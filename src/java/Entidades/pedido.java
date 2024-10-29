@@ -1,89 +1,86 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 
-package Entidades;
+package entidades;
 
-import java.sql.Date;
-/**
- *
- * @author javie
- */
-public class pedido {
-    private String Id_Pedido;
-    private String Id_Cliente;
-    private String Apellidos;
-    private String Nombres;
-    private Date Fecha;
-    private double SubTotal;
-    private double TotalVenta;
+import java.util.Date;
 
-    public pedido() {
-        this.Id_Pedido="";
-        this.Id_Cliente="";
-        this.Apellidos="";
-        this.Nombres="";
-        this.Fecha= null;
-        this.SubTotal=0;
-        this.TotalVenta=0;
+public class Pedido {
+    private int idPedido;
+    private int idCliente;
+    private int idEmpleado;
+    private Date fechaPedido;
+    private double subTotal;
+    private double total;
+    private String estado;
+
+    // Constructor vacío
+    public Pedido() {
     }
 
-    public String getId_Pedido() {
-        return Id_Pedido;
+    // Constructor con parámetros
+    public Pedido(int idPedido, int idCliente, int idEmpleado, Date fechaPedido, double subTotal, double total, String estado) {
+        this.idPedido = idPedido;
+        this.idCliente = idCliente;
+        this.idEmpleado = idEmpleado;
+        this.fechaPedido = fechaPedido;
+        this.subTotal = subTotal;
+        this.total = total;
+        this.estado = estado;
     }
 
-    public void setId_Pedido(String Id_Pedido) {
-        this.Id_Pedido = Id_Pedido;
+    // Getters y Setters
+    public int getIdPedido() {
+        return idPedido;
     }
 
-    public String getId_Cliente() {
-        return Id_Cliente;
+    public void setIdPedido(int idPedido) {
+        this.idPedido = idPedido;
     }
 
-    public void setId_Cliente(String Id_Cliente) {
-        this.Id_Cliente = Id_Cliente;
+    public int getIdCliente() {
+        return idCliente;
     }
 
-    public String getApellidos() {
-        return Apellidos;
+    public void setIdCliente(int idCliente) {
+        this.idCliente = idCliente;
     }
 
-    public void setApellidos(String Apellidos) {
-        this.Apellidos = Apellidos;
+    public int getIdEmpleado() {
+        return idEmpleado;
     }
 
-    public String getNombres() {
-        return Nombres;
+    public void setIdEmpleado(int idEmpleado) {
+        this.idEmpleado = idEmpleado;
     }
 
-    public void setNombres(String Nombres) {
-        this.Nombres = Nombres;
+    public Date getFechaPedido() {
+        return fechaPedido;
     }
 
-    public Date getFecha() {
-        return Fecha;
-    }
-
-    public void setFecha(Date Fecha) {
-        this.Fecha = Fecha;
+    public void setFechaPedido(Date fechaPedido) {
+        this.fechaPedido = fechaPedido;
     }
 
     public double getSubTotal() {
-        return SubTotal;
+        return subTotal;
     }
 
-    public void setSubTotal(double SubTotal) {
-        this.SubTotal = SubTotal;
+    public void setSubTotal(double subTotal) {
+        this.subTotal = subTotal;
     }
 
-    public double getTotalVenta() {
-        return TotalVenta;
+    public double getTotal() {
+        return total;
     }
 
-    public void setTotalVenta(double TotalVenta) {
-        this.TotalVenta = TotalVenta;
+    public void setTotal(double total) {
+        this.total = total;
     }
-    
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
 }

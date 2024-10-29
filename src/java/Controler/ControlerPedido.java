@@ -5,9 +5,9 @@
  */
 package Controler;
 
-import Entidades.detallePedido;
-import Entidades.pedido;
-import conexion.conexionBD;
+import Entidades.DetallePedido;
+import Entidades.Pedido;
+import conexion.conexion;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
@@ -71,9 +71,9 @@ public class ControlerPedido extends HttpServlet {
         //processRequest(request, response);
         
         String Op =request.getParameter("Op");
-        ArrayList<pedido> Lista= new ArrayList<pedido>();
-        ArrayList<detallePedido> ListaDet= new ArrayList<detallePedido>();
-        conexionBD conBD = new conexionBD();
+        ArrayList<Pedido> Lista= new ArrayList<Pedido>();
+        ArrayList<DetallePedido> ListaDet= new ArrayList<DetallePedido>();
+        conexion conBD = new conexion();
         Connection conn = conBD.Connected();
         PreparedStatement ps;
         ResultSet rs;
@@ -86,7 +86,7 @@ public class ControlerPedido extends HttpServlet {
                     ps= conn.prepareStatement(sql);
                     rs= ps.executeQuery();
                     while(rs.next()){
-                        pedido Pedido=new pedido();
+                        Pedido Pedido=new Pedido();
                         Pedido.setId_Pedido(rs.getString(1));
                         Pedido.setId_Cliente(rs.getString(2));
                         Pedido.setApellidos(rs.getString(3));
@@ -113,7 +113,7 @@ public class ControlerPedido extends HttpServlet {
                     ps= conn.prepareStatement(sql);
                     ps.setString(1, Id);
                     rs= ps.executeQuery();
-                    detallePedido DetaPed=new detallePedido();
+                    DetallePedido DetaPed=new DetallePedido();
                     while(rs.next()){
                         DetaPed.setId_Pedido(rs.getString(1));
                         DetaPed.setId_Prod(rs.getString(2));

@@ -1,77 +1,74 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package Entidades;
 
-/**
- *
- * @author javie
- */
-public class detallePedido {
-    private String Id_Pedido;
-    private String Id_Prod;
-    private String Descripcion;
-    private double Cantidad;
-    private double Precio;
-    private double TotalDeta;
+package entidades;
 
-    public detallePedido() {
-        this.Id_Pedido="";
-        this.Id_Prod="";
-        this.Descripcion="";
-        this.Cantidad=0;
-        this.Precio=0;
-        this.TotalDeta=0;
+public class DetallePedido {
+    private int idDetalle;
+    private int idPedido;
+    private int idProducto;
+    private int cantidad;
+    private double precio;
+    private double total;
+
+    // Constructor vacío
+    public DetallePedido() {
     }
 
-    public String getId_Pedido() {
-        return Id_Pedido;
+    // Constructor con parámetros
+    public DetallePedido(int idDetalle, int idPedido, int idProducto, int cantidad, double precio, double total) {
+        this.idDetalle = idDetalle;
+        this.idPedido = idPedido;
+        this.idProducto = idProducto;
+        this.cantidad = cantidad;
+        this.precio = precio;
+        this.total = total;
     }
 
-    public void setId_Pedido(String Id_Pedido) {
-        this.Id_Pedido = Id_Pedido;
+    // Getters y Setters
+    public int getIdDetalle() {
+        return idDetalle;
     }
 
-    public String getId_Prod() {
-        return Id_Prod;
+    public void setIdDetalle(int idDetalle) {
+        this.idDetalle = idDetalle;
     }
 
-    public void setId_Prod(String Id_Prod) {
-        this.Id_Prod = Id_Prod;
+    public int getIdPedido() {
+        return idPedido;
     }
 
-    public String getDescripcion() {
-        return Descripcion;
+    public void setIdPedido(int idPedido) {
+        this.idPedido = idPedido;
     }
 
-    public void setDescripcion(String Descripcion) {
-        this.Descripcion = Descripcion;
+    public int getIdProducto() {
+        return idProducto;
     }
 
-    public double getCantidad() {
-        return Cantidad;
+    public void setIdProducto(int idProducto) {
+        this.idProducto = idProducto;
     }
 
-    public void setCantidad(double Cantidad) {
-        this.Cantidad = Cantidad;
+    public int getCantidad() {
+        return cantidad;
+    }
+
+    public void setCantidad(int cantidad) {
+        this.cantidad = cantidad;
     }
 
     public double getPrecio() {
-        return Precio;
+        return precio;
     }
 
-    public void setPrecio(double Precio) {
-        this.Precio = Precio;
+    public void setPrecio(double precio) {
+        this.precio = precio;
     }
 
-    public double getTotalDeta() {
-        return TotalDeta;
+    public double getTotal() {
+        return total;
     }
 
-    public void setTotalDeta(double TotalDeta) {
-        this.TotalDeta = TotalDeta;
+    public void setTotal(double total) {
+        this.total = total;
     }
-    
 }

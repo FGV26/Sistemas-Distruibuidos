@@ -1,87 +1,83 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package Entidades;
+package entidades;
 
-/**
- *
- * @author javie
- */
-public class cliente {
-    private String Id;
-    private String Apellidos;
-    private String Nombres;
-    private String Direccion;
-    private String DNI;
-    private String Telefono;
-    private String Movil;
+public class Cliente {
+    private int idCliente;
+    private String nombre;
+    private String apellido;
+    private String direccion;
+    private String dni;
+    private String telefono;
+    private String email;
 
-    public cliente() {
-        this.Id="";
-        this.Apellidos="";
-        this.Nombres="";
-        this.Direccion="";
-        this.DNI="";
-        this.Telefono="";
-        this.Movil="";
+    // Constructor vacío
+    public Cliente() {
     }
 
-    public String getId() {
-        return Id;
+    // Constructor con parámetros
+    public Cliente(int idCliente, String nombre, String apellido, String direccion, String dni, String telefono, String email) {
+        this.idCliente = idCliente;
+        this.nombre = nombre;
+        this.apellido = apellido;
+        this.direccion = direccion;
+        this.dni = dni;
+        this.telefono = telefono;
+        this.email = email;
     }
 
-    public void setId(String Id) {
-        this.Id = Id;
+    // Getters y Setters
+    public int getIdCliente() {
+        return idCliente;
     }
 
-    public String getApellidos() {
-        return Apellidos;
+    public void setIdCliente(int idCliente) {
+        this.idCliente = idCliente;
     }
 
-    public void setApellidos(String Apellidos) {
-        this.Apellidos = Apellidos;
+    public String getNombre() {
+        return nombre;
     }
 
-    public String getNombres() {
-        return Nombres;
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
 
-    public void setNombres(String Nombres) {
-        this.Nombres = Nombres;
+    public String getApellido() {
+        return apellido;
+    }
+
+    public void setApellido(String apellido) {
+        this.apellido = apellido;
     }
 
     public String getDireccion() {
-        return Direccion;
+        return direccion;
     }
 
-    public void setDireccion(String Direccion) {
-        this.Direccion = Direccion;
+    public void setDireccion(String direccion) {
+        this.direccion = direccion;
     }
 
-    public String getDNI() {
-        return DNI;
+    public String getDni() {
+        return dni;
     }
 
-    public void setDNI(String DNI) {
-        this.DNI = DNI;
+    public void setDni(String dni) {
+        this.dni = dni;
     }
 
     public String getTelefono() {
-        return Telefono;
+        return telefono;
     }
 
-    public void setTelefono(String Telefono) {
-        this.Telefono = Telefono;
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
     }
 
-    public String getMovil() {
-        return Movil;
+    public String getEmail() {
+        return email;
     }
 
-    public void setMovil(String Movil) {
-        this.Movil = Movil;
+    public void setEmail(String email) {
+        this.email = email;
     }
-    
 }

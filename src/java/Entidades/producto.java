@@ -1,67 +1,84 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package Entidades;
 
-/**
- *
- * @author javie
- */
-public class producto {
-    private String Id;
-    private String Descripcion;
-    private float Costo;
-    private float Precio;
-    private int Cantidad;
+package entidades;
 
-    public producto() {
-        this.Id="";
-        this.Descripcion="";
-        this.Costo=0;
-        this.Precio=0;
-        this.Cantidad=0;
+public class Producto {
+    private int idProducto;
+    private String descripcion;
+    private double costo;
+    private double precio;
+    private int stock;
+    private int stockMinimo;
+    private String estado;
+
+    // Constructor vacío
+    public Producto() {
     }
 
-    public String getId() {
-        return Id;
+    // Constructor con parámetros
+    public Producto(int idProducto, String descripcion, double costo, double precio, int stock, int stockMinimo, String estado) {
+        this.idProducto = idProducto;
+        this.descripcion = descripcion;
+        this.costo = costo;
+        this.precio = precio;
+        this.stock = stock;
+        this.stockMinimo = stockMinimo;
+        this.estado = estado;
     }
 
-    public void setId(String Id) {
-        this.Id = Id;
+    // Getters y Setters
+    public int getIdProducto() {
+        return idProducto;
+    }
+
+    public void setIdProducto(int idProducto) {
+        this.idProducto = idProducto;
     }
 
     public String getDescripcion() {
-        return Descripcion;
+        return descripcion;
     }
 
-    public void setDescripcion(String Descripcion) {
-        this.Descripcion = Descripcion;
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
     }
 
-    public float getCosto() {
-        return Costo;
+    public double getCosto() {
+        return costo;
     }
 
-    public void setCosto(float Costo) {
-        this.Costo = Costo;
+    public void setCosto(double costo) {
+        this.costo = costo;
     }
 
-    public float getPrecio() {
-        return Precio;
+    public double getPrecio() {
+        return precio;
     }
 
-    public void setPrecio(float Precio) {
-        this.Precio = Precio;
+    public void setPrecio(double precio) {
+        this.precio = precio;
     }
 
-    public int getCantidad() {
-        return Cantidad;
+    public int getStock() {
+        return stock;
     }
 
-    public void setCantidad(int Cantidad) {
-        this.Cantidad = Cantidad;
+    public void setStock(int stock) {
+        this.stock = stock;
     }
 
+    public int getStockMinimo() {
+        return stockMinimo;
+    }
+
+    public void setStockMinimo(int stockMinimo) {
+        this.stockMinimo = stockMinimo;
+    }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
 }

@@ -2,6 +2,11 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group/>
+        <group>
+            <file>file:/D:/GitHub/Sistemas-Distruibuidos/src/java/Controler/ControlerCliente.java</file>
+            <file>file:/D:/GitHub/Sistemas-Distruibuidos/src/java/Entidades/Cliente.java</file>
+            <file>file:/D:/GitHub/Sistemas-Distruibuidos/web/Clientes.jsp</file>
+            <file>file:/D:/GitHub/Sistemas-Distruibuidos/src/java/Dao/ClienteDAO.java</file>
+        </group>
     </open-files>
 </project-private>

@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 package Controler;
-import conexion.conexionBD;
+import conexion.conexion;
 import Entidades.cliente;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -186,7 +186,7 @@ public class Controler extends HttpServlet {
         String vClave = request.getParameter("txtClave");
         String vPaswd="";
         String vUser="";
-        conexionBD conBD = new conexionBD();
+        conexion conBD = new conexion();
         Connection conn = conBD.Connected();
         PreparedStatement ps;
         ResultSet rs; 

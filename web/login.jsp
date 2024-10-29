@@ -1,9 +1,5 @@
+
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%-- 
-    Document   : index
-    Created on : 19/11/2021, 07:15:10 PM
-    Author     : javie
---%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
 <!DOCTYPE html>
