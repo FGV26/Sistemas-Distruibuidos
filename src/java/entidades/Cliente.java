@@ -23,6 +23,17 @@ public class Cliente {
         this.telefono = telefono;
         this.email = email;
     }
+    
+    // Constructor para crear un nuevo cliente sin ID
+    public Cliente(String nombre, String apellido, String direccion, String dni, String telefono, String email) {
+        this.nombre = nombre;
+        this.apellido = apellido;
+        this.direccion = direccion;
+        this.dni = dni;
+        this.telefono = telefono;
+        this.email = email;
+    }
+
 
     // Getters y Setters
     public int getIdCliente() {

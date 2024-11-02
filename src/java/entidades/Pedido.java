@@ -1,4 +1,3 @@
-
 package entidades;
 
 import java.util.Date;
@@ -16,7 +15,7 @@ public class Pedido {
     public Pedido() {
     }
 
-    // Constructor con parámetros
+    // Constructor con todos los parámetros
     public Pedido(int idPedido, int idCliente, int idEmpleado, Date fechaPedido, double subTotal, double total, String estado) {
         this.idPedido = idPedido;
         this.idCliente = idCliente;
@@ -25,6 +24,15 @@ public class Pedido {
         this.subTotal = subTotal;
         this.total = total;
         this.estado = estado;
+    }
+
+    // Nuevo constructor simplificado (para `crearPedido` en el controlador)
+    public Pedido(int idCliente, double subTotal, double total) {
+        this.idCliente = idCliente;
+        this.subTotal = subTotal;
+        this.total = total;
+        this.fechaPedido = new Date();  // Fecha actual como predeterminada
+        this.estado = "Proceso";        // Estado predeterminado
     }
 
     // Getters y Setters

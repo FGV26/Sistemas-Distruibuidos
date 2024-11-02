@@ -1,8 +1,4 @@
-<%-- 
-    Document   : index
-    Created on : 17/09/2022, 08:38:47 AM
-    Author     : javie
---%>
+
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>

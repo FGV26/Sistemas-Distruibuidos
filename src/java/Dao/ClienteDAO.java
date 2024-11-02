@@ -1,4 +1,3 @@
-
 package dao;
 
 import entidades.Cliente;
@@ -54,8 +53,8 @@ public class ClienteDAO {
         return clientes;
     }
 
-    // Buscar cliente por ID
-    public Cliente buscarPorId(int id) {
+    // Obtener cliente por ID
+    public Cliente obtenerClientePorId(int id) {
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -99,12 +98,13 @@ public class ClienteDAO {
         try {
             conn = conexion.getConnection();
             stmt = conn.prepareStatement(SQL_INSERT);
-            stmt.setString(1, cliente.getNombre());
-            stmt.setString(2, cliente.getApellido());
-            stmt.setString(3, cliente.getDireccion());
-            stmt.setString(4, cliente.getDni());
-            stmt.setString(5, cliente.getTelefono());
-            stmt.setString(6, cliente.getEmail());
+
+            stmt.setString(1, cliente.getNombre());       
+            stmt.setString(2, cliente.getApellido());     
+            stmt.setString(3, cliente.getDireccion());    
+            stmt.setString(4, cliente.getDni());          
+            stmt.setString(5, cliente.getTelefono());     
+            stmt.setString(6, cliente.getEmail());        
             rows = stmt.executeUpdate();
         } catch (SQLException ex) {
             ex.printStackTrace(System.out);
@@ -119,8 +119,8 @@ public class ClienteDAO {
         return rows;
     }
 
-    // Actualizar un cliente
-    public int actualizar(Cliente cliente) {
+    // Actualizar un cliente existente
+    public int actualizarCliente(Cliente cliente) {
         Connection conn = null;
         PreparedStatement stmt = null;
         int rows = 0;

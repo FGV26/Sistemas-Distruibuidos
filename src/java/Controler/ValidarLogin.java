@@ -1,8 +1,7 @@
-
 package Controler;
 
-import dao.UsuarioDAO; // Asegúrate de tener importado el DAO
-import entidades.Usuario; // Asegúrate de importar la entidad correcta
+import dao.UsuarioDAO;
+import entidades.Usuario;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -18,23 +17,37 @@ public class ValidarLogin extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         
-        // 1. Obtener los parámetros del formulario
         String user = request.getParameter("txtUsuario");
         String pass = request.getParameter("txtClave");
         
-        // 2. Instanciar el DAO y buscar el usuario por nombre de usuario
         UsuarioDAO usuarioDAO = new UsuarioDAO();
-        Usuario usuario = usuarioDAO.buscarPorUsername(user);  // Aquí usamos el método que busca por el username
+        Usuario usuario = usuarioDAO.buscarPorUsername(user);
 
-        // 3. Validar si el usuario existe y si la contraseña es correcta
         if (usuario != null && usuario.getPassword().equals(pass)) {
             // Si es correcto, creamos la sesión
             HttpSession session = request.getSession();
-            session.setAttribute("user", usuario);  // Guardamos el objeto Usuario en la sesión
-            request.getRequestDispatcher("index.jsp").forward(request, response);  // Redirigir a la página principal
+            session.setAttribute("user", usuario);
+            
+            // Redirigir según el rol del usuario
+            switch (usuario.getRol()) {
+                case "Empleado":
+                    request.getRequestDispatcher("DashboardEmpleado.jsp").forward(request, response);
+                    break;
+                case "Despachador":
+                    request.getRequestDispatcher("DashboardDespachador.jsp").forward(request, response);
+                    break;
+                case "Administrador":
+                    request.getRequestDispatcher("DashboardAdministrador.jsp").forward(request, response);
+                    break;
+                default:
+                    request.setAttribute("errorMessage", "Rol de usuario no reconocido.");
+                    request.getRequestDispatcher("login.jsp").forward(request, response);
+                    break;
+            }
         } else {
-            // Si falla, redirigir al error de login
-            request.getRequestDispatcher("ErrorLogin.jsp").forward(request, response);
+            // Si las credenciales son incorrectas, mostrar mensaje de error
+            request.setAttribute("errorMessage", "Usuario o contraseña incorrectos.");
+            request.getRequestDispatcher("login.jsp").forward(request, response);
         }
     }
 
@@ -52,6 +65,6 @@ public class ValidarLogin extends HttpServlet {
 
     @Override
     public String getServletInfo() {
-        return "Servlet para validar el login";
+        return "Servlet para validar el login con redirección por rol de usuario";
     }
 }

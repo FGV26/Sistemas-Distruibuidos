@@ -1,4 +1,8 @@
-
+<%-- 
+    Document   : DashboardDespachador
+    Created on : 1 nov. 2024, 17:50:27
+    Author     : ferna
+--%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -8,6 +12,6 @@
         <title>JSP Page</title>
     </head>
     <body>
-        <h1>En Construcción....</h1>
+        <h1>Hello World!</h1>
     </body>
 </html>

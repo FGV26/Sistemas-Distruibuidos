@@ -1,4 +1,3 @@
-
 package conexion;
 
 import java.sql.Connection;
@@ -16,7 +15,12 @@ public class conexion {
     private static final String JDBC_PASSWORD = "";  // Añade tu contraseña si tienes una
 
     // Método para obtener una conexión
-    public static Connection getConnection() throws SQLException {
+    public static Connection getConnection() throws SQLException {  
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+        } catch (ClassNotFoundException e) {
+            throw new SQLException("No se pudo cargar el driver de MySQL", e);
+        }
         return DriverManager.getConnection(JDBC_URL, JDBC_USER, JDBC_PASSWORD);
     }
 
