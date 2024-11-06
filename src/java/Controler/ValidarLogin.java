@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import org.mindrot.jbcrypt.BCrypt;
 
 @WebServlet(name = "ValidarLogin", urlPatterns = {"/ValidarLogin"})
 public class ValidarLogin extends HttpServlet {
@@ -22,8 +23,10 @@ public class ValidarLogin extends HttpServlet {
 
         UsuarioDAO usuarioDAO = new UsuarioDAO();
         Usuario usuario = usuarioDAO.buscarPorUsername(user);
+        
+        boolean validate_pass = BCrypt.checkpw(pass, usuario.getPassword());
 
-        if (usuario != null && usuario.getPassword().equals(pass)) {
+        if (usuario != null && validate_pass) {
             // Si es correcto, creamos la sesión
             HttpSession session = request.getSession();
             session.setAttribute("user", usuario);
