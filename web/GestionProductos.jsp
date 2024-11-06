@@ -249,53 +249,41 @@
                 </div>
             </div>
 
-            <<c:forEach var="mensaje" items="${mensajesAdvertencia}" varStatus="status">
-                <div class="modal fade 
-                     <c:choose>
-                         <c:when test="${tiposMensaje[status.index] == 'warning'}">modal-warning</c:when>
-                         <c:when test="${tiposMensaje[status.index] == 'danger'}">modal-danger</c:when>
-                     </c:choose>" 
-                     id="modalAdvertencia${status.index}" tabindex="-1" role="dialog" aria-labelledby="modalAdvertenciaLabel${status.index}" aria-hidden="true">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="modalAdvertenciaLabel${status.index}">
+            <div aria-live="polite" aria-atomic="true" class="position-relative">
+                <!-- Contenedor de toasts en la esquina superior derecha -->
+                <div class="toast-container position-absolute top-0 end-0 p-3">
+                    <c:forEach var="mensaje" items="${mensajesAdvertencia}" varStatus="status">
+                        <div class="toast border-0 
+                             <c:choose>
+                                 <c:when test="${tiposMensaje[status.index] == 'warning'}">bg-warning text-dark</c:when>
+                                 <c:when test="${tiposMensaje[status.index] == 'danger'}">bg-danger text-light</c:when>
+                             </c:choose>"
+                             role="alert" aria-live="assertive" aria-atomic="true">
+                            <div class="toast-header">
+                                <strong class="me-auto">
                                     <c:choose>
                                         <c:when test="${tiposMensaje[status.index] == 'warning'}">Aviso de Stock Bajo</c:when>
                                         <c:when test="${tiposMensaje[status.index] == 'danger'}">Aviso de Sin Stock</c:when>
                                     </c:choose>
-                                </h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
+                                </strong>
+                                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
                             </div>
-                            <div class="modal-body">
+                            <div class="toast-body">
                                 ${mensaje}
                             </div>
-                            <div class="modal-footer">
-                                <!-- Botón dinámico según el tipo de mensaje -->
-                                <c:choose>
-                                    <c:when test="${tiposMensaje[status.index] == 'warning'}">
-                                        <a href="GestionProductos?accion=ListarPocoStock" class="btn btn-warning">Mostrar con Poco Stock</a>
-                                    </c:when>
-                                    <c:when test="${tiposMensaje[status.index] == 'danger'}">
-                                        <a href="GestionProductos?accion=ListarSinStock" class="btn btn-danger">Mostrar sin Stock</a>
-                                    </c:when>
-                                </c:choose>
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                            </div>
                         </div>
-                    </div>
+                    </c:forEach>
                 </div>
-            </c:forEach>
-
+            </div>
 
             <script>
-                $(document).ready(function () {
-                    // Mostrar cada modal de advertencia si hay mensajes
-                <c:forEach var="mensaje" items="${mensajesAdvertencia}" varStatus="status">
-                    $('#modalAdvertencia${status.index}').modal('show');
-                </c:forEach>
+                document.addEventListener('DOMContentLoaded', function () {
+                    // Inicializar todos los toasts en la página
+                    var toastElList = [].slice.call(document.querySelectorAll('.toast'))
+                    toastElList.forEach(function (toastEl) {
+                        var toast = new bootstrap.Toast(toastEl, {autohide: true, delay: 5000})
+                        toast.show()
+                    })
                 });
             </script>
 
