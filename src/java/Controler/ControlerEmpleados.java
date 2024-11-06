@@ -1,4 +1,3 @@
-
 package Controler;
 
 import dao.RegistroActividadDAO;
@@ -24,7 +23,7 @@ public class ControlerEmpleados extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+
         HttpSession session = request.getSession();
         Usuario user = (Usuario) session.getAttribute("user");
         if (user == null || !user.getRol().equals("Administrador")) {
@@ -108,8 +107,8 @@ public class ControlerEmpleados extends HttpServlet {
             return;
         }
 
-        String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
-        Usuario nuevoEmpleado = new Usuario(username, hashedPassword, email, "Empleado", nombre, apellido, "Activo");
+        // Crear el empleado sin encriptación en la contraseña
+        Usuario nuevoEmpleado = new Usuario(username, password, email, "Empleado", nombre, apellido, "Activo");
         boolean exito = usuarioDAO.agregarEmpleado(nuevoEmpleado);
 
         if (exito) {
@@ -149,11 +148,8 @@ public class ControlerEmpleados extends HttpServlet {
             return;
         }
 
-        Usuario empleadoActual = usuarioDAO.obtenerEmpleadoPorId(id);
-        String hashedPassword = (password != null && !password.isEmpty() && !BCrypt.checkpw(password, empleadoActual.getPassword()))
-                ? BCrypt.hashpw(password, BCrypt.gensalt()) : empleadoActual.getPassword();
-
-        Usuario empleado = new Usuario(id, username, hashedPassword, email, "Empleado", nombre, apellido, estado);
+        // En este caso, la contraseña no se encripta
+        Usuario empleado = new Usuario(id, username, password, email, "Empleado", nombre, apellido, estado);
         boolean exito = usuarioDAO.actualizarEmpleado(empleado);
 
         if (exito) {

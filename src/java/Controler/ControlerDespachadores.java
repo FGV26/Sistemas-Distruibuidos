@@ -1,4 +1,3 @@
-
 package Controler;
 
 import dao.RegistroActividadDAO;
@@ -24,7 +23,7 @@ public class ControlerDespachadores extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+
         HttpSession session = request.getSession();
         Usuario user = (Usuario) session.getAttribute("user");
         if (user == null || !user.getRol().equals("Administrador")) {
@@ -108,8 +107,8 @@ public class ControlerDespachadores extends HttpServlet {
             return;
         }
 
-        String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
-        Usuario nuevoDespachador = new Usuario(username, hashedPassword, email, "Despachador", nombre, apellido, "Activo");
+        // Almacena la contraseña tal cual (sin encriptar)
+        Usuario nuevoDespachador = new Usuario(username, password, email, "Despachador", nombre, apellido, "Activo");
         boolean exito = usuarioDAO.agregarDespachador(nuevoDespachador);
 
         if (exito) {
@@ -149,11 +148,11 @@ public class ControlerDespachadores extends HttpServlet {
             return;
         }
 
-        Usuario despachadorActual = usuarioDAO.obtenerEmpleadoPorId(id);
-        String hashedPassword = (password != null && !password.isEmpty() && !BCrypt.checkpw(password, despachadorActual.getPassword()))
-                ? BCrypt.hashpw(password, BCrypt.gensalt()) : despachadorActual.getPassword();
+        // Mantener la contraseña actual si no se ha proporcionado una nueva
+        String actualPassword = usuarioDAO.obtenerEmpleadoPorId(id).getPassword();
+        String finalPassword = (password != null && !password.isEmpty()) ? password : actualPassword;
 
-        Usuario despachador = new Usuario(id, username, hashedPassword, email, "Despachador", nombre, apellido, estado);
+        Usuario despachador = new Usuario(id, username, finalPassword, email, "Despachador", nombre, apellido, estado);
         boolean exito = usuarioDAO.actualizarDespachador(despachador);
 
         if (exito) {

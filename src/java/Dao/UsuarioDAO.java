@@ -280,7 +280,7 @@ public class UsuarioDAO {
 
         try {
             // Hashear la contraseña antes de guardarla
-            String hashedPassword = BCrypt.hashpw(empleado.getPassword(), BCrypt.gensalt());
+            String hashedPassword = BCrypt.hashpw(empleado.getPassword(), BCrypt.gensalt(12));
 
             conn = conexion.getConnection();
             stmt = conn.prepareStatement(SQL_INSERT_EMPLEADO);
@@ -304,7 +304,7 @@ public class UsuarioDAO {
         return exito;
     }
 
-    // Actualizar empleado con opción de cambiar contraseña
+// Actualizar empleado con opción de cambiar contraseña
     public boolean actualizarEmpleado(Usuario empleado) {
         Connection conn = null;
         PreparedStatement stmt = null;
@@ -316,7 +316,7 @@ public class UsuarioDAO {
             // Si la contraseña no está vacía, hashearla y actualizarla; si está vacía, mantener la actual
             if (empleado.getPassword() != null && !empleado.getPassword().isEmpty()) {
                 // Hashear la nueva contraseña
-                String hashedPassword = BCrypt.hashpw(empleado.getPassword(), BCrypt.gensalt());
+                String hashedPassword = BCrypt.hashpw(empleado.getPassword(), BCrypt.gensalt(12));
                 stmt = conn.prepareStatement(SQL_UPDATE_EMPLEADO_CON_PASSWORD);
                 stmt.setString(1, empleado.getUsername());
                 stmt.setString(2, hashedPassword); // Usar la nueva contraseña hasheada
@@ -494,17 +494,18 @@ public class UsuarioDAO {
         boolean exito = false;
 
         try {
-            // Hashear la contraseña antes de guardarla
-            String hashedPassword = BCrypt.hashpw(despachador.getPassword(), BCrypt.gensalt());
+            // Hashear la contraseña antes de guardarla con 12 rondas
+            String hashedPassword = BCrypt.hashpw(despachador.getPassword(), BCrypt.gensalt(12));
 
             conn = conexion.getConnection();
             stmt = conn.prepareStatement(SQL_INSERT_DESPACHADOR);
             stmt.setString(1, despachador.getUsername());
-            stmt.setString(2, hashedPassword);
+            stmt.setString(2, hashedPassword);  // Guardamos la contraseña hasheada
             stmt.setString(3, despachador.getEmail());
             stmt.setString(4, despachador.getNombre());
             stmt.setString(5, despachador.getApellido());
             stmt.setString(6, despachador.getEstado());
+
             exito = stmt.executeUpdate() > 0;
         } catch (SQLException ex) {
             ex.printStackTrace(System.out);
@@ -528,10 +529,11 @@ public class UsuarioDAO {
             conn = conexion.getConnection();
 
             if (despachador.getPassword() != null && !despachador.getPassword().isEmpty()) {
-                String hashedPassword = BCrypt.hashpw(despachador.getPassword(), BCrypt.gensalt());
+                // Hashear la nueva contraseña con 12 rondas
+                String hashedPassword = BCrypt.hashpw(despachador.getPassword(), BCrypt.gensalt(12));
                 stmt = conn.prepareStatement(SQL_UPDATE_DESPACHADOR_CON_PASSWORD);
                 stmt.setString(1, despachador.getUsername());
-                stmt.setString(2, hashedPassword);
+                stmt.setString(2, hashedPassword); // Usar la nueva contraseña hasheada
                 stmt.setString(3, despachador.getEmail());
                 stmt.setString(4, despachador.getNombre());
                 stmt.setString(5, despachador.getApellido());
