@@ -1,5 +1,10 @@
 /build/
 /dist/
-/nbproject/
-/nbproject/*.xml
-/nbproject/*.properties
+nbproject/private/private.properties
+nbproject/genfiles.properties
+nbproject/build-impl.xml
+nbproject/private/private.properties
+nbproject/private/private.xml
+nbproject/project.properties
+nbproject/project.xml
+/nbproject
