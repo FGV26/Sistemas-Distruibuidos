@@ -2,11 +2,43 @@
 <web-app version="3.1" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
     <servlet>
         <servlet-name>ControladorEmpleado</servlet-name>
-        <servlet-class>Controler.ControladorEmpleado</servlet-class>
+        <servlet-class>Controler.ControlerEmpleados</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ControlerDespachador</servlet-name>
+        <servlet-class>Controler.ControlerDespachadores</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ControlerCategoria</servlet-name>
+        <servlet-class>Controler.ControlerCategoria</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ControlerProductos</servlet-name>
+        <servlet-class>Controler.ControlerProductos</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DashboardActividades</servlet-name>
+        <servlet-class>Controler.DashboardActividades</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>ControladorEmpleado</servlet-name>
         <url-pattern>/ControladorEmpleado</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ControlerDespachador</servlet-name>
+        <url-pattern>/ControlerDespachador</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ControlerCategoria</servlet-name>
+        <url-pattern>/ControlerCategoria</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ControlerProductos</servlet-name>
+        <url-pattern>/ControlerProductos</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DashboardActividades</servlet-name>
+        <url-pattern>/DashboardActividades</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

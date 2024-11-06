@@ -1,7 +1,7 @@
-
 package entidades;
 
 public class Usuario {
+
     private int idUsuario;
     private String username;
     private String password;
@@ -18,6 +18,16 @@ public class Usuario {
     // Constructor con parámetros
     public Usuario(int idUsuario, String username, String password, String email, String rol, String nombre, String apellido, String estado) {
         this.idUsuario = idUsuario;
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.rol = rol;
+        this.nombre = nombre;
+        this.apellido = apellido;
+        this.estado = estado;
+    }
+
+    public Usuario(String username, String password, String email, String rol, String nombre, String apellido, String estado) {
         this.username = username;
         this.password = password;
         this.email = email;

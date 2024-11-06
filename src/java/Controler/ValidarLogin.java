@@ -16,10 +16,10 @@ public class ValidarLogin extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        
+
         String user = request.getParameter("txtUsuario");
         String pass = request.getParameter("txtClave");
-        
+
         UsuarioDAO usuarioDAO = new UsuarioDAO();
         Usuario usuario = usuarioDAO.buscarPorUsername(user);
 
@@ -27,23 +27,24 @@ public class ValidarLogin extends HttpServlet {
             // Si es correcto, creamos la sesión
             HttpSession session = request.getSession();
             session.setAttribute("user", usuario);
-            
+
             // Redirigir según el rol del usuario
             switch (usuario.getRol()) {
                 case "Empleado":
-                    request.getRequestDispatcher("DashboardEmpleado.jsp").forward(request, response);
+                    response.sendRedirect("DashboardActividades?accion=Listar");  
                     break;
                 case "Despachador":
-                    request.getRequestDispatcher("DashboardDespachador.jsp").forward(request, response);
+                    response.sendRedirect("DashboardActividades?accion=Listar");
                     break;
                 case "Administrador":
-                    request.getRequestDispatcher("DashboardAdministrador.jsp").forward(request, response);
+                    response.sendRedirect("DashboardActividades?accion=Listar");
                     break;
                 default:
                     request.setAttribute("errorMessage", "Rol de usuario no reconocido.");
                     request.getRequestDispatcher("login.jsp").forward(request, response);
                     break;
             }
+
         } else {
             // Si las credenciales son incorrectas, mostrar mensaje de error
             request.setAttribute("errorMessage", "Usuario o contraseña incorrectos.");
