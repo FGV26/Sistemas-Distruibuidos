@@ -1,5 +1,5 @@
 /build/
 /dist/
-nbproject/
-nbproject/*.xml
-nbproject/*.properties
+/nbproject/
+/nbproject/*.xml
+/nbproject/*.properties
