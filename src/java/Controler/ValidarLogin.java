@@ -23,21 +23,11 @@ public class ValidarLogin extends HttpServlet {
 
         UsuarioDAO usuarioDAO = new UsuarioDAO();
         Usuario usuario = usuarioDAO.buscarPorUsername(user);
+        
+        boolean validate_pass = BCrypt.checkpw(pass, usuario.getPassword());
 
-        if (usuario == null) {
-            // Caso 1: Usuario no encontrado (correo incorrecto)
-            request.setAttribute("errorMessage", "Correo no encontrado.");
-            request.getRequestDispatcher("login.jsp").forward(request, response);
-        } else if (!BCrypt.checkpw(pass, usuario.getPassword())) {
-            // Caso 2: Contraseña incorrecta
-            request.setAttribute("errorMessage", "Contraseña incorrecta.");
-            request.getRequestDispatcher("login.jsp").forward(request, response);
-        } else if (!"Activo".equals(usuario.getEstado())) {
-            // Caso 3: Usuario inactivo
-            request.setAttribute("errorMessage", "Su usuario está inactivo.");
-            request.getRequestDispatcher("login.jsp").forward(request, response);
-        } else {
-            // Caso exitoso: Credenciales correctas y usuario activo
+        if (usuario != null && validate_pass) {
+            // Si es correcto, creamos la sesión
             HttpSession session = request.getSession();
             session.setAttribute("user", usuario);
 
@@ -53,11 +43,15 @@ public class ValidarLogin extends HttpServlet {
                     response.sendRedirect("DashboardActividades?accion=Listar");
                     break;
                 default:
-                    // Si el rol no es reconocido
                     request.setAttribute("errorMessage", "Rol de usuario no reconocido.");
                     request.getRequestDispatcher("login.jsp").forward(request, response);
                     break;
             }
+
+        } else {
+            // Si las credenciales son incorrectas, mostrar mensaje de error
+            request.setAttribute("errorMessage", "Usuario o contraseña incorrectos.");
+            request.getRequestDispatcher("login.jsp").forward(request, response);
         }
     }
 
