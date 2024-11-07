@@ -1,3 +1,4 @@
+
 package dao;
 
 import entidades.Cliente;
@@ -13,8 +14,8 @@ public class ClienteDAO {
 
     private static final String SQL_SELECT = "SELECT * FROM clientes";
     private static final String SQL_SELECT_BY_ID = "SELECT * FROM clientes WHERE Id_Cliente = ?";
-    private static final String SQL_INSERT = "INSERT INTO clientes (Nombre, Apellido, Direccion, DNI, Telefono, Email) VALUES (?, ?, ?, ?, ?, ?)";
-    private static final String SQL_UPDATE = "UPDATE clientes SET Nombre = ?, Apellido = ?, Direccion = ?, DNI = ?, Telefono = ?, Email = ? WHERE Id_Cliente = ?";
+    private static final String SQL_INSERT = "INSERT INTO clientes (Nombre, Apellido, Direccion, DNI, Telefono, Email, Id_Empleado) VALUES (?, ?, ?, ?, ?, ?, ?)";
+    private static final String SQL_UPDATE = "UPDATE clientes SET Nombre = ?, Apellido = ?, Direccion = ?, DNI = ?, Telefono = ?, Email = ?, Id_Empleado = ? WHERE Id_Cliente = ?";
     private static final String SQL_DELETE = "DELETE FROM clientes WHERE Id_Cliente = ?";
 
     // Listar todos los clientes
@@ -37,6 +38,7 @@ public class ClienteDAO {
                 cliente.setDni(rs.getString("DNI"));
                 cliente.setTelefono(rs.getString("Telefono"));
                 cliente.setEmail(rs.getString("Email"));
+                cliente.setIdEmpleado(rs.getInt("Id_Empleado"));  // Nuevo campo
                 clientes.add(cliente);
             }
         } catch (SQLException ex) {
@@ -74,6 +76,7 @@ public class ClienteDAO {
                 cliente.setDni(rs.getString("DNI"));
                 cliente.setTelefono(rs.getString("Telefono"));
                 cliente.setEmail(rs.getString("Email"));
+                cliente.setIdEmpleado(rs.getInt("Id_Empleado"));  // Nuevo campo
             }
         } catch (SQLException ex) {
             ex.printStackTrace(System.out);
@@ -98,13 +101,13 @@ public class ClienteDAO {
         try {
             conn = conexion.getConnection();
             stmt = conn.prepareStatement(SQL_INSERT);
-
             stmt.setString(1, cliente.getNombre());       
             stmt.setString(2, cliente.getApellido());     
             stmt.setString(3, cliente.getDireccion());    
             stmt.setString(4, cliente.getDni());          
             stmt.setString(5, cliente.getTelefono());     
             stmt.setString(6, cliente.getEmail());        
+            stmt.setInt(7, cliente.getIdEmpleado());      // Nuevo campo
             rows = stmt.executeUpdate();
         } catch (SQLException ex) {
             ex.printStackTrace(System.out);
@@ -134,7 +137,8 @@ public class ClienteDAO {
             stmt.setString(4, cliente.getDni());
             stmt.setString(5, cliente.getTelefono());
             stmt.setString(6, cliente.getEmail());
-            stmt.setInt(7, cliente.getIdCliente());
+            stmt.setInt(7, cliente.getIdEmpleado());  // Nuevo campo
+            stmt.setInt(8, cliente.getIdCliente());
             rows = stmt.executeUpdate();
         } catch (SQLException ex) {
             ex.printStackTrace(System.out);

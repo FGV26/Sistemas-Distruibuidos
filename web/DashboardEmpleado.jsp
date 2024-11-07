@@ -52,7 +52,7 @@
                         <ul>
                             <!-- Gestionar un Pedido -->
                             <li>
-                                <a href="GestionPedidos?accion=IniciarPedido" title="Gestionar Pedido">
+                                <a href="#" title="Gestionar Pedido">
                                     <i class="bi bi-cart"></i>
                                     <span class="link hide">Gestionar Pedido</span>
                                 </a>
@@ -60,7 +60,7 @@
 
                             <!-- Gestionar Mis Clientes -->
                             <li>
-                                <a href="GestionClientes?accion=Listar" title="Gestionar Mis Clientes">
+                                <a href="GestionarPedido.jsp" title="Gestionar Mis Clientes">
                                     <i class="bi bi-people"></i>
                                     <span class="link hide">Gestionar Mis Clientes</span>
                                 </a>
@@ -68,7 +68,7 @@
 
                             <!-- Mirar Productos -->
                             <li>
-                                <a href="MirarProductos?accion=Listar" title="Mirar Productos">
+                                <a href="#" title="Mirar Productos">
                                     <i class="bi bi-box-seam"></i>
                                     <span class="link hide">Mirar Productos</span>
                                 </a>

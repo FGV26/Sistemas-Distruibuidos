@@ -38,15 +38,15 @@ public class ControlerCliente extends HttpServlet {
             case "Modificar":
                 modificarCliente(request, response);
                 break;
-            case "Actualizar":
-                actualizarCliente(request, response);
-                break;
+//            case "Actualizar":
+//                actualizarCliente(request, response);
+//                break;
             case "Nuevo":
                 nuevoCliente(request, response);
                 break;
-            case "Crear":
-                crearCliente(request, response);
-                break;
+//            case "Crear":
+//                crearCliente(request, response);
+//                break;
             default:
                 response.sendRedirect("Clientes.jsp");
                 break;
@@ -76,40 +76,40 @@ public class ControlerCliente extends HttpServlet {
         request.getRequestDispatcher("modificar.jsp").forward(request, response);
     }
 
-    private void actualizarCliente(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        int id = Integer.parseInt(request.getParameter("Id"));
-        String nombre = request.getParameter("nombre");
-        String apellido = request.getParameter("apellido");
-        String dni = request.getParameter("DNI");
-        String direccion = request.getParameter("direccion");
-        String telefono = request.getParameter("telefono");
-        String email = request.getParameter("email");
-
-        Cliente cliente = new Cliente(id, nombre, apellido, dni, direccion, telefono, email);
-        clienteDAO.actualizarCliente(cliente);
-        response.sendRedirect("ControlerCliente?accion=Listar");
-    }
+//    private void actualizarCliente(HttpServletRequest request, HttpServletResponse response)
+//            throws ServletException, IOException {
+//        int id = Integer.parseInt(request.getParameter("Id"));
+//        String nombre = request.getParameter("nombre");
+//        String apellido = request.getParameter("apellido");
+//        String dni = request.getParameter("DNI");
+//        String direccion = request.getParameter("direccion");
+//        String telefono = request.getParameter("telefono");
+//        String email = request.getParameter("email");
+//
+//        Cliente cliente = new Cliente(id, nombre, apellido, dni, direccion, telefono, email);
+//        clienteDAO.actualizarCliente(cliente);
+//        response.sendRedirect("ControlerCliente?accion=Listar");
+//    }
 
     private void nuevoCliente(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         request.getRequestDispatcher("nuevo.jsp").forward(request, response);
     }
 
-    private void crearCliente(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        String nombre = request.getParameter("nombre");
-        String apellido = request.getParameter("apellido");
-        String dni = request.getParameter("DNI");
-        String direccion = request.getParameter("direccion");
-        String telefono = request.getParameter("telefono");
-        String email = request.getParameter("email");
-
-        // Crear el cliente con el constructor correcto
-        Cliente nuevoCliente = new Cliente(nombre, apellido, direccion, dni, telefono, email);  // Revise el orden aquí
-        clienteDAO.insertar(nuevoCliente);
-        response.sendRedirect("ControlerCliente?accion=Listar");
-    }
+//    private void crearCliente(HttpServletRequest request, HttpServletResponse response)
+//            throws ServletException, IOException {
+//        String nombre = request.getParameter("nombre");
+//        String apellido = request.getParameter("apellido");
+//        String dni = request.getParameter("DNI");
+//        String direccion = request.getParameter("direccion");
+//        String telefono = request.getParameter("telefono");
+//        String email = request.getParameter("email");
+//
+//        // Crear el cliente con el constructor correcto
+//        Cliente nuevoCliente = new Cliente(nombre, apellido, direccion, dni, telefono, email);  // Revise el orden aquí
+//        clienteDAO.insertar(nuevoCliente);
+//        response.sendRedirect("ControlerCliente?accion=Listar");
+//    }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)

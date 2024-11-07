@@ -1,3 +1,4 @@
+
 package entidades;
 
 public class Cliente {
@@ -8,13 +9,13 @@ public class Cliente {
     private String dni;
     private String telefono;
     private String email;
+    private int idEmpleado;  // Nuevo campo para el ID del empleado
 
     // Constructor vacío
-    public Cliente() {
-    }
+    public Cliente() {}
 
-    // Constructor con parámetros
-    public Cliente(int idCliente, String nombre, String apellido, String direccion, String dni, String telefono, String email) {
+    // Constructor completo con ID de empleado
+    public Cliente(int idCliente, String nombre, String apellido, String direccion, String dni, String telefono, String email, int idEmpleado) {
         this.idCliente = idCliente;
         this.nombre = nombre;
         this.apellido = apellido;
@@ -22,18 +23,19 @@ public class Cliente {
         this.dni = dni;
         this.telefono = telefono;
         this.email = email;
+        this.idEmpleado = idEmpleado;
     }
-    
-    // Constructor para crear un nuevo cliente sin ID
-    public Cliente(String nombre, String apellido, String direccion, String dni, String telefono, String email) {
+
+    // Constructor para crear un nuevo cliente sin ID de cliente
+    public Cliente(String nombre, String apellido, String direccion, String dni, String telefono, String email, int idEmpleado) {
         this.nombre = nombre;
         this.apellido = apellido;
         this.direccion = direccion;
         this.dni = dni;
         this.telefono = telefono;
         this.email = email;
+        this.idEmpleado = idEmpleado;
     }
-
 
     // Getters y Setters
     public int getIdCliente() {
@@ -90,5 +92,13 @@ public class Cliente {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public int getIdEmpleado() {
+        return idEmpleado;
+    }
+
+    public void setIdEmpleado(int idEmpleado) {
+        this.idEmpleado = idEmpleado;
     }
 }

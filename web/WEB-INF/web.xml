@@ -20,6 +20,10 @@
         <servlet-name>DashboardActividades</servlet-name>
         <servlet-class>Controler.DashboardActividades</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>CrearCliente</servlet-name>
+        <servlet-class>Controler.CrearCliente</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>ControladorEmpleado</servlet-name>
         <url-pattern>/ControladorEmpleado</url-pattern>
@@ -39,6 +43,10 @@
     <servlet-mapping>
         <servlet-name>DashboardActividades</servlet-name>
         <url-pattern>/DashboardActividades</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CrearCliente</servlet-name>
+        <url-pattern>/CrearCliente</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
