@@ -13,8 +13,49 @@
         <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     </head>
+
+    <style>
+
+        .modal-content {
+            position: relative;
+        }
+
+        .autocomplete-results {
+            position: absolute;
+            top: 60px; /* Ajusta esto para que quede justo debajo del campo */
+            left: 15px;
+            right: 15px;
+            border: 1px solid #ccc;
+            background-color: white;
+            max-height: 150px;
+            overflow-y: auto;
+            border-radius: 4px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 5px 0;
+            z-index: 1050; /* Asegura que se muestre encima del modal */
+        }
+
+        .autocomplete-item {
+            padding: 8px 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .autocomplete-item i {
+            color: #007bff;
+        }
+
+        .autocomplete-item:hover {
+            background-color: #e9e9e9;
+        }
+
+
+    </style>
+
     <body>
-        
+
         <%
             response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
 
@@ -27,7 +68,7 @@
                 return;
             }
         %>
-        
+
         <!-- Contenido Principal -->
         <div class="container mt-5">
             <h2 class="text-center">Gestión de Pedido</h2>
@@ -98,7 +139,7 @@
         <!-- Modal para Buscar Cliente por DNI -->
         <div class="modal fade" id="buscarDniModal" tabindex="-1" aria-labelledby="buscarDniLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
+                <div class="modal-content position-relative">
                     <div class="modal-header">
                         <h5 class="modal-title" id="buscarDniLabel">Ingrese su DNI por favor</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
@@ -109,10 +150,15 @@
                             <input type="text" class="form-control" id="dniBuscar" placeholder="Ingrese DNI">
                             <button class="btn btn-primary" onclick="buscarCliente()">Buscar</button>
                         </div>
+                        <!-- Contenedor de resultados de autocompletado -->
+                        <div id="resultadosAutocompletar" class="autocomplete-results"></div>
                     </div>
                 </div>
             </div>
         </div>
+
+
+
 
         <!-- Modal de Advertencia -->
         <div class="modal fade" id="advertenciaModal" tabindex="-1" aria-labelledby="advertenciaLabel" aria-hidden="true">
@@ -135,7 +181,7 @@
 
         <!-- Bootstrap JS y Popper -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
-        <script src="resources/js/Models.js?timestamp=<%= System.currentTimeMillis()%>">
+        <script src="resources/js/Models.js?timestamp=<%= System.currentTimeMillis()%>"></script>
 
     </body>
 </html>

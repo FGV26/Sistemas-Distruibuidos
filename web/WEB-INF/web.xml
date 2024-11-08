@@ -24,6 +24,10 @@
         <servlet-name>CrearCliente</servlet-name>
         <servlet-class>Controler.CrearCliente</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ControlerPedidos</servlet-name>
+        <servlet-class>Controler.ValidarClientes</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>ControladorEmpleado</servlet-name>
         <url-pattern>/ControladorEmpleado</url-pattern>
@@ -47,6 +51,10 @@
     <servlet-mapping>
         <servlet-name>CrearCliente</servlet-name>
         <url-pattern>/CrearCliente</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ControlerPedidos</servlet-name>
+        <url-pattern>/ControlerPedidos</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

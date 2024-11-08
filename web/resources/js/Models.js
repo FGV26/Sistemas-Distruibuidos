@@ -1,3 +1,4 @@
+
 // Variable de control para evitar la advertencia tras interactuar con el modal
 let clienteSeleccionado = false;
 
@@ -33,18 +34,51 @@ function redirigirDashboard() {
     window.location.href = "DashboardActividades?accion=Listar";
 }
 
-// Placeholder para registrar cliente
+// Función para enviar el formulario de registro de cliente
 function submitRegistro() {
-    alert("Formulario de registro enviado (simulado)");
-    var modal = bootstrap.Modal.getInstance(document.getElementById('registroClienteModal'));
-    modal.hide();
+    const nombre = document.getElementById("nombre").value;
+    const apellido = document.getElementById("apellido").value;
+    const direccion = document.getElementById("direccion").value;
+    const dni = document.getElementById("dni").value;
+    const telefono = document.getElementById("telefono").value;
+    const email = document.getElementById("email").value;
+
+    // Enviar datos del cliente al servlet
+    fetch('ValidarClientes?accion=Crear', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        body: `nombre=${nombre}&apellido=${apellido}&direccion=${direccion}&dni=${dni}&telefono=${telefono}&email=${email}`
+    }).then(response => {
+        if (response.ok) {
+            alert("Cliente registrado exitosamente");
+            bootstrap.Modal.getInstance(document.getElementById('registroClienteModal')).hide();
+            abrirModalCliente();
+        } else {
+            alert("Error al registrar el cliente");
+        }
+    });
 }
 
-// Placeholder para buscar cliente
+// Función para buscar cliente por DNI
 function buscarCliente() {
-    alert("Buscar cliente por DNI (simulado)");
-    var modal = bootstrap.Modal.getInstance(document.getElementById('buscarDniModal'));
-    modal.hide();
+    const dni = document.getElementById("dniBuscar").value.trim();
+    if (dni) {
+        // Llamada al servlet para buscar cliente
+        fetch(`ValidarClientes?accion=Buscar&dni=${dni}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data) {
+                        alert(`Cliente encontrado: ${data.nombre} ${data.apellido}`);
+                        bootstrap.Modal.getInstance(document.getElementById('buscarDniModal')).hide();
+                        abrirModalCliente();
+                    } else {
+                        alert("Cliente no encontrado");
+                    }
+                })
+                .catch(() => alert("Error en la búsqueda del cliente"));
+    } else {
+        alert("Por favor, ingrese un DNI");
+    }
 }
 
 // Mostrar el modal inicial al cargar la página
@@ -68,3 +102,40 @@ document.getElementById('advertenciaModal').addEventListener('hidden.bs.modal', 
         redirigirDashboard();
     }
 });
+
+// Autocompletar en el campo de búsqueda de DNI
+document.addEventListener("DOMContentLoaded", function () {
+    const inputDni = document.getElementById("dniBuscar");
+    const resultadosDiv = document.getElementById("resultadosAutocompletar");
+
+    inputDni.addEventListener("input", function () {
+        const dni = inputDni.value.trim();
+        if (dni.length >= 3) { // Empieza a buscar después de 3 caracteres
+            fetch(`ValidarClientes?accion=AutoCompletar&dni=${dni}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        mostrarResultados(data);
+                    });
+        } else {
+            resultadosDiv.innerHTML = "";
+        }
+    });
+
+    function mostrarResultados(data) {
+        resultadosDiv.innerHTML = "";
+        data.forEach(cliente => {
+            const div = document.createElement("div");
+            div.classList.add("autocomplete-item");
+
+            // Añade un ícono de usuario y el nombre del cliente
+            div.innerHTML = `<i class="fas fa-user"></i> ${cliente.nombre} ${cliente.apellido}`;
+
+            div.addEventListener("click", () => {
+                inputDni.value = cliente.dni; // Asigna el DNI al input
+                resultadosDiv.innerHTML = ""; // Borra los resultados
+            });
+            resultadosDiv.appendChild(div);
+        });
+    }
+});
+

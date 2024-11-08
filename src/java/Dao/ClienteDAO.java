@@ -1,4 +1,3 @@
-
 package dao;
 
 import entidades.Cliente;
@@ -17,6 +16,7 @@ public class ClienteDAO {
     private static final String SQL_INSERT = "INSERT INTO clientes (Nombre, Apellido, Direccion, DNI, Telefono, Email, Id_Empleado) VALUES (?, ?, ?, ?, ?, ?, ?)";
     private static final String SQL_UPDATE = "UPDATE clientes SET Nombre = ?, Apellido = ?, Direccion = ?, DNI = ?, Telefono = ?, Email = ?, Id_Empleado = ? WHERE Id_Cliente = ?";
     private static final String SQL_DELETE = "DELETE FROM clientes WHERE Id_Cliente = ?";
+    private static final String SQL_SELECT_BY_DNI = "SELECT * FROM clientes WHERE DNI = ?";
 
     // Listar todos los clientes
     public List<Cliente> listar() {
@@ -101,12 +101,12 @@ public class ClienteDAO {
         try {
             conn = conexion.getConnection();
             stmt = conn.prepareStatement(SQL_INSERT);
-            stmt.setString(1, cliente.getNombre());       
-            stmt.setString(2, cliente.getApellido());     
-            stmt.setString(3, cliente.getDireccion());    
-            stmt.setString(4, cliente.getDni());          
-            stmt.setString(5, cliente.getTelefono());     
-            stmt.setString(6, cliente.getEmail());        
+            stmt.setString(1, cliente.getNombre());
+            stmt.setString(2, cliente.getApellido());
+            stmt.setString(3, cliente.getDireccion());
+            stmt.setString(4, cliente.getDni());
+            stmt.setString(5, cliente.getTelefono());
+            stmt.setString(6, cliente.getEmail());
             stmt.setInt(7, cliente.getIdEmpleado());      // Nuevo campo
             rows = stmt.executeUpdate();
         } catch (SQLException ex) {
@@ -176,4 +176,84 @@ public class ClienteDAO {
         }
         return rows;
     }
+
+    public Cliente obtenerClientePorDni(String dni) {
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        Cliente cliente = null;
+
+        try {
+            conn = conexion.getConnection();
+            stmt = conn.prepareStatement(SQL_SELECT_BY_DNI);
+            stmt.setString(1, dni);
+            rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                cliente = new Cliente();
+                cliente.setIdCliente(rs.getInt("Id_Cliente"));
+                cliente.setNombre(rs.getString("Nombre"));
+                cliente.setApellido(rs.getString("Apellido"));
+                cliente.setDireccion(rs.getString("Direccion"));
+                cliente.setDni(rs.getString("DNI"));
+                cliente.setTelefono(rs.getString("Telefono"));
+                cliente.setEmail(rs.getString("Email"));
+                cliente.setIdEmpleado(rs.getInt("Id_Empleado"));
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace(System.out);
+        } finally {
+            try {
+                conexion.close(rs);
+                conexion.close(stmt);
+                conexion.close(conn);
+            } catch (SQLException ex) {
+                ex.printStackTrace(System.out);
+            }
+        }
+        return cliente;
+    }
+
+    public List<Cliente> buscarClientesPorDniParcial(String dniParcial) {
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        List<Cliente> clientes = new ArrayList<>();
+
+        String SQL_BUSCAR_DNI_PARCIAL = "SELECT Id_Cliente, Nombre, Apellido FROM clientes WHERE DNI LIKE ?";
+
+        try {
+            conn = conexion.getConnection();
+            stmt = conn.prepareStatement(SQL_BUSCAR_DNI_PARCIAL);
+            stmt.setString(1, dniParcial + "%"); // Usa '%' para coincidencias que comiencen con 'dniParcial'
+            rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                Cliente cliente = new Cliente();
+                cliente.setIdCliente(rs.getInt("Id_Cliente"));
+                cliente.setNombre(rs.getString("Nombre"));
+                cliente.setApellido(rs.getString("Apellido"));
+                clientes.add(cliente);
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace(System.out);
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (stmt != null) {
+                    stmt.close();
+                }
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException ex) {
+                ex.printStackTrace(System.out);
+            }
+        }
+
+        return clientes;
+    }
+
 }
