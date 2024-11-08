@@ -69,12 +69,6 @@
             }
         %>
 
-        <!-- Contenido Principal -->
-        <div class="container mt-5">
-            <h2 class="text-center">Gestión de Pedido</h2>
-            <p class="text-center">Aquí podrás gestionar el pedido seleccionando un cliente y añadiendo productos.</p>
-        </div>
-
         <!-- Modal Inicial para la selección de cliente -->
         <div class="modal fade" id="clienteModal" tabindex="-1" aria-labelledby="clienteModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
