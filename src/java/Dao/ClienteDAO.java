@@ -229,7 +229,7 @@ public class ClienteDAO {
             stmt = conn.prepareStatement(SQL_SELECT_BY_DNI);
             stmt.setString(1, dni);
             rs = stmt.executeQuery();
-
+            
             if (rs.next()) {
                 cliente = new Cliente();
                 cliente.setIdCliente(rs.getInt("Id_Cliente"));

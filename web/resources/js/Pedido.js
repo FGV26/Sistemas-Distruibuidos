@@ -4,20 +4,20 @@
 // Bloquear/desbloquear acciones entre búsqueda y registro
 let clienteSeleccionado = false;
 
-// Buscar cliente con autocompletado
-$("#dniCliente").on("input", function () {
-    const dni = $(this).val();
-    if (dni.length >= 3) { // Autocompletar desde el tercer carácter
-        $.get("GestionDePedido", {accion: "BuscarClienteAuto", dni: dni}, function (data) {
-            const resultados = JSON.parse(data);
-            let lista = "";
-            resultados.forEach(cliente => {
-                lista += `<a href="#" class="list-group-item list-group-item-action" onclick="seleccionarCliente('${cliente.dni}', '${cliente.nombre}', '${cliente.apellido}', '${cliente.email}')">${cliente.nombre} ${cliente.apellido}</a>`;
-            });
-            $("#autocompleteResults").html(lista);
-        });
-    }
-});
+//// Buscar cliente con autocompletado
+//$("#dniCliente").on("input", function () {
+//    const dni = $(this).val();
+//    if (dni.length >= 3) { // Autocompletar desde el tercer carácter
+//        $.get("GestionDePedido", {accion: "BuscarClienteAuto", dni: dni}, function (data) {
+//            const resultados = JSON.parse(data);
+//            let lista = "";
+//            resultados.forEach(cliente => {
+//                lista += `<a href="#" class="list-group-item list-group-item-action" onclick="seleccionarCliente('${cliente.dni}', '${cliente.nombre}', '${cliente.apellido}', '${cliente.email}')">${cliente.nombre} ${cliente.apellido}</a>`;
+//            });
+//            $("#autocompleteResults").html(lista);
+//        });
+//    }
+//});
 
 // Seleccionar cliente de la lista de autocompletar
 function seleccionarCliente(dni, nombre, apellido, email) {
@@ -37,20 +37,42 @@ function bloquearRegistro() {
 }
 
 
-function buscarCliente() {
-    const  dni = $("#dniCliente").val();
-    $.get("GestionDePedido", {accion: "BuscarCliente", dni: dni}, function (response) {
-        const cliente = JSON.parse(response);
-        if (cliente) {
-            $("#resultadoBusqueda").html(`Cliente: ${cliente.nombre} ${cliente.apellido}`);
-            $("#nextToStep2").prop("disabled", false); // Habilitar botón para avanzar
-        } else {
-            alert("Cliente no encontrado");
+async function buscarCliente() {
+    const dniInput = document.getElementById("dniCliente").value;
+    
+    const data = {
+        accion: "BuscarCliente",
+        dni: dniInput
+    };
+    
+    $.post("/Sistemas-Distruibuidos/GestionDePedidos", data, function (response) {
+        console.log("Respuesta del servidor:", response);
+
+        
+        let inputNombre = document.getElementById("nombreCliente");
+        let inputApellido = document.getElementById("apellidoCliente");
+        let inputDireccion = document.getElementById("direccionCliente");
+        let inputTelefono = document.getElementById("telefonoCliente");
+        let inputEmail = document.getElementById("emailCliente");
+        
+        if (!response) {
+            alert("No se encontro cliente.");
+            return;
         }
+        
+        console.log(response.apellido);
+        
+        inputNombre.value = response.nombre;
+        inputApellido.value = response.apellido;
+        inputDireccion.value = response.direccion;
+        inputTelefono.value = response.telefono;
+        inputEmail.value = response.email;
+
     }).fail(function () {
-        alert("Error en la búsqueda del cliente");
+        alert("Error al buscar cliente");
     });
 }
+
 
 
 function registrarCliente() {

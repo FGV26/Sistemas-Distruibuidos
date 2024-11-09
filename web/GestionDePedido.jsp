@@ -112,9 +112,65 @@
                     
                     <div class="col-md-6">
                         <h5>Búsqueda de Cliente</h5>
-                        <input type="text" id="dniCliente" class="form-control" placeholder="Ingrese DNI del cliente" autocomplete="off">
+                        
+                        <form id="formBuscarCliente">
+                            
+                            <div class="input-group mt-2">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-id-card"></i></span>
+                                </div>
+
+                                <input type="text" class="form-control" id="dniCliente" placeholder="Ingrese DNI" value="">
+
+                                <div class="input-group-prepend">
+                                    <button class="input-group btn btn-outline-primary" type="button" onclick="buscarCliente()" >Buscar</button>
+                                </div>
+                            </div>
+                            
+                            <!-- Campo de Nombre -->
+                            <div class="input-group mt-2">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                </div>
+                                <input type="text" class="form-control" id="nombreCliente" placeholder="Ingrese Nombre" readonly> 
+                            </div>
+
+                            <!-- Campo de Apellido -->
+                            <div class="input-group mt-2">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                </div>
+                                <input type="text" class="form-control" id="apellidoCliente" placeholder="Ingrese Apellido" readonly>
+                            </div>
+
+                            <!-- Campo de Dirección -->
+                            <div class="input-group mt-2">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-home"></i></span>
+                                </div>
+                                <input type="text" class="form-control" id="direccionCliente" placeholder="Ingrese Dirección" readonly>
+                            </div>
+
+                            <!-- Campo de Teléfono -->
+                            <div class="input-group mt-2">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                                </div>
+                                <input type="text" class="form-control" id="telefonoCliente" placeholder="Ingrese Teléfono" readonly>
+                            </div>
+
+                            <!-- Campo de Email -->
+                            <div class="input-group mt-2">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                                </div>
+                                <input type="email" class="form-control" id="emailCliente" placeholder="Ingrese Email" readonly>
+                            </div>
+                            
+                        </form>
+
                         <div id="autocompleteResults" class="list-group mt-2"></div> <!-- Lista de sugerencias -->
-                        <button class="btn btn-primary mt-2" onclick="buscarCliente()" id="btnBuscar">Buscar</button>
+                        
                     </div>
                 </div>
 

@@ -16,6 +16,7 @@ import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -71,18 +72,37 @@ public class GestionDePedidos extends HttpServlet {
         }
     }
 
-    private void buscarCliente(HttpServletRequest request, HttpServletResponse response, Usuario user)
-            throws IOException {
-        String dni = request.getParameter("dni");
-        Cliente cliente = clienteDAO.obtenerClientePorDni(dni);
-
-        if (cliente != null) {
-            response.getWriter().write(gson.toJson(cliente));
-            registrarActividad("Búsqueda", "El empleado buscó un cliente con DNI: " + dni, user.getIdUsuario());
-        } else {
-            response.sendRedirect("GestionDePedido.jsp?error=Cliente+no+encontrado");
+    private void buscarCliente(HttpServletRequest request, HttpServletResponse response, Usuario user) throws IOException {
+        try{
+            if (user == null) {
+                response.sendRedirect("GestionDePedido.jsp?error=Usuario+no+autenticado");
+                return;
+            }
+            
+            String dni = request.getParameter("dni");
+            
+            System.out.println("dni:" + dni);
+            
+            if(dni == null){
+                return;
+            }
+            
+            Cliente cliente = clienteDAO.obtenerClientePorDni(dni);
+            
+            if(cliente == null) {
+                return;
+            };
+            
+            String clienteJson = gson.toJson(cliente);
+            response.setContentType("application/json");
+            response.getWriter().write(clienteJson);
+            
+        } catch (IOException e) {
+            e.printStackTrace(System.out);
+            response.getWriter().write("{\"error\": \"Error al procesar solicitud\"}");
         }
     }
+
 
     private void crearCliente(HttpServletRequest request, HttpServletResponse response, Usuario user)
             throws IOException {
@@ -214,6 +234,8 @@ public class GestionDePedidos extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
+        
+        
     }
 
     @Override
