@@ -48,25 +48,19 @@
             <div id="step1" class="step-content">
                 <h4>Seleccionar o Registrar Cliente</h4>
                 <div class="row">
-                    <div class="col-md-6">
-                        <h5>Búsqueda de Cliente</h5>
-                        <input type="text" id="dniCliente" class="form-control" placeholder="Ingrese DNI del cliente" autocomplete="off">
-                        <div id="autocompleteResults" class="list-group mt-2"></div> <!-- Lista de sugerencias -->
-                        <button class="btn btn-primary mt-2" onclick="buscarCliente()" id="btnBuscar">Buscar</button>
-                    </div>
 
                     <div class="col-md-6">
                         <h5>Registro de Cliente</h5>
                         <form id="formRegistroCliente">
                             <!-- Campo de DNI para el formulario de registro -->
                             <div class="input-group mt-2">
-                                
+
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"><i class="fas fa-id-card"></i></span>
                                 </div>
-                                
+
                                 <input type="text" class="form-control" id="dniRegistro" placeholder="Ingrese DNI" value="">
-                                
+
                                 <div class="input-group-prepend">
                                     <button class="input-group btn btn-outline-primary" type="button" onclick="searchClient()">Buscar</button>
                                 </div>
@@ -112,8 +106,15 @@
                                 <input type="email" class="form-control" id="email" placeholder="Ingrese Email">
                             </div>
                             <button type="button" class="btn btn-success mt-2" onclick="registrarCliente()" id="btnRegistrar">Registrar</button>
-                            
+
                         </form>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <h5>Búsqueda de Cliente</h5>
+                        <input type="text" id="dniCliente" class="form-control" placeholder="Ingrese DNI del cliente" autocomplete="off">
+                        <div id="autocompleteResults" class="list-group mt-2"></div> <!-- Lista de sugerencias -->
+                        <button class="btn btn-primary mt-2" onclick="buscarCliente()" id="btnBuscar">Buscar</button>
                     </div>
                 </div>
 
