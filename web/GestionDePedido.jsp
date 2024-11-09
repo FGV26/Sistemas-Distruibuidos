@@ -60,10 +60,16 @@
                         <form id="formRegistroCliente">
                             <!-- Campo de DNI para el formulario de registro -->
                             <div class="input-group mt-2">
+                                
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"><i class="fas fa-id-card"></i></span>
                                 </div>
+                                
                                 <input type="text" class="form-control" id="dniRegistro" placeholder="Ingrese DNI" value="">
+                                
+                                <div class="input-group-prepend">
+                                    <button class="input-group btn btn-outline-primary" type="button" onclick="searchClient()">Buscar</button>
+                                </div>
                             </div>
 
                             <!-- Campo de Nombre -->
@@ -106,6 +112,7 @@
                                 <input type="email" class="form-control" id="email" placeholder="Ingrese Email">
                             </div>
                             <button type="button" class="btn btn-success mt-2" onclick="registrarCliente()" id="btnRegistrar">Registrar</button>
+                            
                         </form>
                     </div>
                 </div>

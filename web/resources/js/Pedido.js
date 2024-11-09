@@ -123,3 +123,48 @@ function realizarPedido() {
         alert("Error al realizar el pedido");
     });
 }
+
+async function searchClient(){
+
+    console.log("searchClient");
+    
+    const token_api = "bb41db102773b0701695ead93cb71d54829e5cf38b90f9b6af5cc238db7f1170";
+    const dni = document.getElementById("dniRegistro").value;
+    
+    console.log("dni:" + dni);
+    
+    if(!dni){
+        alert("Ingresar un DNI para buscar.");
+        return;
+    }
+    
+    try {
+        const response = await fetch("https://apiperu.dev/api/dni", {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token_api}`
+            },
+            body: JSON.stringify({ 'dni': dni })
+        });
+
+        if (!response.ok) {
+            console.error('Error en la solicitud: ' + response.status);
+        }
+        
+        let inputNombre = document.getElementById("nombre");
+        let inputApellido = document.getElementById("apellido");
+
+        const data = await response.json();
+        
+        // Asignar los valores a los inputs
+        inputNombre.value = data.data.nombres;
+        inputApellido.value = `${data.data.apellido_paterno} ${data.data.apellido_materno}`;
+
+
+    } catch (error) {
+        console.error('Hubo un problema con la solicitud:', error);
+    }
+
+}
