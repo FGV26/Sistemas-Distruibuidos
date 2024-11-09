@@ -1,22 +1,25 @@
-
 package entidades;
 
 public class Cliente {
+
     private int idCliente;
+    private String codCliente; // Nuevo campo para el código del cliente
     private String nombre;
     private String apellido;
     private String direccion;
     private String dni;
     private String telefono;
     private String email;
-    private int idEmpleado;  // Nuevo campo para el ID del empleado
+    private int idEmpleado;
 
     // Constructor vacío
-    public Cliente() {}
+    public Cliente() {
+    }
 
-    // Constructor completo con ID de empleado
-    public Cliente(int idCliente, String nombre, String apellido, String direccion, String dni, String telefono, String email, int idEmpleado) {
+    // Constructor completo con ID de empleado y codCliente
+    public Cliente(int idCliente, String codCliente, String nombre, String apellido, String direccion, String dni, String telefono, String email, int idEmpleado) {
         this.idCliente = idCliente;
+        this.codCliente = codCliente;
         this.nombre = nombre;
         this.apellido = apellido;
         this.direccion = direccion;
@@ -26,7 +29,7 @@ public class Cliente {
         this.idEmpleado = idEmpleado;
     }
 
-    // Constructor para crear un nuevo cliente sin ID de cliente
+    // Constructor para crear un nuevo cliente sin ID de cliente y sin codCliente
     public Cliente(String nombre, String apellido, String direccion, String dni, String telefono, String email, int idEmpleado) {
         this.nombre = nombre;
         this.apellido = apellido;
@@ -44,6 +47,14 @@ public class Cliente {
 
     public void setIdCliente(int idCliente) {
         this.idCliente = idCliente;
+    }
+
+    public String getCodCliente() {
+        return codCliente;
+    }
+
+    public void setCodCliente(String codCliente) {
+        this.codCliente = codCliente;
     }
 
     public String getNombre() {

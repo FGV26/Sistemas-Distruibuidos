@@ -21,6 +21,8 @@ public class ProductoDAO {
             = "SELECT MAX(CAST(SUBSTRING(imagen, 4, LENGTH(imagen) - 7) AS UNSIGNED)) AS ultimoNumero FROM productos";
     private static final String IMAGE_PREFIX = "PRO";
 
+    private static final String SQL_SELECT_BY_CATEGORY = "SELECT * FROM productos WHERE idCategoria = (SELECT idCategoria FROM categoria WHERE nombre = ?)";
+
     // Listar todos los productos
     public List<Producto> listar() {
         Connection conn = null;
@@ -402,4 +404,44 @@ public class ProductoDAO {
         return success;
     }
 
+    public List<Producto> listarPorCategoria(String categoria) {
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        List<Producto> productos = new ArrayList<>();
+
+        try {
+            conn = conexion.getConnection();
+            stmt = conn.prepareStatement(SQL_SELECT_BY_CATEGORY);
+            stmt.setString(1, categoria);
+            rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                Producto producto = new Producto(
+                        rs.getInt("idProducto"),
+                        rs.getInt("idCategoria"),
+                        rs.getString("nombre"),
+                        rs.getDouble("precio"),
+                        rs.getInt("stock"),
+                        rs.getInt("stock_minimo"),
+                        rs.getString("descripcion"),
+                        rs.getString("imagen"),
+                        rs.getString("estado"),
+                        rs.getString("fecha_creacion")
+                );
+                productos.add(producto);
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace(System.out);
+        } finally {
+            try {
+                conexion.close(rs);
+                conexion.close(stmt);
+                conexion.close(conn);
+            } catch (SQLException ex) {
+                ex.printStackTrace(System.out);
+            }
+        }
+        return productos;
+    }
 }

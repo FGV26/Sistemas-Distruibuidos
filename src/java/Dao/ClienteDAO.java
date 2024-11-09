@@ -13,10 +13,12 @@ public class ClienteDAO {
 
     private static final String SQL_SELECT = "SELECT * FROM clientes";
     private static final String SQL_SELECT_BY_ID = "SELECT * FROM clientes WHERE Id_Cliente = ?";
-    private static final String SQL_INSERT = "INSERT INTO clientes (Nombre, Apellido, Direccion, DNI, Telefono, Email, Id_Empleado) VALUES (?, ?, ?, ?, ?, ?, ?)";
-    private static final String SQL_UPDATE = "UPDATE clientes SET Nombre = ?, Apellido = ?, Direccion = ?, DNI = ?, Telefono = ?, Email = ?, Id_Empleado = ? WHERE Id_Cliente = ?";
+    private static final String SQL_INSERT = "INSERT INTO clientes (Cod_Cliente, Nombre, Apellido, Direccion, DNI, Telefono, Email, Id_Empleado) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+    private static final String SQL_UPDATE = "UPDATE clientes SET Cod_Cliente = ?, Nombre = ?, Apellido = ?, Direccion = ?, DNI = ?, Telefono = ?, Email = ?, Id_Empleado = ? WHERE Id_Cliente = ?";
     private static final String SQL_DELETE = "DELETE FROM clientes WHERE Id_Cliente = ?";
     private static final String SQL_SELECT_BY_DNI = "SELECT * FROM clientes WHERE DNI = ?";
+    private static final String SQL_OBTENER_ULTIMO_ID = "SELECT MAX(Id_Cliente) AS ultimoId FROM clientes";
+    private static final String SQL_BUSCAR_DNI_PARCIAL = "SELECT Id_Cliente, Cod_Cliente, Nombre, Apellido FROM clientes WHERE DNI LIKE ?";
 
     // Listar todos los clientes
     public List<Cliente> listar() {
@@ -32,13 +34,14 @@ public class ClienteDAO {
             while (rs.next()) {
                 Cliente cliente = new Cliente();
                 cliente.setIdCliente(rs.getInt("Id_Cliente"));
+                cliente.setCodCliente(rs.getString("Cod_Cliente"));
                 cliente.setNombre(rs.getString("Nombre"));
                 cliente.setApellido(rs.getString("Apellido"));
                 cliente.setDireccion(rs.getString("Direccion"));
                 cliente.setDni(rs.getString("DNI"));
                 cliente.setTelefono(rs.getString("Telefono"));
                 cliente.setEmail(rs.getString("Email"));
-                cliente.setIdEmpleado(rs.getInt("Id_Empleado"));  // Nuevo campo
+                cliente.setIdEmpleado(rs.getInt("Id_Empleado"));
                 clientes.add(cliente);
             }
         } catch (SQLException ex) {
@@ -70,13 +73,14 @@ public class ClienteDAO {
             if (rs.next()) {
                 cliente = new Cliente();
                 cliente.setIdCliente(rs.getInt("Id_Cliente"));
+                cliente.setCodCliente(rs.getString("Cod_Cliente"));
                 cliente.setNombre(rs.getString("Nombre"));
                 cliente.setApellido(rs.getString("Apellido"));
                 cliente.setDireccion(rs.getString("Direccion"));
                 cliente.setDni(rs.getString("DNI"));
                 cliente.setTelefono(rs.getString("Telefono"));
                 cliente.setEmail(rs.getString("Email"));
-                cliente.setIdEmpleado(rs.getInt("Id_Empleado"));  // Nuevo campo
+                cliente.setIdEmpleado(rs.getInt("Id_Empleado"));
             }
         } catch (SQLException ex) {
             ex.printStackTrace(System.out);
@@ -92,7 +96,34 @@ public class ClienteDAO {
         return cliente;
     }
 
-    // Insertar un nuevo cliente
+    // Método para obtener el último ID de cliente para la generación de Cod_Cliente
+    public int obtenerUltimoIdCliente() {
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        int ultimoId = 0;
+
+        try {
+            conn = conexion.getConnection();
+            stmt = conn.prepareStatement(SQL_OBTENER_ULTIMO_ID);
+            rs = stmt.executeQuery();
+            if (rs.next()) {
+                ultimoId = rs.getInt("ultimoId");
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace(System.out);
+        } finally {
+            try {
+                conexion.close(rs);
+                conexion.close(stmt);
+                conexion.close(conn);
+            } catch (SQLException ex) {
+                ex.printStackTrace(System.out);
+            }
+        }
+        return ultimoId;
+    }
+
     public int insertar(Cliente cliente) {
         Connection conn = null;
         PreparedStatement stmt = null;
@@ -100,15 +131,23 @@ public class ClienteDAO {
 
         try {
             conn = conexion.getConnection();
+
+            int nuevoId = obtenerUltimoIdCliente() + 1;
+            String nuevoCodCliente = "CLIEN" + String.format("%03d", nuevoId);
+            cliente.setCodCliente(nuevoCodCliente);
+
             stmt = conn.prepareStatement(SQL_INSERT);
-            stmt.setString(1, cliente.getNombre());
-            stmt.setString(2, cliente.getApellido());
-            stmt.setString(3, cliente.getDireccion());
-            stmt.setString(4, cliente.getDni());
-            stmt.setString(5, cliente.getTelefono());
-            stmt.setString(6, cliente.getEmail());
-            stmt.setInt(7, cliente.getIdEmpleado());      // Nuevo campo
+            stmt.setString(1, cliente.getCodCliente());
+            stmt.setString(2, cliente.getNombre());
+            stmt.setString(3, cliente.getApellido());
+            stmt.setString(4, cliente.getDireccion());
+            stmt.setString(5, cliente.getDni());
+            stmt.setString(6, cliente.getTelefono());
+            stmt.setString(7, cliente.getEmail());
+            stmt.setInt(8, cliente.getIdEmpleado());
+
             rows = stmt.executeUpdate();
+
         } catch (SQLException ex) {
             ex.printStackTrace(System.out);
         } finally {
@@ -131,14 +170,15 @@ public class ClienteDAO {
         try {
             conn = conexion.getConnection();
             stmt = conn.prepareStatement(SQL_UPDATE);
-            stmt.setString(1, cliente.getNombre());
-            stmt.setString(2, cliente.getApellido());
-            stmt.setString(3, cliente.getDireccion());
-            stmt.setString(4, cliente.getDni());
-            stmt.setString(5, cliente.getTelefono());
-            stmt.setString(6, cliente.getEmail());
-            stmt.setInt(7, cliente.getIdEmpleado());  // Nuevo campo
-            stmt.setInt(8, cliente.getIdCliente());
+            stmt.setString(1, cliente.getCodCliente());
+            stmt.setString(2, cliente.getNombre());
+            stmt.setString(3, cliente.getApellido());
+            stmt.setString(4, cliente.getDireccion());
+            stmt.setString(5, cliente.getDni());
+            stmt.setString(6, cliente.getTelefono());
+            stmt.setString(7, cliente.getEmail());
+            stmt.setInt(8, cliente.getIdEmpleado());
+            stmt.setInt(9, cliente.getIdCliente());
             rows = stmt.executeUpdate();
         } catch (SQLException ex) {
             ex.printStackTrace(System.out);
@@ -177,6 +217,7 @@ public class ClienteDAO {
         return rows;
     }
 
+    // Obtener cliente por DNI
     public Cliente obtenerClientePorDni(String dni) {
         Connection conn = null;
         PreparedStatement stmt = null;
@@ -192,6 +233,7 @@ public class ClienteDAO {
             if (rs.next()) {
                 cliente = new Cliente();
                 cliente.setIdCliente(rs.getInt("Id_Cliente"));
+                cliente.setCodCliente(rs.getString("Cod_Cliente"));
                 cliente.setNombre(rs.getString("Nombre"));
                 cliente.setApellido(rs.getString("Apellido"));
                 cliente.setDireccion(rs.getString("Direccion"));
@@ -214,13 +256,12 @@ public class ClienteDAO {
         return cliente;
     }
 
+    // Búsqueda parcial de clientes por DNI
     public List<Cliente> buscarClientesPorDniParcial(String dniParcial) {
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
         List<Cliente> clientes = new ArrayList<>();
-
-        String SQL_BUSCAR_DNI_PARCIAL = "SELECT Id_Cliente, Nombre, Apellido FROM clientes WHERE DNI LIKE ?";
 
         try {
             conn = conexion.getConnection();
@@ -231,6 +272,7 @@ public class ClienteDAO {
             while (rs.next()) {
                 Cliente cliente = new Cliente();
                 cliente.setIdCliente(rs.getInt("Id_Cliente"));
+                cliente.setCodCliente(rs.getString("Cod_Cliente"));
                 cliente.setNombre(rs.getString("Nombre"));
                 cliente.setApellido(rs.getString("Apellido"));
                 clientes.add(cliente);
@@ -239,15 +281,9 @@ public class ClienteDAO {
             ex.printStackTrace(System.out);
         } finally {
             try {
-                if (rs != null) {
-                    rs.close();
-                }
-                if (stmt != null) {
-                    stmt.close();
-                }
-                if (conn != null) {
-                    conn.close();
-                }
+                conexion.close(rs);
+                conexion.close(stmt);
+                conexion.close(conn);
             } catch (SQLException ex) {
                 ex.printStackTrace(System.out);
             }
@@ -255,5 +291,4 @@ public class ClienteDAO {
 
         return clientes;
     }
-
 }

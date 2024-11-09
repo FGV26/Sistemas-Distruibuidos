@@ -32,6 +32,10 @@
         <servlet-name>GestionarPedido</servlet-name>
         <servlet-class>Controler.GestionarPedido</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>GestionDePedido</servlet-name>
+        <servlet-class>Controler.GestionDePedidos</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>ControladorEmpleado</servlet-name>
         <url-pattern>/ControladorEmpleado</url-pattern>
@@ -63,6 +67,10 @@
     <servlet-mapping>
         <servlet-name>GestionarPedido</servlet-name>
         <url-pattern>/GestionarPedido</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>GestionDePedido</servlet-name>
+        <url-pattern>/GestionDePedido</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

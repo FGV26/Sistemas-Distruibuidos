@@ -1,9 +1,11 @@
+
 package entidades;
 
 import java.util.Date;
 
 public class Pedido {
     private int idPedido;
+    private String codPedido; // Nuevo campo para el código del pedido
     private int idCliente;
     private int idEmpleado;
     private Date fechaPedido;
@@ -12,12 +14,12 @@ public class Pedido {
     private String estado;
 
     // Constructor vacío
-    public Pedido() {
-    }
+    public Pedido() {}
 
-    // Constructor con todos los parámetros
-    public Pedido(int idPedido, int idCliente, int idEmpleado, Date fechaPedido, double subTotal, double total, String estado) {
+    // Constructor completo con todos los parámetros
+    public Pedido(int idPedido, String codPedido, int idCliente, int idEmpleado, Date fechaPedido, double subTotal, double total, String estado) {
         this.idPedido = idPedido;
+        this.codPedido = codPedido;
         this.idCliente = idCliente;
         this.idEmpleado = idEmpleado;
         this.fechaPedido = fechaPedido;
@@ -26,12 +28,12 @@ public class Pedido {
         this.estado = estado;
     }
 
-    // Nuevo constructor simplificado (para `crearPedido` en el controlador)
+    // Constructor simplificado (para `crearPedido` en el controlador)
     public Pedido(int idCliente, double subTotal, double total) {
         this.idCliente = idCliente;
         this.subTotal = subTotal;
         this.total = total;
-        this.fechaPedido = new Date();  // Fecha actual como predeterminada
+        this.fechaPedido = new Date();  // Fecha actual por defecto
         this.estado = "Proceso";        // Estado predeterminado
     }
 
@@ -42,6 +44,14 @@ public class Pedido {
 
     public void setIdPedido(int idPedido) {
         this.idPedido = idPedido;
+    }
+
+    public String getCodPedido() {
+        return codPedido;
+    }
+
+    public void setCodPedido(String codPedido) {
+        this.codPedido = codPedido;
     }
 
     public int getIdCliente() {

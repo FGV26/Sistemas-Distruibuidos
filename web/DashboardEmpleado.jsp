@@ -52,7 +52,7 @@
                         <ul>
                             <!-- Gestionar un Pedido -->
                             <li>
-                                <a href="#" title="Gestionar Pedido">
+                                <a href="GestionDePedido?accion=Ingresar" title="Gestionar Pedido">
                                     <i class="bi bi-cart"></i>
                                     <span class="link hide">Gestionar Pedido</span>
                                 </a>
@@ -100,7 +100,7 @@
                     <!-- Sección de Bienvenida -->
                     <div class="welcome-section">
                         <img src="resources/img/user.png" alt="User Image" class="welcome-image">
-                        <h2>Bienvenido, <%= user.getNombre() %> (Empleado)</h2>
+                        <h2>Bienvenido, <%= user.getNombre()%> (Empleado)</h2>
                     </div>
 
                     <div class="reminder-section">
