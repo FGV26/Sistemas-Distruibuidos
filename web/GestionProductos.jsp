@@ -16,10 +16,12 @@
     <head>
         <meta charset="UTF-8">
         <title>Gestión de Productos</title>
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
         <link rel="stylesheet" href="resources/css/Alerta.css">
         <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+        
+        <!-- Boostrap -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    
     </head>
     <body>
         <div class="container">
@@ -248,17 +250,18 @@
                     </div>
                 </div>
             </div>
-
+            
+            <!-- Toast deyvids - Informacion deyvids -->
+            
             <div aria-live="polite" aria-atomic="true" class="position-relative">
-                <!-- Contenedor de toasts en la esquina superior derecha -->
-                <div class="toast-container position-absolute top-0 end-0 p-3">
+                <div class="toast-container position-fixed top-0 end-0 p-3">
                     <c:forEach var="mensaje" items="${mensajesAdvertencia}" varStatus="status">
-                        <div class="toast border-0 
-                             <c:choose>
-                                 <c:when test="${tiposMensaje[status.index] == 'warning'}">bg-warning text-dark</c:when>
-                                 <c:when test="${tiposMensaje[status.index] == 'danger'}">bg-danger text-light</c:when>
-                             </c:choose>"
-                             role="alert" aria-live="assertive" aria-atomic="true">
+                        <!-- Cambia el color de fondo según el tipo de mensaje -->
+                        <div class="toast <c:choose>
+                            <c:when test="${tiposMensaje[status.index] == 'warning'}">bg-warning</c:when>
+                            <c:when test="${tiposMensaje[status.index] == 'danger'}">bg-danger</c:when>
+                        </c:choose>" role="alert" aria-live="assertive" aria-atomic="true">
+
                             <div class="toast-header">
                                 <strong class="me-auto">
                                     <c:choose>
@@ -266,9 +269,11 @@
                                         <c:when test="${tiposMensaje[status.index] == 'danger'}">Aviso de Sin Stock</c:when>
                                     </c:choose>
                                 </strong>
+                                <small class="text-body-secondary">just now</small>
                                 <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
                             </div>
-                            <div class="toast-body">
+
+                            <div class="toast-body text-white">
                                 ${mensaje}
                             </div>
                         </div>
@@ -276,18 +281,18 @@
                 </div>
             </div>
 
+            
             <script>
-                document.addEventListener('DOMContentLoaded', function () {
-                    // Inicializar todos los toasts en la página
-                    var toastElList = [].slice.call(document.querySelectorAll('.toast'))
-                    toastElList.forEach(function (toastEl) {
-                        var toast = new bootstrap.Toast(toastEl, {autohide: true, delay: 5000})
-                        toast.show()
-                    })
+                document.addEventListener("DOMContentLoaded", function () {
+                    const toastElList = document.querySelectorAll('.toast');
+                    const toastList = [...toastElList].map(toastEl => {
+                        const toast = new bootstrap.Toast(toastEl);
+                        toast.show();
+                        return toast;
+                    });
                 });
             </script>
-
-
+            
             <script>
                 // JavaScript para el modal de edición
                 $(document).ready(function () {
@@ -320,6 +325,10 @@
                     })();
                 });
             </script>
+             
+            <!-- Boostrap -->
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+            
         </div>
     </body>
 </html>

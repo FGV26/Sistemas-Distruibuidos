@@ -7,7 +7,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Página de Inicio de Sesión</title>
+    <title>Inicio de Sesión</title>
     <link rel="stylesheet" href="resources/css/login.css">
 </head>
 <body>
