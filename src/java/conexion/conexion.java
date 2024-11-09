@@ -10,9 +10,9 @@ import java.sql.Statement;
 public class conexion {
 
     // Datos de conexión a la base de datos
-    private static final String JDBC_URL = "jdbc:mysql://localhost:3306/sistemas_distribuidos?useSSL=false&useTimezone=true&serverTimezone=UTC&allowPublicKeyRetrieval=true";
+    private static final String JDBC_URL = "jdbc:mysql://184.174.35.90:3006/sistemas_distribuidos?useSSL=false&useTimezone=true&serverTimezone=UTC&allowPublicKeyRetrieval=true";
     private static final String JDBC_USER = "root";  
-    private static final String JDBC_PASSWORD = "";  
+    private static final String JDBC_PASSWORD = "deyvids123";  
 
     // Método para obtener una conexión
     public static Connection getConnection() throws SQLException {  
