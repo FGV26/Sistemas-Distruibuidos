@@ -60,7 +60,7 @@
 
                             <!-- Gestionar Mis Clientes -->
                             <li>
-                                <a href="#" title="Gestionar Mis Clientes">
+                                <a href="ControlerCliente?accion=Listar" title="Gestionar Mis Clientes">
                                     <i class="bi bi-people"></i>
                                     <span class="link hide">Gestionar Mis Clientes</span>
                                 </a>
@@ -68,11 +68,12 @@
 
                             <!-- Mirar Productos -->
                             <li>
-                                <a href="#" title="Mirar Productos">
+                                <a href="MirarProductos?accion=Listar" title="Mirar Productos">
                                     <i class="bi bi-box-seam"></i>
                                     <span class="link hide">Mirar Productos</span>
                                 </a>
                             </li>
+
 
                             <!-- Ver Información -->
                             <li>

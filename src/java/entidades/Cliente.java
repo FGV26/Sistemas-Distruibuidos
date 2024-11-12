@@ -1,32 +1,38 @@
+
 package entidades;
+
+import java.sql.Timestamp;
 
 public class Cliente {
 
     private int idCliente;
-    private String codCliente; // Nuevo campo para el código del cliente
     private String nombre;
     private String apellido;
     private String direccion;
     private String dni;
     private String telefono;
     private String email;
+    private Timestamp fechaCreacion;
     private int idEmpleado;
+    private String codCliente; // Código del cliente
 
     // Constructor vacío
     public Cliente() {
     }
 
-    // Constructor completo con ID de empleado y codCliente
-    public Cliente(int idCliente, String codCliente, String nombre, String apellido, String direccion, String dni, String telefono, String email, int idEmpleado) {
+    // Constructor completo
+    public Cliente(int idCliente, String nombre, String apellido, String direccion, String dni, String telefono, 
+                   String email, Timestamp fechaCreacion, int idEmpleado, String codCliente) {
         this.idCliente = idCliente;
-        this.codCliente = codCliente;
         this.nombre = nombre;
         this.apellido = apellido;
         this.direccion = direccion;
         this.dni = dni;
         this.telefono = telefono;
         this.email = email;
+        this.fechaCreacion = fechaCreacion;
         this.idEmpleado = idEmpleado;
+        this.codCliente = codCliente;
     }
 
     // Constructor para crear un nuevo cliente sin ID de cliente y sin codCliente
@@ -47,14 +53,6 @@ public class Cliente {
 
     public void setIdCliente(int idCliente) {
         this.idCliente = idCliente;
-    }
-
-    public String getCodCliente() {
-        return codCliente;
-    }
-
-    public void setCodCliente(String codCliente) {
-        this.codCliente = codCliente;
     }
 
     public String getNombre() {
@@ -105,11 +103,27 @@ public class Cliente {
         this.email = email;
     }
 
+    public Timestamp getFechaCreacion() {
+        return fechaCreacion;
+    }
+
+    public void setFechaCreacion(Timestamp fechaCreacion) {
+        this.fechaCreacion = fechaCreacion;
+    }
+
     public int getIdEmpleado() {
         return idEmpleado;
     }
 
     public void setIdEmpleado(int idEmpleado) {
         this.idEmpleado = idEmpleado;
+    }
+
+    public String getCodCliente() {
+        return codCliente;
+    }
+
+    public void setCodCliente(String codCliente) {
+        this.codCliente = codCliente;
     }
 }

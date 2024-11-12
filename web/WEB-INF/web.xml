@@ -36,6 +36,14 @@
         <servlet-name>GestionDePedido</servlet-name>
         <servlet-class>Controler.GestionDePedidos</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ControlerCliente</servlet-name>
+        <servlet-class>Controler.ControlerCliente</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>MirarProductos</servlet-name>
+        <servlet-class>Controler.MirarProductos</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>ControladorEmpleado</servlet-name>
         <url-pattern>/ControladorEmpleado</url-pattern>
@@ -47,6 +55,10 @@
     <servlet-mapping>
         <servlet-name>ControlerCategoria</servlet-name>
         <url-pattern>/ControlerCategoria</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ControlerCliente</servlet-name>
+        <url-pattern>/ControlerCliente</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>ControlerProductos</servlet-name>
@@ -71,6 +83,10 @@
     <servlet-mapping>
         <servlet-name>GestionDePedido</servlet-name>
         <url-pattern>/GestionDePedido</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>MirarProductos</servlet-name>
+        <url-pattern>/MirarProductos</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

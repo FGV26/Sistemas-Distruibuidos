@@ -23,6 +23,16 @@ public class ProductoDAO {
 
     private static final String SQL_SELECT_BY_CATEGORY = "SELECT * FROM productos WHERE idCategoria = (SELECT idCategoria FROM categoria WHERE nombre = ?)";
 
+    //Cosultas Para MirarProductos
+    // Nueva consulta para obtener productos con nombres de categorías
+    private static final String SQL_SELECT_CON_CATEGORIA
+            = "SELECT p.*, c.nombre AS categoria_nombre "
+            + "FROM productos p "
+            + "JOIN categoria c ON p.idCategoria = c.idCategoria";
+
+    private static final String SQL_SELECT_WITH_STOCK = "SELECT * FROM productos WHERE stock > 0";
+    private static final String SQL_SEARCH_WITH_STOCK = "SELECT * FROM productos WHERE nombre LIKE ? AND stock > 0";
+
     // Listar todos los productos
     public List<Producto> listar() {
         Connection conn = null;
@@ -444,4 +454,141 @@ public class ProductoDAO {
         }
         return productos;
     }
+
+    public List<Producto> listarConCategoria() {
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        List<Producto> productos = new ArrayList<>();
+
+        try {
+            conn = conexion.getConnection();
+            stmt = conn.prepareStatement(SQL_SELECT_CON_CATEGORIA);
+            rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                Producto producto = new Producto(
+                        rs.getInt("idProducto"),
+                        rs.getInt("idCategoria"),
+                        rs.getString("nombre"),
+                        rs.getDouble("precio"),
+                        rs.getInt("stock"),
+                        rs.getInt("stock_minimo"),
+                        rs.getString("descripcion"),
+                        rs.getString("imagen"),
+                        rs.getString("estado"),
+                        rs.getString("fecha_creacion")
+                );
+                producto.setCategoriaNombre(rs.getString("categoria_nombre")); // Asigna el nombre de la categoría
+                productos.add(producto);
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace(System.out);
+        } finally {
+            try {
+                conexion.close(rs);
+                conexion.close(stmt);
+                conexion.close(conn);
+            } catch (SQLException ex) {
+                ex.printStackTrace(System.out);
+            }
+        }
+        return productos;
+    }
+
+    // Listar productos que tienen stock mayor que cero
+    public List<Producto> listarConStock() {
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        List<Producto> productos = new ArrayList<>();
+
+        try {
+            conn = conexion.getConnection();
+            stmt = conn.prepareStatement(SQL_SELECT_WITH_STOCK);
+            rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                Producto producto = new Producto(
+                        rs.getInt("idProducto"),
+                        rs.getInt("idCategoria"),
+                        rs.getString("nombre"),
+                        rs.getDouble("precio"),
+                        rs.getInt("stock"),
+                        rs.getInt("stock_minimo"),
+                        rs.getString("descripcion"),
+                        rs.getString("imagen"),
+                        rs.getString("estado"),
+                        rs.getString("fecha_creacion")
+                );
+                productos.add(producto);
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace(System.out);
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (stmt != null) {
+                    stmt.close();
+                }
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException ex) {
+                ex.printStackTrace(System.out);
+            }
+        }
+        return productos;
+    }
+
+// Buscar productos por nombre que tienen stock mayor que cero
+    public List<Producto> buscarProductosConStock(String nombre) {
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        List<Producto> productos = new ArrayList<>();
+
+        try {
+            conn = conexion.getConnection();
+            stmt = conn.prepareStatement(SQL_SEARCH_WITH_STOCK);
+            stmt.setString(1, "%" + nombre + "%");
+            rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                Producto producto = new Producto(
+                        rs.getInt("idProducto"),
+                        rs.getInt("idCategoria"),
+                        rs.getString("nombre"),
+                        rs.getDouble("precio"),
+                        rs.getInt("stock"),
+                        rs.getInt("stock_minimo"),
+                        rs.getString("descripcion"),
+                        rs.getString("imagen"),
+                        rs.getString("estado"),
+                        rs.getString("fecha_creacion")
+                );
+                productos.add(producto);
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace(System.out);
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (stmt != null) {
+                    stmt.close();
+                }
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException ex) {
+                ex.printStackTrace(System.out);
+            }
+        }
+        return productos;
+    }
+
 }

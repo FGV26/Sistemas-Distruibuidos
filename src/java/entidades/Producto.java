@@ -1,6 +1,7 @@
 package entidades;
 
 public class Producto {
+
     private int idProducto;
     private int idCategoria;
     private String nombre;
@@ -11,6 +12,7 @@ public class Producto {
     private String imagen;
     private String estado;
     private String fechaCreacion;
+    private String categoriaNombre;
 
     public Producto(int idProducto, int idCategoria, String nombre, double precio, int stock, int stockMinimo, String descripcion, String imagen, String estado, String fechaCreacion) {
         this.idProducto = idProducto;
@@ -24,9 +26,8 @@ public class Producto {
         this.estado = estado;
         this.fechaCreacion = fechaCreacion;
     }
-    
-    // Getters y Setters
 
+    // Getters y Setters
     public int getIdProducto() {
         return idProducto;
     }
@@ -105,5 +106,13 @@ public class Producto {
 
     public void setFechaCreacion(String fechaCreacion) {
         this.fechaCreacion = fechaCreacion;
+    }
+
+    public String getCategoriaNombre() {
+        return categoriaNombre;
+    }
+
+    public void setCategoriaNombre(String categoriaNombre) {
+        this.categoriaNombre = categoriaNombre;
     }
 }
