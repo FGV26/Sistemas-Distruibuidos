@@ -10,112 +10,147 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" 
-              integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
         <script src="https://code.jquery.com/jquery-3.3.1.min.js" crossorigin="anonymous"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" crossorigin="anonymous"></script>
         <script src="https://kit.fontawesome.com/26a3cc7edf.js" crossorigin="anonymous"></script>
         <meta charset="UTF-8">
         <title>Gestión de Empleados</title>
     </head>
     <body>
+        
+        <main class="container">
+            
+            <header class="mt-4 mb-4 border rounded app-header">
+                <div class="d-flex align-items-center" >
+                    <div class="d-flex justify-content-start align-items-center">
+                        <h4 class="m-4">Gestión de Empleados<h4/>
+                    </div>
+                </div>
+            </header>
+            
+            <body>
+                <div class="border rounded" style="min-height: 80vh;">
+                    
+                    <!-- Busqueda y botones arriba de la tabla -->
+                    <div class="mt-4 mb-4 p-4">
+                        <form action="GestionEmpleados" method="GET">
+                            <div class="input-group mb-3">
+                                <input type="text" name="nombre" class="form-control" placeholder="Buscar por nombre o usuario" required>
+                                <button type="submit" name="accion" class="btn btn-outline-success">Buscar</button>
+                            </div>
+                        </form>
+                        <div class="input-group mb-3 justify-content-end">
+                            <a class="btn btn-outline-primary"" role="button" href="GestionEmpleados?accion=Listar">Mostrar Todo</a>
+                            <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#agregarEmpleadoModal">Agregar empleado</button>
+                            <a href="DashboardActividades?accion=Listar" role="button" class="btn btn-outline-dark">Menú Administrador</a>
+                        </div>
+                    </div>
+                    
+                    <!-- Tabla -->
+                    
+                    <div class="container mt-4 mb-4">
+                        <table class="table">
+                            <thead>
+                              <tr>
+                                <th scope="col">ID</th>
+                                <th scope="col">Usuario</th>
+                                <th scope="col">Rol</th>
+                                <th scope="col">Email</th>
+                                <th scope="col">Nombre</th>
+                                <th scope="col">Apellido</th>
+                                <th scope="col">Estado</th>
+                                <th scope="col">Acciones</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                                <c:forEach var="empleado" items="${ListaEmpleados}">
+                                  <tr>
+                                      <td>${empleado.idUsuario}</td>
+                                      <td>${empleado.username}</td>
+                                      <td>${empleado.rol}</td>
+                                      <td>${empleado.email}</td>
+                                      <td>${empleado.nombre}</td>
+                                      <td>${empleado.apellido}</td>
+                                      <td>${empleado.estado}</td>
+                                      <td>
+                                          <div class="btn-group">
+                                              <!-- Editar -->
+                                              <button class="btn btn-primary editBtn" data-bs-toggle="modal" data-bs-target="#editModal"
+                                                      data-id="${empleado.idUsuario}" data-username="${empleado.username}"
+                                                      data-email="${empleado.email}" data-nombre="${empleado.nombre}" 
+                                                      data-apellido="${empleado.apellido}" data-estado="${empleado.estado}">
+                                                  <i class="fas fa-edit"></i>
+                                              </button>
+                                              <!-- Eliminar -->
+                                              <a href="GestionEmpleados?accion=Eliminar&Id=${empleado.idUsuario}"
+                                                 class="btn btn-danger ml-2"
+                                                 onclick="return confirm('¿Estás seguro de que deseas eliminar este empleado?');">
+                                                  <i class="fas fa-trash-alt"></i>
+                                              </a>
+                                          </div>
+                                      </td>
+                                  </tr>
+                                </c:forEach>
+                            </tbody>
+                          </table>
+                    </div>
+                    
+                </div>
+            </body>
+            
+            
+        <main>
+        
+        
         <div class="container">
-            <h1 class="mt-4">Gestión de Empleados</h1>
-
-            <!-- Formulario de búsqueda -->
-            <form class="form-inline my-3" action="GestionEmpleados" method="GET">
-                <input type="hidden" name="accion" value="Buscar">
-                <input type="text" name="nombre" class="form-control mr-sm-2" placeholder="Buscar por nombre o usuario" required>
-                <button type="submit" class="btn btn-outline-success my-2 my-sm-0">Buscar</button>
-                <a href="GestionEmpleados?accion=Listar" class="btn btn-outline-primary my-2 my-sm-0 ml-2">Mostrar Todo</a>
-            </form>
-
-            <!-- Botones para agregar empleado y volver al menú administrador -->
-            <div class="d-flex justify-content-start mb-3">
-                <button type="button" class="btn btn-info mr-2" data-toggle="modal" data-target="#agregarEmpleadoModal">Agregar Empleado</button>
-                <a href="DashboardActividades?accion=Listar" class="btn btn-outline-secondary">Volver a Menú Administrador</a>
-            </div>
 
             <!-- Mensajes de éxito o error -->
             <% String mensaje = request.getParameter("mensaje");
             String error = request.getParameter("error"); %>
 
             <% if (mensaje != null) {%>
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                <%= mensaje%>
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <% } else if (error != null) {%>
-            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                <%= error%>
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <% }%>
-
-            <!-- Tabla de empleados -->
-            <div class="d-flex">
-                <div class="col-sm-12">
-                    <table class="table table-hover">
-                        <thead class="thead-light">
-                            <tr>
-                                <th>ID</th>
-                                <th>Usuario</th>
-                                <th>Rol</th>
-                                <th>Email</th>
-                                <th>Nombre</th>
-                                <th>Apellido</th>
-                                <th>Estado</th>
-                                <th>Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <c:forEach var="empleado" items="${ListaEmpleados}">
-                                <tr>
-                                    <td>${empleado.idUsuario}</td>
-                                    <td>${empleado.username}</td>
-                                    <td>${empleado.rol}</td>
-                                    <td>${empleado.email}</td>
-                                    <td>${empleado.nombre}</td>
-                                    <td>${empleado.apellido}</td>
-                                    <td>${empleado.estado}</td>
-                                    <td>
-                                        <div class="btn-group">
-                                            <!-- Editar -->
-                                            <button class="btn btn-warning editBtn" data-toggle="modal" data-target="#editModal"
-                                                    data-id="${empleado.idUsuario}" data-username="${empleado.username}"
-                                                    data-email="${empleado.email}" data-nombre="${empleado.nombre}" 
-                                                    data-apellido="${empleado.apellido}" data-estado="${empleado.estado}">
-                                                <i class="fas fa-edit"></i> Editar
-                                            </button>
-                                            <!-- Eliminar -->
-                                            <a href="GestionEmpleados?accion=Eliminar&Id=${empleado.idUsuario}"
-                                               class="btn btn-danger ml-2"
-                                               onclick="return confirm('¿Estás seguro de que deseas eliminar este empleado?');">
-                                                <i class="fas fa-trash-alt"></i> Eliminar
-                                            </a>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </c:forEach>
-                        </tbody>
-                    </table>
+            
+            <div aria-live="polite" aria-atomic="true" class="position-relative">
+                <div class="toast-container position-fixed top-0 end-0 p-3 show">
+                    <div class="toast bg-success fade show" role="alert" aria-live="assertive" aria-atomic="true">
+                        <div class="d-flex">
+                            <div class="toast-body text-white">
+                                <%= mensaje%>
+                            </div>
+                            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                        </div>
+                    </div>
                 </div>
             </div>
+                            
+            <% } else if (error != null) {%>
+            
+            <div aria-live="polite" aria-atomic="true" class="position-relative">
+                <div class="toast-container position-fixed top-0 end-0 p-3 show">
+                    <div class="toast bg-danger fade show" role="alert" aria-live="assertive" aria-atomic="true">
+                        <div class="d-flex">
+                            <div class="toast-body text-white">
+                                <%= error%>
+                            </div>
+                            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+                            
+            <% }%>
 
             <!-- Modal para agregar empleado -->
             <div class="modal fade" id="agregarEmpleadoModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
+                        <!-- Header -->
                         <div class="modal-header">
-                            <h5 class="modal-title">Agregar Empleado</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">Agregar Empleado</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
+                        <!-- body -->
                         <div class="modal-body">
                             <!-- Formulario con validación -->
                             <form action="GestionEmpleados" method="POST" class="needs-validation" novalidate>
@@ -160,9 +195,11 @@
                                     </select>
                                     <div class="invalid-feedback">Debe seleccionar un estado.</div>
                                 </div>
-                                <div style="display: flex; justify-content: center;">
-                                    <input type="submit" class="btn btn-info" value="Agregar">
+                                
+                                <div class="d-grid gap-2 col-6 mx-auto mt-2">
+                                    <button class="btn btn-primary" type="submit">Agregar</button>
                                 </div>
+
                             </form>
                         </div>
                     </div>
@@ -173,12 +210,16 @@
             <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
+                        
+                        <!-- Header -->
+                        
                         <div class="modal-header">
-                            <h5 class="modal-title">Editar Empleado</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">Editar Empleado</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
+                        
+                        <!-- Body -->
+                        
                         <div class="modal-body">
                             <form action="GestionEmpleados" method="POST" class="needs-validation" novalidate>
                                 <input type="hidden" name="accion" value="Modificar">
@@ -197,11 +238,9 @@
                                     <div class="input-group">
                                         <input type="password" name="password" id="editPassword" class="form-control" 
                                                placeholder="Dejar en blanco para mantener la contraseña actual">
-                                        <div class="input-group-append">
-                                            <span class="input-group-text">
-                                                <i class="fas fa-eye-slash" id="togglePassword"></i>
-                                            </span>
-                                        </div>
+                                        <span class="input-group-text">
+                                            <i class="fas fa-eye-slash" id="togglePassword"></i>
+                                        </span>
                                     </div>
                                 </div>
 
@@ -229,10 +268,11 @@
                                     </select>
                                     <div class="invalid-feedback">Debe seleccionar un estado.</div>
                                 </div>
-
-                                <div style="display: flex; justify-content: center;">
-                                    <input type="submit" class="btn btn-success" value="Guardar cambios">
+                                
+                                <div class="d-grid gap-2 col-6 mx-auto mt-4">
+                                    <button class="btn btn-primary" type="submit">Guardar cambios</button>
                                 </div>
+ 
                             </form>
                         </div>
                     </div>
@@ -291,7 +331,9 @@
                     }, false);
                 })();
             </script>
-
+            
+            <!-- Boostrap -->
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
         </div>
     </body>
 </html>
