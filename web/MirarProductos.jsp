@@ -14,9 +14,10 @@
     <head>
         <meta charset="UTF-8">
         <title>Mirar Productos</title>
-
-        <!-- Bootstrap CSS -->
+        <!-- Bootstrap 5.3.3 -->
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js" crossorigin="anonymous"></script>
+        <script src="https://kit.fontawesome.com/26a3cc7edf.js" crossorigin="anonymous"></script>
     </head>
     <body>
 
@@ -34,56 +35,88 @@
         %>
 
         <div class="container">
-            <h1 class="mt-4">Productos en Inventario</h1>
-
-            <!-- Barra de búsqueda -->
-            <form class="form-inline my-3" action="MirarProductos" method="GET">
-                <input type="hidden" name="accion" value="Buscar">
-                <input type="text" name="nombre" class="form-control mr-sm-2" placeholder="Buscar por nombre de producto" required>
-                <button type="submit" class="btn btn-outline-success my-2 my-sm-0">Buscar</button>
-                <a href="MirarProductos?accion=Listar" class="btn btn-outline-primary my-2 my-sm-0 ml-2">Mostrar Todo</a>
-                <a href="DashboardActividades?accion=Listar" class="btn btn-outline-secondary my-2 my-sm-0 ml-2">Volver al Dashboard</a>
-            </form>
+            <header class="mt-4 mb-4 border rounded app-header">
+                <div class="d-flex align-items-center" >
+                    <div class="d-flex justify-content-start align-items-center">
+                        <h4 class="m-4">Productos en Inventario<h4/>
+                    </div>
+                </div>
+            </header>
+                <div class="border rounded" style="min-height: 80vh;">
+                    
+                    <!-- Busqueda y botones arriba de la tabla -->
+                    <div class="mt-4 mb-4 p-4">
+                        <form action="GestionEmpleados" method="GET">
+                            <div class="input-group mb-3">
+                                <input type="text" name="nombre" class="form-control" placeholder="Buscar por nombre o usuario" required>
+                                <button type="submit" name="accion" class="btn btn-outline-success">Buscar</button>
+                            </div>
+                        </form>
+                        <div class="input-group mb-3 justify-content-end">
+                            <a class="btn btn-outline-primary"" role="button" href="GestionEmpleados?accion=Listar">Mostrar Todo</a>
+                            <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#agregarEmpleadoModal">Agregar empleado</button>
+                            <a href="DashboardActividades?accion=Listar" role="button" class="btn btn-outline-dark">Menú Administrador</a>
+                        </div>
+                    </div>
 
             <!-- Tabla de productos -->
-            <table class="table table-hover">
-                <thead class="thead-light">
-                    <tr>
-                        <th>ID</th>
-                        <th>Nombre</th>
-                        <th>Categoría</th>
-                        <th>Precio</th>
-                        <th>Stock</th>
-                        <th>Descripción</th>
-                        <th>Imagen</th>
-                        <th>Estado</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <c:forEach var="producto" items="${ListaProductos}">
+            <div class="container mt-4 mb-4">
+                <table class="table table-hover">
+                    <thead class="thead-light">
                         <tr>
-                            <td>${producto.idProducto}</td>
-                            <td>${producto.nombre}</td>
-                            <td>
-                                <!-- Mostrar el nombre de la categoría del producto -->
-                                <c:forEach var="categoria" items="${ListaCategorias}">
-                                    <c:if test="${categoria.idCategoria == producto.idCategoria}">
-                                        ${categoria.nombre}
-                                    </c:if>
-                                </c:forEach>
-                            </td>
-                            <td>${producto.precio}</td>
-                            <td>${producto.stock}</td>
-                            <td>${producto.descripcion}</td>
-                            <td>
-                                <!-- Mostrar imagen del producto -->
-                                <img src="resources/img/productos/${producto.imagen}?timestamp=<%= System.currentTimeMillis()%>" alt="${producto.nombre}" width="50" height="50">
-                            </td>
-                            <td>${producto.estado}</td>
+                            <th>ID</th>
+                            <th>Nombre</th>
+                            <th>Categoría</th>
+                            <th>Precio</th>
+                            <th>Stock</th>
+                            <th>Descripción</th>
+                            <th>Imagen</th>
+                            <th>Estado</th>
                         </tr>
-                    </c:forEach>
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        <c:forEach var="producto" items="${ListaProductos}">
+                            <tr>
+                                <td>${producto.idProducto}</td>
+                                <td>${producto.nombre}</td>
+                                <td>
+                                    <!-- Mostrar el nombre de la categoría del producto -->
+                                    <c:forEach var="categoria" items="${ListaCategorias}">
+                                        <c:if test="${categoria.idCategoria == producto.idCategoria}">
+                                            ${categoria.nombre}
+                                        </c:if>
+                                    </c:forEach>
+                                </td>
+                                <td>${producto.precio}</td>
+                                <td>${producto.stock}</td>
+                                <td>${producto.descripcion}</td>
+                                <td>
+                                    <!-- Mostrar imagen del producto -->
+                                    <img src="resources/img/productos/${producto.imagen}?timestamp=<%= System.currentTimeMillis()%>" alt="${producto.nombre}" width="50" height="50">
+                                </td>
+                                <td>${producto.estado}</td>
+                                <td>
+                                <div class="btn-group">
+                                    <!-- Editar -->
+                                    <button class="btn btn-primary editBtn" data-bs-toggle="modal" data-bs-target="#editModal"
+                                            data-id="${producto.idProducto}" data-nombre="${producto.nombre}" 
+                                            data-precio="${producto.precio}" data-stock="${producto.stock}" 
+                                            data-descripcion="${producto.descripcion}">
+                                        <i class="fas fa-edit"></i> 
+                                    </button>
+                                    <!-- Eliminar -->
+                                    <a href="GestionDespachadores?accion=Eliminar&Id=${producto.idProducto}" 
+                                       class="btn btn-danger ml-2" 
+                                       onclick="return confirm('¿Estás seguro de que deseas eliminar este despachador?');">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </a>
+                                </div>
+                            </td>
+                            </tr>
+                        </c:forEach>
+                    </tbody>
+                </table>
+            </div>
         </div>
 
         <!-- Bootstrap JS -->

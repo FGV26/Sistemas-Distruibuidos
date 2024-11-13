@@ -13,67 +13,85 @@
     <head>
         <meta charset="UTF-8">
         <title>Gestión de Mis Clientes</title>
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+        <!-- Bootstrap 5.3.3 -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js" crossorigin="anonymous"></script>
+        <script src="https://kit.fontawesome.com/26a3cc7edf.js" crossorigin="anonymous"></script>
     </head>
     <body>
 
-        <div class="container mt-4">
-            <h1 class="mb-4">Gestión de Mis Clientes</h1>
-
-            <!-- Barra de búsqueda y botones -->
-            <form action="ControlerCliente" method="GET" class="d-flex mb-3">
-                <input type="hidden" name="accion" value="Buscar">
-                <input type="text" name="dniBusqueda" class="form-control me-2" placeholder="Buscar por DNI">
-                <button type="submit" class="btn btn-outline-success me-2">Buscar</button>
-                <a href="ControlerCliente?accion=Listar" class="btn btn-outline-primary me-2">Mostrar Todo</a>
-                <button type="button" class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#agregarClienteModal">Agregar Cliente</button>
-                <a href="DashboardActividades?accion=Listar" class="btn btn-secondary">Volver al Dashboard</a>
-            </form>
+        <div class="container">
+             <header class="mt-4 mb-4 border rounded app-header">
+                <div class="d-flex align-items-center" >
+                    <div class="d-flex justify-content-start align-items-center">
+                        <h4 class="m-4">Gestión Mis clientes<h4/>
+                    </div>
+                </div>
+            </header>
+                <div class="border rounded" style="min-height: 80vh;">
+                    
+                    <!-- Busqueda y botones arriba de la tabla -->
+                    <div class="mt-4 mb-4 p-4">
+                        <form action="GestionEmpleados" method="GET">
+                            <div class="input-group mb-3">
+                                <input type="text" name="nombre" class="form-control" placeholder="Buscar por nombre o usuario" required>
+                                <button type="submit" name="accion" class="btn btn-outline-success">Buscar</button>
+                            </div>
+                        </form>
+                        <div class="input-group mb-3 justify-content-end">
+                            <a class="btn btn-outline-primary"" role="button" href="GestionEmpleados?accion=Listar">Mostrar Todo</a>
+                            <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#agregarEmpleadoModal">Agregar empleado</button>
+                            <a href="DashboardActividades?accion=Listar" role="button" class="btn btn-outline-dark">Menú Administrador</a>
+                        </div>
+                    </div>
 
             <!-- Tabla de clientes -->
-            <table class="table table-hover">
-                <thead class="table-light">
-                    <tr>
-                        <th>ID</th>
-                        <th>Código Cliente</th>
-                        <th>Nombre</th>
-                        <th>Apellido</th>
-                        <th>Dirección</th> <!-- Nueva columna de Dirección -->
-                        <th>DNI</th>
-                        <th>Teléfono</th>
-                        <th>Email</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <c:forEach var="cliente" items="${listaClientes}">
+            <div class="container mt-4 mb-4">
+                <table class="table">
+                    <thead>
                         <tr>
-                            <td>${cliente.idCliente}</td>
-                            <td>${cliente.codCliente}</td>
-                            <td>${cliente.nombre}</td>
-                            <td>${cliente.apellido}</td>
-                            <td>${cliente.direccion}</td> <!-- Mostrar dirección en la tabla -->
-                            <td>${cliente.dni}</td>
-                            <td>${cliente.telefono}</td>
-                            <td>${cliente.email}</td>
-                            <td>
-                                <button class="btn btn-warning btn-sm editBtn" data-bs-toggle="modal" data-bs-target="#editarClienteModal"
-                                        data-id="${cliente.idCliente}" data-codcliente="${cliente.codCliente}"
-                                        data-nombre="${cliente.nombre}" data-apellido="${cliente.apellido}"
-                                        data-direccion="${cliente.direccion}" data-dni="${cliente.dni}" 
-                                        data-telefono="${cliente.telefono}" data-email="${cliente.email}">
-                                    Editar
-                                </button>
-                                <a href="ControlerCliente?accion=Eliminar&Id=${cliente.idCliente}" 
-                                   class="btn btn-danger btn-sm"
-                                   onclick="return confirm('¿Estás seguro de eliminar este cliente?');">
-                                    Eliminar
-                                </a>
-                            </td>
+                            <th>ID</th>
+                            <th>Código Cliente</th>
+                            <th>Nombre</th>
+                            <th>Apellido</th>
+                            <th>Dirección</th> <!-- Nueva columna de Dirección -->
+                            <th>DNI</th>
+                            <th>Teléfono</th>
+                            <th>Email</th>
+                            <th>Acciones</th>
                         </tr>
-                    </c:forEach>
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        <c:forEach var="cliente" items="${listaClientes}">
+                            <tr>
+                                <td>${cliente.idCliente}</td>
+                                <td>${cliente.codCliente}</td>
+                                <td>${cliente.nombre}</td>
+                                <td>${cliente.apellido}</td>
+                                <td>${cliente.direccion}</td> <!-- Mostrar dirección en la tabla -->
+                                <td>${cliente.dni}</td>
+                                <td>${cliente.telefono}</td>
+                                <td>${cliente.email}</td>
+                                <td>
+                                    <button class="btn btn-warning btn-sm editBtn" data-bs-toggle="modal" data-bs-target="#editarClienteModal"
+                                            data-id="${cliente.idCliente}" data-codcliente="${cliente.codCliente}"
+                                            data-nombre="${cliente.nombre}" data-apellido="${cliente.apellido}"
+                                            data-direccion="${cliente.direccion}" data-dni="${cliente.dni}" 
+                                            data-telefono="${cliente.telefono}" data-email="${cliente.email}">
+                                        Editar
+                                    </button>
+                                    <a href="ControlerCliente?accion=Eliminar&Id=${cliente.idCliente}" 
+                                       class="btn btn-danger btn-sm"
+                                       onclick="return confirm('¿Estás seguro de eliminar este cliente?');">
+                                        Eliminar
+                                    </a>
+                                </td>
+                            </tr>
+                        </c:forEach>
+                    </tbody>
+                </table>
+            </div>
+        </div>
 
 
         </div>
