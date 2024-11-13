@@ -19,33 +19,43 @@
         <link rel="stylesheet" href="resources/css/Alerta.css">
         <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
         
-        <!-- Boostrap -->
+        <!-- Bootstrap 5.3.3 -->
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js" crossorigin="anonymous"></script>
+        <script src="https://kit.fontawesome.com/26a3cc7edf.js" crossorigin="anonymous"></script>
     
     </head>
     <body>
         <div class="container">
-            <h1 class="mt-4">Gestión de Productos</h1>
+            <header class="mt-4 mb-4 border rounded app-header">
+            <div class="d-flex align-items-center" >
+                <div class="d-flex justify-content-start align-items-center">
+                    <h4 class="m-4">Gestión de Despachadores<h4/>
+                </div>
+            </div>
+        </header>
+        
+        <div class="border rounded" style="min-height: 80vh;">
 
-            <!-- Formulario de búsqueda -->
-            <form class="form-inline my-3" action="GestionProductos" method="GET">
-                <input type="hidden" name="accion" value="Buscar">
-                <input type="text" name="nombre" class="form-control mr-sm-2" placeholder="Buscar por nombre" required>
-                <button type="submit" class="btn btn-outline-success my-2 my-sm-0">Buscar</button>
-                <a href="GestionProductos?accion=Listar" class="btn btn-outline-primary my-2 my-sm-0 ml-2">Mostrar Todo</a>
-            </form>
-
-            <!-- Botones de filtros de stock -->
-            <div class="d-flex justify-content-start mb-3">
-                <a href="GestionProductos?accion=ListarPocoStock" class="btn btn-warning mr-2">Productos con Poco Stock</a>
-                <a href="GestionProductos?accion=ListarSinStock" class="btn btn-danger mr-2">Productos Sin Stock</a>
-                <!-- Botón para regresar al menú del administrador -->
-                <a href="DashboardActividades?accion=Listar" class="btn btn-secondary">Volver al Menú Administrador</a>
+            <!-- Busqueda y botones arriba de la tabla -->
+            <div class="container mt-4 mb-4 p-4">
+                <form action="GestionEmpleados" method="GET">
+                    <div class="input-group mb-3">
+                        <input type="text" name="nombre" class="form-control" placeholder="Buscar por nombre o usuario" required>
+                        <button type="submit" name="accion" class="btn btn-outline-success">Buscar</button>
+                    </div>
+                </form>
+                <div class="input-group mb-3 justify-content-end">
+                    <a class="btn btn-outline-primary"" role="button" href="GestionEmpleados?accion=Listar">Mostrar Todo</a>
+                    <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#agregarEmpleadoModal">Agregar empleado</button>
+                    <a href="DashboardActividades?accion=Listar" role="button" class="btn btn-outline-dark">Menú Administrador</a>
+                </div>
+                <!-- Botón para agregar producto -->
+            <button type="button" class="btn btn-info mb-3" data-toggle="modal" data-target="#agregarProductoModal">Agregar Producto</button>
             </div>
 
 
-            <!-- Botón para agregar producto -->
-            <button type="button" class="btn btn-info mb-3" data-toggle="modal" data-target="#agregarProductoModal">Agregar Producto</button>
+            
 
             <!-- Mensajes de éxito o error -->
             <% String mensaje = request.getParameter("mensaje");
@@ -68,8 +78,9 @@
             <% }%>
 
             <!-- Tabla de productos -->
-            <table class="table table-hover">
-                <thead class="thead-light">
+            <div class="container mt-4 mb-4">
+            <table class="table">
+                <thead>
                     <tr>
                         <th>ID</th>
                         <th>Nombre</th>
@@ -108,18 +119,18 @@
                             <td>
                                 <div class="btn-group">
                                     <!-- Botón Editar -->
-                                    <button class="btn btn-warning editBtn" data-toggle="modal" data-target="#editModal"
+                                    <button class="btn btn-primary editBtn" data-toggle="modal" data-target="#editModal"
                                             data-id="${producto.idProducto}" data-idcategoria="${producto.idCategoria}"
                                             data-nombre="${producto.nombre}" data-precio="${producto.precio}"
                                             data-stock="${producto.stock}" data-stockminimo="${producto.stockMinimo}"
                                             data-descripcion="${producto.descripcion}" data-estado="${producto.estado}">
-                                        Editar
+                                        <i class="fas fa-edit"></i>
                                     </button>
                                     <!-- Botón Eliminar -->
                                     <a href="GestionProductos?accion=Eliminar&idProducto=${producto.idProducto}"
                                        class="btn btn-danger ml-2"
                                        onclick="return confirm('¿Estás seguro de que deseas eliminar este producto?');">
-                                        <i class="fas fa-trash-alt"></i> Eliminar
+                                        <i class="fas fa-trash-alt"></i>
                                     </a>
                                 </div>
                             </td>
@@ -127,6 +138,8 @@
                     </c:forEach>
                 </tbody>
             </table>
+          </div>
+        </div>
 
             <!-- Modal para agregar producto -->
             <div class="modal fade" id="agregarProductoModal" tabindex="-1" role="dialog" aria-labelledby="agregarProductoLabel" aria-hidden="true">
