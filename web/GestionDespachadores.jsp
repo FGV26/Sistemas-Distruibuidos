@@ -1,4 +1,3 @@
-
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@page import="entidades.Usuario"%>
 <%@page import="java.util.List"%>
@@ -9,238 +8,199 @@
 %>
 
 <!DOCTYPE html>
-<html>
-    <head>
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" 
-              integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-        <script src="https://code.jquery.com/jquery-3.3.1.min.js" crossorigin="anonymous"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" crossorigin="anonymous"></script>
-        <script src="https://kit.fontawesome.com/26a3cc7edf.js" crossorigin="anonymous"></script>
-        <meta charset="UTF-8">
-        <title>Gestión de Despachadores</title>
-    </head>
-    <body>
-        <div class="container">
-            <h1 class="mt-4">Gestión de Despachadores</h1>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Despachadores</title>
+    <!-- Bootstrap 5.3.3 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/26a3cc7edf.js" crossorigin="anonymous"></script>
+<body>
+    <div class="container">
+        <header class="mt-4 mb-4 border rounded app-header">
+            <div class="d-flex align-items-center" >
+                <div class="d-flex justify-content-start align-items-center">
+                    <h4 class="m-4">Gestión de Despachadores<h4/>
+                </div>
+            </div>
+        </header>
+        
+        <div class="border rounded" style="min-height: 80vh;">
 
-            <!-- Formulario de búsqueda -->
-            <form class="form-inline my-3" action="GestionDespachadores" method="GET">
-                <input type="hidden" name="accion" value="Buscar">
-                <input type="text" name="nombre" class="form-control mr-sm-2" placeholder="Buscar por nombre o usuario" required>
-                <button type="submit" class="btn btn-outline-success my-2 my-sm-0">Buscar</button>
-                <a href="GestionDespachadores?accion=Listar" class="btn btn-outline-primary my-2 my-sm-0 ml-2">Mostrar Todo</a>
-            </form>
-
-            <!-- Botones para agregar despachador y volver al menú administrador -->
-            <div class="d-flex justify-content-start mb-3">
-                <button type="button" class="btn btn-info mr-2" data-toggle="modal" data-target="#agregarDespachadorModal">Agregar Despachador</button>
-                <a href="DashboardActividades?accion=Listar" class="btn btn-outline-secondary">Volver a Menú Administrador</a>
+        <!-- Busqueda y botones arriba de la tabla -->
+            <div class="mt-4 mb-4 p-4">
+                <form action="GestionEmpleados" method="GET">
+                    <div class="input-group mb-3">
+                        <input type="text" name="nombre" class="form-control" placeholder="Buscar por nombre o usuario" required>
+                        <button type="submit" name="accion" class="btn btn-outline-success">Buscar</button>
+                    </div>
+                </form>
+                <div class="input-group mb-3 justify-content-end">
+                    <a class="btn btn-outline-primary"" role="button" href="GestionEmpleados?accion=Listar">Mostrar Todo</a>
+                    <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#agregarEmpleadoModal">Agregar empleado</button>
+                    <a href="DashboardActividades?accion=Listar" role="button" class="btn btn-outline-dark">Menú Administrador</a>
+                </div>
             </div>
 
-            <!-- Mensajes de éxito o error -->
-            <% String mensaje = request.getParameter("mensaje");
-            String error = request.getParameter("error"); %>
-
-            <% if (mensaje != null) {%>
+        <!-- Mensajes de éxito o error -->
+        <% String mensaje = request.getParameter("mensaje");
+           String error = request.getParameter("error"); %>
+        <% if (mensaje != null) { %>
             <div class="alert alert-success alert-dismissible fade show" role="alert">
-                <%= mensaje%>
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                <%= mensaje %>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
-            <% } else if (error != null) {%>
+        <% } else if (error != null) { %>
             <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                <%= error%>
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                <%= error %>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
-            <% }%>
+        <% } %>
 
-            <!-- Tabla de despachadores -->
-            <div class="d-flex">
-                <div class="col-sm-12">
-                    <table class="table table-hover">
-                        <thead class="thead-light">
-                            <tr>
-                                <th>ID</th>
-                                <th>Usuario</th>
-                                <th>Rol</th>
-                                <th>Email</th>
-                                <th>Nombre</th>
-                                <th>Apellido</th>
-                                <th>Estado</th>
-                                <th>Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <c:forEach var="despachador" items="${ListaDespachadores}">
-                                <tr>
-                                    <td>${despachador.idUsuario}</td>
-                                    <td>${despachador.username}</td>
-                                    <td>${despachador.rol}</td>
-                                    <td>${despachador.email}</td>
-                                    <td>${despachador.nombre}</td>
-                                    <td>${despachador.apellido}</td>
-                                    <td>${despachador.estado}</td>
-                                    <td>
-                                        <div class="btn-group">
-                                            <!-- Editar -->
-                                            <button class="btn btn-warning editBtn" data-toggle="modal" data-target="#editModal"
-                                                    data-id="${despachador.idUsuario}" data-username="${despachador.username}"
-                                                    data-email="${despachador.email}" data-nombre="${despachador.nombre}" 
-                                                    data-apellido="${despachador.apellido}" data-estado="${despachador.estado}">
-                                                <i class="fas fa-edit"></i> Editar
-                                            </button>
-                                            <!-- Eliminar -->
-                                            <a href="GestionDespachadores?accion=Eliminar&Id=${despachador.idUsuario}"
-                                               class="btn btn-danger ml-2"
-                                               onclick="return confirm('¿Estás seguro de que deseas eliminar este despachador?');">
-                                                <i class="fas fa-trash-alt"></i> Eliminar
-                                            </a>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </c:forEach>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+        <!-- Tabla de despachadores -->
+        <div class="container mt-4 mb-4">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Usuario</th>
+                        <th>Rol</th>
+                        <th>Email</th>
+                        <th>Nombre</th>
+                        <th>Apellido</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <c:forEach var="despachador" items="${ListaDespachadores}">
+                        <tr>
+                            <td>${despachador.idUsuario}</td>
+                            <td>${despachador.username}</td>
+                            <td>${despachador.rol}</td>
+                            <td>${despachador.email}</td>
+                            <td>${despachador.nombre}</td>
+                            <td>${despachador.apellido}</td>
+                            <td>${despachador.estado}</td>
+                            <td>
+                                <div class="btn-group">
+                                    <!-- Editar -->
+                                    <button class="btn btn-primary editBtn" data-bs-toggle="modal" data-bs-target="#editModal"
+                                            data-id="${despachador.idUsuario}" data-username="${despachador.username}" 
+                                            data-email="${despachador.email}" data-nombre="${despachador.nombre}" 
+                                            data-apellido="${despachador.apellido}" data-estado="${despachador.estado}">
+                                        <i class="fas fa-edit"></i> 
+                                    </button>
+                                    <!-- Eliminar -->
+                                    <a href="GestionDespachadores?accion=Eliminar&Id=${despachador.idUsuario}" 
+                                       class="btn btn-danger ml-2" 
+                                       onclick="return confirm('¿Estás seguro de que deseas eliminar este despachador?');">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    </c:forEach>
+                </tbody>
+            </table>
+        </div>
+       </div>
 
-            <!-- Modal para agregar despachador -->
-            <div class="modal fade" id="agregarDespachadorModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title">Agregar Despachador</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <!-- Formulario con validación -->
-                            <form action="GestionDespachadores" method="POST" class="needs-validation" novalidate>
-                                <input type="hidden" name="accion" value="Crear">
-                                <div class="form-group">
-                                    <label for="txtUsuario">Usuario</label>
-                                    <input type="text" name="username" id="txtUsuario" class="form-control" required>
-                                    <div class="invalid-feedback">El campo usuario es obligatorio.</div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="txtClave">Clave</label>
-                                    <div class="input-group">
-                                        <input type="password" name="password" id="txtClave" class="form-control" required>
-                                        <div class="input-group-append">
-                                            <button type="button" class="btn btn-outline-secondary toggle-password">
-                                                <i class="fas fa-eye"></i>
-                                            </button>
-                                        </div>
-                                        <div class="invalid-feedback">El campo clave es obligatorio.</div>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="txtNombre">Nombre</label>
-                                    <input type="text" name="nombre" id="txtNombre" class="form-control" required>
-                                    <div class="invalid-feedback">El campo nombre es obligatorio.</div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="txtApellido">Apellido</label>
-                                    <input type="text" name="apellido" id="txtApellido" class="form-control" required>
-                                    <div class="invalid-feedback">El campo apellido es obligatorio.</div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="txtEmail">Email</label>
-                                    <input type="email" name="email" id="txtEmail" class="form-control" required>
-                                    <div class="invalid-feedback">Debe ingresar un email válido.</div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="txtEstado">Estado</label>
-                                    <select name="estado" id="txtEstado" class="form-control" required>
-                                        <option value="Activo">Activo</option>
-                                        <option value="Inactivo">Inactivo</option>
-                                    </select>
-                                    <div class="invalid-feedback">Debe seleccionar un estado.</div>
-                                </div>
-                                <div style="display: flex; justify-content: center;">
-                                    <input type="submit" class="btn btn-info" value="Agregar">
-                                </div>
-                            </form>
-                        </div>
+        <!-- Modal para agregar despachador -->
+        <div class="modal fade" id="agregarDespachadorModal" tabindex="-1" aria-labelledby="agregarDespachadorModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="agregarDespachadorModalLabel">Agregar Despachador</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="GestionDespachadores" method="POST">
+                            <input type="hidden" name="accion" value="Crear">
+                            <div class="mb-3">
+                                <label for="txtUsuario" class="form-label">Usuario</label>
+                                <input type="text" name="username" id="txtUsuario" class="form-control" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="txtClave" class="form-label">Clave</label>
+                                <input type="password" name="password" id="txtClave" class="form-control" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="txtNombre" class="form-label">Nombre</label>
+                                <input type="text" name="nombre" id="txtNombre" class="form-control" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="txtApellido" class="form-label">Apellido</label>
+                                <input type="text" name="apellido" id="txtApellido" class="form-control" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="txtEmail" class="form-label">Email</label>
+                                <input type="email" name="email" id="txtEmail" class="form-control" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="txtEstado" class="form-label">Estado</label>
+                                <select name="estado" id="txtEstado" class="form-select" required>
+                                    <option value="Activo">Activo</option>
+                                    <option value="Inactivo">Inactivo</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-info w-100">Agregar</button>
+                        </form>
                     </div>
                 </div>
             </div>
+        </div>
 
-            <!-- Modal para editar despachador -->
-            <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title">Editar Despachador</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <form action="GestionDespachadores" method="POST" class="needs-validation" novalidate>
-                                <input type="hidden" name="accion" value="Modificar">
-                                <input type="hidden" name="idUsuario" id="editIdUsuario">
-
-                                <!-- Usuario -->
-                                <div class="form-group">
-                                    <label for="editUsername">Usuario</label>
-                                    <input type="text" name="username" id="editUsername" class="form-control" required>
-                                    <div class="invalid-feedback">El campo usuario es obligatorio.</div>
-                                </div>
-
-                                <!-- Clave -->
-                                <div class="form-group">
-                                    <label for="editPassword">Clave</label>
-                                    <div class="input-group">
-                                        <input type="password" name="password" id="editPassword" class="form-control" 
-                                               placeholder="Dejar en blanco para mantener la contraseña actual">
-                                        <div class="input-group-append">
-                                            <span class="input-group-text">
-                                                <i class="fas fa-eye-slash" id="togglePassword"></i>
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Nombre, Apellido, Email, Estado -->
-                                <div class="form-group">
-                                    <label for="editNombre">Nombre</label>
-                                    <input type="text" name="nombre" id="editNombre" class="form-control" required>
-                                    <div class="invalid-feedback">El campo nombre es obligatorio.</div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="editApellido">Apellido</label>
-                                    <input type="text" name="apellido" id="editApellido" class="form-control" required>
-                                    <div class="invalid-feedback">El campo apellido es obligatorio.</div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="editEmail">Email</label>
-                                    <input type="email" name="email" id="editEmail" class="form-control" required>
-                                    <div class="invalid-feedback">Debe ingresar un email válido.</div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="editEstado">Estado</label>
-                                    <select name="estado" id="editEstado" class="form-control" required>
-                                        <option value="Activo">Activo</option>
-                                        <option value="Inactivo">Inactivo</option>
-                                    </select>
-                                    <div class="invalid-feedback">Debe seleccionar un estado.</div>
-                                </div>
-
-                                <div style="display: flex; justify-content: center;">
-                                    <input type="submit" class="btn btn-success" value="Guardar cambios">
-                                </div>
-                            </form>
-                        </div>
+        <!-- Modal para editar despachador -->
+        <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editModalLabel">Editar Despachador</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="GestionDespachadores" method="POST">
+                            <input type="hidden" name="accion" value="Modificar">
+                            <input type="hidden" name="idUsuario" id="editIdUsuario">
+                            <div class="mb-3">
+                                <label for="editUsername" class="form-label">Usuario</label>
+                                <input type="text" name="username" id="editUsername" class="form-control" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="editPassword" class="form-label">Clave</label>
+                                <input type="password" name="password" id="editPassword" class="form-control">
+                            </div>
+                            <div class="mb-3">
+                                <label for="editNombre" class="form-label">Nombre</label>
+                                <input type="text" name="nombre" id="editNombre" class="form-control" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="editApellido" class="form-label">Apellido</label>
+                                <input type="text" name="apellido" id="editApellido" class="form-control" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="editEmail" class="form-label">Email</label>
+                                <input type="email" name="email" id="editEmail" class="form-control" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="editEstado" class="form-label">Estado</label>
+                                <select name="estado" id="editEstado" class="form-select" required>
+                                    <option value="Activo">Activo</option>
+                                    <option value="Inactivo">Inactivo</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-warning w-100">Guardar Cambios</button>
+                        </form>
                     </div>
                 </div>
             </div>
+        </div>
 
-            <!-- JavaScript para mostrar/ocultar la contraseña -->
+    </div>
+        <!-- JavaScript para mostrar/ocultar la contraseña -->
             <script>
                 $(document).ready(function () {
                     $('.editBtn').on('click', function () {
@@ -290,6 +250,21 @@
                 })();
             </script>
 
-        </div>
-    </body>
+    <!-- Bootstrap JS Bundle (Incluye Popper) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script>
+        // Script para llenar el modal de editar
+        var editModal = document.getElementById('editModal');
+        editModal.addEventListener('show.bs.modal', function (event) {
+            var button = event.relatedTarget;
+            document.getElementById('editIdUsuario').value = button.getAttribute('data-id');
+            document.getElementById('editUsername').value = button.getAttribute('data-username');
+            document.getElementById('editEmail').value = button.getAttribute('data-email');
+            document.getElementById('editNombre').value = button.getAttribute('data-nombre');
+            document.getElementById('editApellido').value = button.getAttribute('data-apellido');
+            document.getElementById('editEstado').value = button.getAttribute('data-estado');
+        });
+    </script>
+</body>
 </html>
+

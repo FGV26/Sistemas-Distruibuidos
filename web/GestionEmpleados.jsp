@@ -28,8 +28,6 @@
                     </div>
                 </div>
             </header>
-            
-            <body>
                 <div class="border rounded" style="min-height: 80vh;">
                     
                     <!-- Busqueda y botones arriba de la tabla -->
@@ -97,7 +95,6 @@
                     </div>
                     
                 </div>
-            </body>
             
             
         <main>
