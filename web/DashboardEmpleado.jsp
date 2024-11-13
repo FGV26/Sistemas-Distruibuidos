@@ -52,7 +52,7 @@
                         <ul>
                             <!-- Gestionar un Pedido -->
                             <li>
-                                <a href="GestionDePedido?accion=Ingresar" title="Gestionar Pedido">
+                                <a href="GestionDePedido.jsp" title="Gestionar Pedido">
                                     <i class="bi bi-cart"></i>
                                     <span class="link hide">Gestionar Pedido</span>
                                 </a>
