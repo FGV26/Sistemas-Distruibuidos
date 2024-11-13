@@ -1,4 +1,5 @@
 
+
 <%@page import="entidades.Usuario"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
@@ -9,8 +10,8 @@
         <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
         <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
-        <script src="https://cdn.tailwindcss.com"></script>
         <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+        <script src="https://cdn.tailwindcss.com"></script>
     </head>
     <body>
 
@@ -29,7 +30,7 @@
 
 
         <!-- Gestion de pedidos -->
-        
+
         <div class="container mt-4">
 
             <h2 class="text-center mb-4" style="font-weight: bold">Gestión de Pedidos</h2>
@@ -52,13 +53,13 @@
 
             <!-- Módulo 1: Selección o Registro de Cliente -->
             <div id="step1" class="step-content">
-                
+
                 <h3 class="text-center pt-4 pb-4">Seleccionar o Registrar Cliente</h3>
-                
+
                 <div class="row d-flex justify-content-around">
-                    
+
                     <div class="col-md-5 shadow-sm p-3 mb-5 bg-body-tertiary rounded">
-                        
+
                         <h4 class="text-center pt-2 pb-2 text-uppercase" style="font-weight: bold">Registro de Cliente</h4>
 
                         <div class="container">
@@ -99,21 +100,21 @@
                                     <span class="input-group-text"><i class="fas fa-envelope"></i></span>
                                     <input type="email" class="form-control" id="email" placeholder="Ingrese Email">
                                 </div>
-                                
+
                                 <div class="pt-3 m-1 row d-flex justify-content-end">
                                     <button type="button" class="btn btn-success mt-2" onclick="registrarCliente()" id="btnRegistrar">Registrar</button>
                                 </div>
-                                
+
 
                             </form>  
                         </div>
-                        
+
                     </div>
-                    
+
                     <div class="col-md-5 shadow-sm p-3 mb-5 bg-body-tertiary rounded">
-                        
+
                         <h5 class="text-center pt-2 pb-2 text-uppercase" style="font-weight: bold"> Búsqueda de Cliente</h5>
-                        
+
                         <div class="container">
                             <form id="formBuscarCliente">
 
@@ -155,40 +156,155 @@
 
                             </form>
                         </div>
-                        
+
                         <div id="autocompleteResults" class="list-group mt-2"></div> <!-- Lista de sugerencias -->
-                        
+
                     </div>
                 </div>
 
-                <div id="confirmacionSeleccion" class="mt-3"></div> <!-- Confirmación del cliente seleccionado -->
-                
+                <div id="confirmacionSeleccion" class="mt-3"></div> 
+
                 <div class="row">
                     <div class="col d-flex justify-content-end align-items-center">
+                        <a href="DashboardActividades?accion=Listar" class="btn btn-danger mt-3"></a>
                         <button class="btn btn-primary mt-3" id="nextToStep2" onclick="goToStep(2)" disabled>Siguiente</button>
+
                     </div>
                 </div>
             </div>
 
-
             <!-- Módulo 2: Selección de Productos -->
             <div id="step2" class="step-content d-none">
                 <h4>Seleccionar Productos</h4>
-                <input type="text" class="form-control mb-3" id="buscarProducto" placeholder="Buscar producto por nombre" onkeyup="buscarProducto()">
-                <button class="btn btn-secondary mb-3" onclick="listarProductos()">Ver Todos</button>
-                <div id="listaProductos"></div>
-                <h5>Carrito</h5>
-                <div id="carrito"></div>
-                <button class="btn btn-primary mt-3" id="nextToStep3" onclick="goToStep(3)" disabled>Confirmar</button>
-                <button class="btn btn-secondary mt-3" onclick="goToStep(1)">Retroceder</button>
+
+                <!-- Barra de búsqueda de productos -->
+                <div class="d-flex mb-3">
+                    <input type="text" class="form-control me-2" id="buscarProducto" placeholder="Buscar producto por nombre" onkeyup="buscarProducto()">
+                    <button class="btn btn-secondary" onclick="listarProductos()">Mostrar Todo</button>
+                    <select class="form-select ms-2" id="categoriaProducto" onchange="listarPorCategoria(this.value)">
+                        <option value="">Categoría</option>
+                        <!-- Las opciones se añadirán dinámicamente a través de JavaScript -->
+                    </select>
+                </div>
+
+                <!-- Contenedor principal de selección de productos y carrito -->
+                <div class="d-flex">
+                    <!-- Tabla de productos con scroll para mostrar solo 5 elementos -->
+                    <div style="width: 60%; max-height: 300px; overflow-y: auto; border: 1px solid #ddd; padding: 10px;">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Imagen</th>
+                                    <th scope="col">Producto</th>
+                                    <th scope="col">Cantidad</th>
+                                    <th scope="col">Acción</th>
+                                </tr>
+                            </thead>
+                            <tbody id="listaProductos">
+                                <!-- Los productos se cargarán aquí dinámicamente desde JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Carrito de productos seleccionados -->
+                    <div style="width: 50%; margin-left: 20px; border: 1px solid #ddd; padding: 10px;">
+                        <h5>Productos Seleccionados</h5>
+                        <div id="carrito" style="max-height: 250px; overflow-y: auto;">
+                            <!-- Lista de productos seleccionados en el carrito -->
+                            <!-- Los productos seleccionados se cargarán aquí dinámicamente desde JavaScript -->
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Botones de navegación entre módulos -->
+                <div class="mt-3">
+                    <button class="btn btn-secondary" onclick="goToStep(1)">Retroceder</button>
+                    <button class="btn btn-primary" id="nextToStep3" onclick="goToStep(3)" disabled>Siguiente</button>
+                </div>
             </div>
 
             <!-- Módulo 3: Confirmación de Pedido -->
             <div id="step3" class="step-content d-none">
                 <h4>Confirmación de Pedido</h4>
-                <div id="resumenPedido"></div>
-                <button class="btn btn-primary mt-3" id="nextToStep4" onclick="goToStep(4)">Confirmar</button>
-                <button class="btn btn-secondary mt-3" onclick="goToStep(2)">Retroceder</button>
+
+                <!-- Información del Cliente -->
+                <div class="client-info mb-4">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label for="codigoCliente">Cod. Cliente:</label>
+                            <input type="text" id="codigoCliente" class="form-control" readonly>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="nombreCliente">Nombres:</label>
+                            <input type="text" id="nombreCliente" class="form-control" readonly>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="direccionCliente">Dirección:</label>
+                            <input type="text" id="direccionCliente" class="form-control" readonly>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="fechaPedido">Fecha:</label>
+                            <input type="text" id="fechaPedido" class="form-control" readonly>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Información del Pedido -->
+                <div class="order-info mb-4">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label for="numeroPedido">Nro. Pedido:</label>
+                            <input type="text" id="numeroPedido" class="form-control" readonly>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Resumen de Productos -->
+                <div class="products-summary mb-4">
+                    <h5>Resumen de Productos</h5>
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Item</th>
+                                <th>Descripción</th>
+                                <th>Precio</th>
+                                <th>Cantidad</th>
+                                <th>IGV</th>
+                                <th>Subtotal</th>
+                            </tr>
+                        </thead>
+                        <tbody id="listaResumenProductos">
+                            <!-- Los productos seleccionados se cargarán aquí dinámicamente desde JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Totales del Pedido -->
+                <div class="order-totals mb-4">
+                    <div class="row">
+                        <div class="col-md-4 offset-md-8">
+                            <div class="d-flex justify-content-between">
+                                <span>Subtotal:</span>
+                                <span id="subtotalPedido">0.00</span>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <span>IGV:</span>
+                                <span id="igvPedido">0.00</span>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <span>Total:</span>
+                                <span id="totalPedido">0.00</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Botones de Navegación -->
+                <div class="navigation-buttons">
+                    <button class="btn btn-secondary" onclick="goToStep(2)">Retroceder</button>
+                    <button class="btn btn-primary" id="nextToStep4" onclick="goToStep(4)">Confirmar</button>
+                </div>
             </div>
 
             <!-- Módulo 4: Pago -->

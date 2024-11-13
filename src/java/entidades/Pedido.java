@@ -5,13 +5,15 @@ import java.util.Date;
 
 public class Pedido {
     private int idPedido;
-    private String codPedido; // Nuevo campo para el código del pedido
     private int idCliente;
     private int idEmpleado;
     private Date fechaPedido;
     private double subTotal;
     private double total;
     private String estado;
+    private String fecha_modificacion; 
+    private int idDespachador;
+    private String codPedido;
 
     // Constructor vacío
     public Pedido() {}
