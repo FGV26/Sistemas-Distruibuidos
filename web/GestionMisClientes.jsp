@@ -34,7 +34,7 @@
                     <div class="mt-4 mb-4 p-4">
                         <form action="GestionEmpleados" method="GET">
                             <div class="input-group mb-3">
-                                <input type="text" name="nombre" class="form-control" placeholder="Buscar por nombre o usuario" required>
+                                <input type="text" name="nombre" class="form-control" placeholder="Buscar por nombre" required>
                                 <button type="submit" name="accion" class="btn btn-outline-success">Buscar</button>
                             </div>
                         </form>
@@ -73,18 +73,20 @@
                                 <td>${cliente.telefono}</td>
                                 <td>${cliente.email}</td>
                                 <td>
-                                    <button class="btn btn-warning btn-sm editBtn" data-bs-toggle="modal" data-bs-target="#editarClienteModal"
-                                            data-id="${cliente.idCliente}" data-codcliente="${cliente.codCliente}"
-                                            data-nombre="${cliente.nombre}" data-apellido="${cliente.apellido}"
-                                            data-direccion="${cliente.direccion}" data-dni="${cliente.dni}" 
-                                            data-telefono="${cliente.telefono}" data-email="${cliente.email}">
-                                        Editar
-                                    </button>
-                                    <a href="ControlerCliente?accion=Eliminar&Id=${cliente.idCliente}" 
-                                       class="btn btn-danger btn-sm"
-                                       onclick="return confirm('¿Estás seguro de eliminar este cliente?');">
-                                        Eliminar
-                                    </a>
+                                    <div class="btn-group">
+                                        <button class="btn btn-primary editBtn" data-bs-toggle="modal" data-bs-target="#editarClienteModal"
+                                                data-id="${cliente.idCliente}" data-codcliente="${cliente.codCliente}"
+                                                data-nombre="${cliente.nombre}" data-apellido="${cliente.apellido}"
+                                                data-direccion="${cliente.direccion}" data-dni="${cliente.dni}" 
+                                                data-telefono="${cliente.telefono}" data-email="${cliente.email}">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <a href="ControlerCliente?accion=Eliminar&Id=${cliente.idCliente}" 
+                                           class="btn btn-danger ml-2"
+                                           onclick="return confirm('¿Estás seguro de eliminar este cliente?');">
+                                            <i class="fas fa-trash-alt"></i>
+                                        </a>
+                                    </div>
                                 </td>
                             </tr>
                         </c:forEach>

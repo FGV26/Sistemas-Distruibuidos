@@ -17,7 +17,6 @@
         <meta charset="UTF-8">
         <title>Gestión de Productos</title>
         <link rel="stylesheet" href="resources/css/Alerta.css">
-        <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
         
         <!-- Bootstrap 5.3.3 -->
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
@@ -41,7 +40,7 @@
             <div class="container mt-4 mb-4 p-4">
                 <form action="GestionEmpleados" method="GET">
                     <div class="input-group mb-3">
-                        <input type="text" name="nombre" class="form-control" placeholder="Buscar por nombre o usuario" required>
+                        <input type="text" name="nombre" class="form-control" placeholder="Buscar por nombre del producto" required>
                         <button type="submit" name="accion" class="btn btn-outline-success">Buscar</button>
                     </div>
                 </form>
@@ -119,7 +118,7 @@
                             <td>
                                 <div class="btn-group">
                                     <!-- Botón Editar -->
-                                    <button class="btn btn-primary editBtn" data-toggle="modal" data-target="#editModal"
+                                    <button class="btn btn-primary editBtn" data-bs-toggle="modal" data-bs-target="#editModal"
                                             data-id="${producto.idProducto}" data-idcategoria="${producto.idCategoria}"
                                             data-nombre="${producto.nombre}" data-precio="${producto.precio}"
                                             data-stock="${producto.stock}" data-stockminimo="${producto.stockMinimo}"
@@ -201,14 +200,12 @@
             </div>
 
             <!-- Modal para editar producto -->
-            <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
-                <div class="modal-dialog" role="document">
+            <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title">Editar Producto</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
                             <form action="GestionProductos" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
@@ -246,18 +243,18 @@
                                     <label for="editDescripcionProducto">Descripción</label>
                                     <textarea name="descripcion" id="editDescripcionProducto" class="form-control" required></textarea>
                                 </div>
-                                <div class="form-group">
+                                <div class="form-group mb-3">
                                     <label for="editEstadoProducto">Estado</label>
                                     <select name="estado" id="editEstadoProducto" class="form-control" required>
                                         <option value="Disponible">Disponible</option>
                                         <option value="No Disponible">No Disponible</option>
                                     </select>
                                 </div>
-                                <div class="form-group">
+                                <div class="form-group mb-3">
                                     <label for="editImagenProducto">Imagen</label>
                                     <input type="file" name="imagen" id="editImagenProducto" class="form-control-file">
                                 </div>
-                                <button type="submit" class="btn btn-success">Guardar cambios</button>
+                                <button type="submit" class="btn btn-warning w-100">Guardar Cambios</button>
                             </form>
                         </div>
                     </div>

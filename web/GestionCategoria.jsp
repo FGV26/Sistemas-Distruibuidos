@@ -34,7 +34,7 @@
                     <div class="mt-4 mb-4 p-4">
                         <form action="GestionEmpleados" method="GET">
                             <div class="input-group mb-3">
-                                <input type="text" name="nombre" class="form-control" placeholder="Buscar por nombre o usuario" required>
+                                <input type="text" name="nombre" class="form-control" placeholder="Buscar por categoría" required>
                                 <button type="submit" name="accion" class="btn btn-outline-success">Buscar</button>
                             </div>
                         </form>
@@ -85,7 +85,7 @@
                                 <td>
                                     <div class="btn-group">
                                         <!-- Editar -->
-                                        <button class="btn btn-primary editBtn" data-toggle="modal" data-target="#editModal"
+                                        <button class="btn btn-primary editBtn" data-bs-toggle="modal" data-bs-target="#editModal"
                                                 data-id="${categoria.idCategoria}" data-nombre="${categoria.nombre}"
                                                 data-descripcion="${categoria.descripcion}">
                                             <i class="fas fa-edit"></i>
@@ -141,25 +141,23 @@
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title">Editar Categoría</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
                             <form action="GestionCategoria" method="POST" class="needs-validation" novalidate>
                                 <input type="hidden" name="accion" value="Modificar">
                                 <input type="hidden" name="idCategoria" id="editIdCategoria">
-                                <div class="form-group">
+                                <div class="form-group mb-3">
                                     <label for="editNombre">Nombre</label>
                                     <input type="text" name="nombre" id="editNombre" class="form-control" required>
                                     <div class="invalid-feedback">El campo nombre es obligatorio.</div>
                                 </div>
-                                <div class="form-group">
+                                <div class="form-group mb-3">
                                     <label for="editDescripcion">Descripción</label>
                                     <textarea name="descripcion" id="editDescripcion" class="form-control" required></textarea>
                                     <div class="invalid-feedback">El campo descripción es obligatorio.</div>
                                 </div>
-                                <button type="submit" class="btn btn-success">Guardar cambios</button>
+                                <button type="submit" class="btn btn-warning w-100">Guardar Cambios</button>
                             </form>
                         </div>
                     </div>
