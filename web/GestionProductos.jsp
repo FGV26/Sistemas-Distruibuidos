@@ -30,7 +30,7 @@
             <header class="mt-4 mb-4 border rounded app-header">
             <div class="d-flex align-items-center" >
                 <div class="d-flex justify-content-start align-items-center">
-                    <h4 class="m-4">Gestión de Despachadores<h4/>
+                    <h4 class="m-4">Gestión de Productos<h4/>
                 </div>
             </div>
         </header>
@@ -339,8 +339,8 @@
                 });
             </script>
              
-            <!-- Boostrap -->
-            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+            <!-- Bootstrap JS Bundle (Incluye Popper) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
             
         </div>
     </body>

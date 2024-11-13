@@ -11,30 +11,39 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" 
-              integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-        <script src="https://code.jquery.com/jquery-3.3.1.min.js" crossorigin="anonymous"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" crossorigin="anonymous"></script>
+        
         <meta charset="UTF-8">
         <title>Gestión de Categorías</title>
+        <!-- Bootstrap 5.3.3 -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js" crossorigin="anonymous"></script>
+        <script src="https://kit.fontawesome.com/26a3cc7edf.js" crossorigin="anonymous"></script>
     </head>
     <body>
         <div class="container">
-            <h1 class="mt-4">Gestión de Categorías</h1>
-
-            <!-- Formulario de búsqueda -->
-            <form class="form-inline my-3" action="GestionCategoria" method="GET">
-                <input type="hidden" name="accion" value="Buscar">
-                <input type="text" name="nombre" class="form-control mr-sm-2" placeholder="Buscar por nombre" required>
-                <button type="submit" class="btn btn-outline-success my-2 my-sm-0">Buscar</button>
-                <a href="GestionCategoria?accion=Listar" class="btn btn-outline-primary my-2 my-sm-0 ml-2">Mostrar Todo</a>
-            </form>
-
-            <!-- Botones para agregar categoría y volver al menú administrador -->
-            <div class="d-flex justify-content-start mb-3">
-                <button type="button" class="btn btn-info mr-2" data-toggle="modal" data-target="#agregarCategoriaModal">Agregar Categoría</button>
-                <a href="DashboardActividades?accion=Listar" class="btn btn-outline-secondary">Volver a Menú Administrador</a>
-            </div>
+            
+            <header class="mt-4 mb-4 border rounded app-header">
+                <div class="d-flex align-items-center" >
+                    <div class="d-flex justify-content-start align-items-center">
+                        <h4 class="m-4">Gestión de Categorías<h4/>
+                    </div>
+                </div>
+            </header>
+            <div class="border rounded" style="min-height: 80vh;">
+                <!-- Busqueda y botones arriba de la tabla -->
+                    <div class="mt-4 mb-4 p-4">
+                        <form action="GestionEmpleados" method="GET">
+                            <div class="input-group mb-3">
+                                <input type="text" name="nombre" class="form-control" placeholder="Buscar por nombre o usuario" required>
+                                <button type="submit" name="accion" class="btn btn-outline-success">Buscar</button>
+                            </div>
+                        </form>
+                        <div class="input-group mb-3 justify-content-end">
+                            <a class="btn btn-outline-primary"" role="button" href="GestionEmpleados?accion=Listar">Mostrar Todo</a>
+                            <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#agregarEmpleadoModal">Agregar empleado</button>
+                            <a href="DashboardActividades?accion=Listar" role="button" class="btn btn-outline-dark">Menú Administrador</a>
+                        </div>
+                    </div>
 
             <!-- Mensajes de éxito o error -->
             <% String mensaje = request.getParameter("mensaje");
@@ -57,41 +66,44 @@
             <% }%>
 
             <!-- Tabla de categorías -->
-            <table class="table table-hover">
-                <thead class="thead-light">
-                    <tr>
-                        <th>ID</th>
-                        <th>Nombre</th>
-                        <th>Descripción</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <c:forEach var="categoria" items="${ListaCategorias}">
+            <div class="container mt-4 mb-4">
+                <table class="table">
+                    <thead>
                         <tr>
-                            <td>${categoria.idCategoria}</td>
-                            <td>${categoria.nombre}</td>
-                            <td>${categoria.descripcion}</td>
-                            <td>
-                                <div class="btn-group">
-                                    <!-- Editar -->
-                                    <button class="btn btn-warning editBtn" data-toggle="modal" data-target="#editModal"
-                                            data-id="${categoria.idCategoria}" data-nombre="${categoria.nombre}"
-                                            data-descripcion="${categoria.descripcion}">
-                                        <i class="fas fa-edit"></i> Editar
-                                    </button>
-                                    <!-- Eliminar -->
-                                    <a href="GestionCategoria?accion=Eliminar&idCategoria=${categoria.idCategoria}"
-                                       class="btn btn-danger ml-2"
-                                       onclick="return confirm('¿Estás seguro de que deseas eliminar esta categoría?');">
-                                        <i class="fas fa-trash-alt"></i> Eliminar
-                                    </a>
-                                </div>
-                            </td>
+                            <th>ID</th>
+                            <th>Nombre</th>
+                            <th>Descripción</th>
+                            <th>Acciones</th>
                         </tr>
-                    </c:forEach>
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        <c:forEach var="categoria" items="${ListaCategorias}">
+                            <tr>
+                                <td>${categoria.idCategoria}</td>
+                                <td>${categoria.nombre}</td>
+                                <td>${categoria.descripcion}</td>
+                                <td>
+                                    <div class="btn-group">
+                                        <!-- Editar -->
+                                        <button class="btn btn-primary editBtn" data-toggle="modal" data-target="#editModal"
+                                                data-id="${categoria.idCategoria}" data-nombre="${categoria.nombre}"
+                                                data-descripcion="${categoria.descripcion}">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <!-- Eliminar -->
+                                        <a href="GestionCategoria?accion=Eliminar&idCategoria=${categoria.idCategoria}"
+                                           class="btn btn-danger ml-2"
+                                           onclick="return confirm('¿Estás seguro de que deseas eliminar esta categoría?');">
+                                            <i class="fas fa-trash-alt"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        </c:forEach>
+                    </tbody>
+                </table>
+            </div>
+        </div>
 
             <!-- Modal para agregar categoría -->
             <div class="modal fade" id="agregarCategoriaModal" tabindex="-1" role="dialog" aria-labelledby="agregarCategoriaLabel" aria-hidden="true">
@@ -153,6 +165,8 @@
                     </div>
                 </div>
             </div>
+            
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 
             <script>
                 // Lógica para el modal de editar
