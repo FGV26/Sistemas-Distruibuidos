@@ -38,7 +38,7 @@
         %>
 
         
-        <div class="container pt-4">
+        <div class="container pt-5">
             <div class="border rounded" style="min-height: 80vh; box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;">
 
                 <!-- Progress Bar -->
@@ -274,19 +274,19 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <label for="codigoCliente">Cod. Cliente:</label>
-                                <input type="text" id="codigoCliente" class="form-control" readonly>
+                                <input type="text" id="codigoClienteConf" class="form-control" readonly>
                             </div>
                             <div class="col-md-6">
-                                <label for="nombreCliente">Nombres:</label>
-                                <input type="text" id="nombreCliente" class="form-control" readonly>
+                                <label for="nombreClienteConf">Nombres:</label>
+                                <input type="text" id="nombreClienteConf" class="form-control" readonly>
                             </div>
                             <div class="col-md-6">
-                                <label for="direccionCliente">Dirección:</label>
-                                <input type="text" id="direccionCliente" class="form-control" readonly>
+                                <label for="direccionClienteConf">Dirección:</label>
+                                <input type="text" id="direccionClienteConf" class="form-control" readonly>
                             </div>
                             <div class="col-md-6">
-                                <label for="fechaPedido">Fecha:</label>
-                                <input type="text" id="fechaPedido" class="form-control" readonly>
+                                <label for="fechaPedidoConf">Fecha:</label>
+                                <input type="text" id="fechaPedidoConf" class="form-control" readonly>
                             </div>
                         </div>
                     </div>

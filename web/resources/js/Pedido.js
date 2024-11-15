@@ -361,12 +361,14 @@ function cargarDatosClienteEnModulo3() {
     // 2. Cargar información del cliente
     const cliente = JSON.parse(sessionStorage.getItem("cliente"));
     
+    console.log('nombre y apellido: ', `${cliente.nombre} ${cliente.apellido}`);
+    console.log('direccion: ', `${cliente.direccion}`);
     
     if (cliente) {
-        $("#codigoCliente").val(cliente.codCliente);  
-        $("#nombreCliente").val(`${cliente.nombre}  ${cliente.apellido}`);
-        $("#direccionCliente").val(cliente.direccion);
-        $("#fechaPedido").val(new Date().toLocaleDateString());
+        $("#codigoClienteConf").val(cliente.codCliente);  
+        $("#nombreClienteConf").val(`${cliente.nombre}  ${cliente.apellido}`);
+        $("#direccionClienteConf").val(cliente.direccion);
+        $("#fechaPedidoConf").val(new Date().toLocaleDateString());
     } else {
         console.warn("No se encontraron datos del cliente en sessionStorage.");
     }
