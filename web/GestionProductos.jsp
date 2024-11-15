@@ -45,12 +45,10 @@
                     </div>
                 </form>
                 <div class="input-group mb-3 justify-content-end">
-                    <a class="btn btn-outline-primary"" role="button" href="GestionEmpleados?accion=Listar">Mostrar Todo</a>
-                    <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#agregarEmpleadoModal">Agregar empleado</button>
+                    <a class="btn btn-outline-primary"" role="button" href="GestionProductos?accion=Listar">Mostrar Todo</a>
+                    <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#agregarProductoModal">Agregar producto</button>
                     <a href="DashboardActividades?accion=Listar" role="button" class="btn btn-outline-dark">Menú Administrador</a>
                 </div>
-                <!-- Botón para agregar producto -->
-            <button type="button" class="btn btn-info mb-3" data-toggle="modal" data-target="#agregarProductoModal">Agregar Producto</button>
             </div>
 
 
@@ -146,9 +144,7 @@
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title">Agregar Producto</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
                             <form action="GestionProductos" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
@@ -181,18 +177,18 @@
                                     <label for="descripcionProducto">Descripción</label>
                                     <textarea name="descripcion" id="descripcionProducto" class="form-control" required></textarea>
                                 </div>
-                                <div class="form-group">
+                                <div class="form-group mb-3">
                                     <label for="estadoProducto">Estado</label>
                                     <select name="estado" id="estadoProducto" class="form-control" required>
                                         <option value="Disponible">Disponible</option>
                                         <option value="No Disponible">No Disponible</option>
                                     </select>
                                 </div>
-                                <div class="form-group">
+                                <div class="form-group mb-3">
                                     <label for="imagenProducto">Imagen</label>
                                     <input type="file" name="imagen" id="imagenProducto" class="form-control-file" required>
                                 </div>
-                                <button type="submit" class="btn btn-info">Agregar</button>
+                                <button type="submit" class="btn btn-warning w-100">Agregar</button>
                             </form>
                         </div>
                     </div>
