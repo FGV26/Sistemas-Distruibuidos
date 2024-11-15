@@ -346,11 +346,15 @@
                 <div class="container pago pt-2 pb-2 d-none" id="pago">
                     <h3 class="text-center pb-5">Pago</h3>
                     <form id="formPago" class="pb-5">
-                        <input type="text" class="form-control mt-2" placeholder="Número de Tarjeta">
-                        <input type="text" class="form-control mt-2" placeholder="CVV">
-                        <input type="text" class="form-control mt-2" placeholder="Nombre en la Tarjeta">
-
+                        <input type="text" class="form-control mt-2" placeholder="Número de Tarjeta" id="numeroTarjeta">
+                        <input type="text" class="form-control mt-2" placeholder="CVV" id="cvvTarjeta">
+                        <input type="text" class="form-control mt-2" placeholder="Nombre en la Tarjeta" id="nombreTarjeta">
                     </form>
+                    <div class="d-flex justify-content-center mt-4">
+                        <button id="realizarPedidoBtn" onclick="realizarPedido()" class="btn btn-success" style="width: 150px;">
+                            Realizar Pedido
+                        </button>
+                    </div>
                 </div>
 
                 <div class="container d-flex justify-content-center pb-5">

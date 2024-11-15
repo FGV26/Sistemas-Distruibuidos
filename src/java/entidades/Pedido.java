@@ -1,5 +1,6 @@
 package entidades;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 public class Pedido {
@@ -8,17 +9,18 @@ public class Pedido {
     private int idCliente;
     private int idEmpleado;
     private Date fechaPedido;
-    private double subTotal;
-    private double total;
+    private BigDecimal subTotal;
+    private BigDecimal total;
     private String estado;
-    private String fecha_modificacion;
-    private int idDespachador;
+    private Date fechaModificacion; 
+    private Integer idDespachador;
     private String codPedido;
+    private String nombreCliente; 
 
     public Pedido() {
     }
 
-    public Pedido(int idPedido, int idCliente, int idEmpleado, Date fechaPedido, double subTotal, double total, String estado, String fecha_modificacion, int idDespachador, String codPedido) {
+    public Pedido(int idPedido, int idCliente, int idEmpleado, Date fechaPedido, BigDecimal subTotal, BigDecimal total, String estado, Date fechaModificacion, Integer idDespachador, String codPedido) {
         this.idPedido = idPedido;
         this.idCliente = idCliente;
         this.idEmpleado = idEmpleado;
@@ -26,19 +28,19 @@ public class Pedido {
         this.subTotal = subTotal;
         this.total = total;
         this.estado = estado;
-        this.fecha_modificacion = fecha_modificacion;
+        this.fechaModificacion = fechaModificacion;
         this.idDespachador = idDespachador;
         this.codPedido = codPedido;
     }
 
-    public Pedido(int idCliente, int idEmpleado, Date fechaPedido, double subTotal, double total, String estado, String fecha_modificacion, int idDespachador, String codPedido) {
+    public Pedido(int idCliente, int idEmpleado, Date fechaPedido, BigDecimal subTotal, BigDecimal total, String estado, Date fechaModificacion, Integer idDespachador, String codPedido) {
         this.idCliente = idCliente;
         this.idEmpleado = idEmpleado;
         this.fechaPedido = fechaPedido;
         this.subTotal = subTotal;
         this.total = total;
         this.estado = estado;
-        this.fecha_modificacion = fecha_modificacion;
+        this.fechaModificacion = fechaModificacion;
         this.idDespachador = idDespachador;
         this.codPedido = codPedido;
     }
@@ -75,19 +77,19 @@ public class Pedido {
         this.fechaPedido = fechaPedido;
     }
 
-    public double getSubTotal() {
+    public BigDecimal getSubTotal() {
         return subTotal;
     }
 
-    public void setSubTotal(double subTotal) {
+    public void setSubTotal(BigDecimal subTotal) {
         this.subTotal = subTotal;
     }
 
-    public double getTotal() {
+    public BigDecimal getTotal() {
         return total;
     }
 
-    public void setTotal(double total) {
+    public void setTotal(BigDecimal total) {
         this.total = total;
     }
 
@@ -99,19 +101,19 @@ public class Pedido {
         this.estado = estado;
     }
 
-    public String getFecha_modificacion() {
-        return fecha_modificacion;
+    public Date getFechaModificacion() {
+        return fechaModificacion;
     }
 
-    public void setFecha_modificacion(String fecha_modificacion) {
-        this.fecha_modificacion = fecha_modificacion;
+    public void setFechaModificacion(Date fechaModificacion) {
+        this.fechaModificacion = fechaModificacion;
     }
 
-    public int getIdDespachador() {
+    public Integer getIdDespachador() {
         return idDespachador;
     }
 
-    public void setIdDespachador(int idDespachador) {
+    public void setIdDespachador(Integer idDespachador) {
         this.idDespachador = idDespachador;
     }
 
@@ -122,7 +124,12 @@ public class Pedido {
     public void setCodPedido(String codPedido) {
         this.codPedido = codPedido;
     }
-    
-    
-    
+
+    public String getNombreCliente() {
+        return nombreCliente;
+    }
+
+    public void setNombreCliente(String nombreCliente) {
+        this.nombreCliente = nombreCliente;
+    }
 }

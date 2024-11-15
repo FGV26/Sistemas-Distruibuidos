@@ -21,6 +21,11 @@ function updateView() {
         console.log("Ingrese");
         cargarDatosClienteEnModulo3();
     }
+    if (content[currentStep] === 'pago') {
+        console.log("pago");
+        obtenerDatosPedido();
+    }
+    
 }
 
 function nextStep() {

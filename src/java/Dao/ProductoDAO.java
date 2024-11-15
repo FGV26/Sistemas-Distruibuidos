@@ -33,6 +33,9 @@ public class ProductoDAO {
     private static final String SQL_SELECT_WITH_STOCK = "SELECT * FROM productos WHERE stock > 0";
     private static final String SQL_SEARCH_WITH_STOCK = "SELECT * FROM productos WHERE nombre LIKE ? AND stock > 0";
 
+    // SQL para disminuir el stock en la tabla `productos`
+    private static final String SQL_ACTUALIZAR_STOCK = "UPDATE productos SET stock = stock - ? WHERE idProducto = ? AND stock >= ?";
+
     // Listar todos los productos
     public List<Producto> listar() {
         Connection conn = null;
@@ -589,6 +592,38 @@ public class ProductoDAO {
             }
         }
         return productos;
+    }
+
+    public int actualizarStockProducto(int idProducto, int cantidadVendida) {
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        int affectedRows = 0;
+
+        try {
+            conn = conexion.getConnection();
+            stmt = conn.prepareStatement(SQL_ACTUALIZAR_STOCK);
+
+            stmt.setInt(1, cantidadVendida);
+            stmt.setInt(2, idProducto);
+            stmt.setInt(3, cantidadVendida); // Verificar que el stock sea suficiente
+
+            affectedRows = stmt.executeUpdate(); // Guardamos el número de filas afectadas
+
+        } catch (SQLException ex) {
+            ex.printStackTrace(System.out);
+        } finally {
+            try {
+                if (stmt != null) {
+                    stmt.close();
+                }
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException ex) {
+                ex.printStackTrace(System.out);
+            }
+        }
+        return affectedRows; // Retornamos el número de filas actualizadas
     }
 
 }

@@ -329,7 +329,7 @@ function actualizarCarrito() {
     sessionStorage.setItem("carrito", JSON.stringify(carrito));
     console.log(sessionStorage.getItem("carrito"));
 
-   
+
 }
 
 
@@ -360,19 +360,16 @@ function cargarDatosClienteEnModulo3() {
 
     // 2. Cargar información del cliente
     const cliente = JSON.parse(sessionStorage.getItem("cliente"));
-    
-    console.log('nombre y apellido: ', `${cliente.nombre} ${cliente.apellido}`);
-    console.log('direccion: ', `${cliente.direccion}`);
-    
+
     if (cliente) {
-        $("#codigoClienteConf").val(cliente.codCliente);  
+        $("#codigoClienteConf").val(cliente.codCliente);
         $("#nombreClienteConf").val(`${cliente.nombre}  ${cliente.apellido}`);
         $("#direccionClienteConf").val(cliente.direccion);
         $("#fechaPedidoConf").val(new Date().toLocaleDateString());
     } else {
         console.warn("No se encontraron datos del cliente en sessionStorage.");
     }
-    
+
     // 3. Cargar y mostrar productos del carrito con desglose de precios
     const carrito = JSON.parse(sessionStorage.getItem("carrito"));
     if (carrito && carrito.length > 0) {
@@ -395,9 +392,6 @@ function cargarDatosClienteEnModulo3() {
             `;
         });
 
-        console.log("Datos del cliente:", cliente);
-        console.log("Productos en el carrito:", carrito);
-
         // Calcular IGV y total
         const igv = subtotal * IGV_RATE;
         const total = subtotal + igv;
@@ -417,11 +411,11 @@ function generarCodigoPedido() {
     $.ajax({
         url: "/Sistemas-Distruibuidos/GestionDePedidos",
         type: "GET",
-        data: { accion: "GenerarCodigoPedido" },
-        success: function(response) {
+        data: {accion: "GenerarCodigoPedido"},
+        success: function (response) {
             $("#numeroPedido").val(response.codPedido); // Asignar código de pedido al campo
         },
-        error: function() {
+        error: function () {
             console.error("Error al obtener el código de pedido.");
         }
     });
@@ -434,3 +428,96 @@ $(document).ready(function () {
     }
 });
 ;
+
+// Módulo 4: Pago y Creación de Pedido
+
+function obtenerDatosPedido() {
+    // 1. Obtener el cliente desde sessionStorage
+    const cliente = JSON.parse(sessionStorage.getItem("cliente"));
+    if (!cliente) {
+        alert("No se encontró información del cliente. Verifique que el cliente esté seleccionado.");
+        return null;
+    }
+
+    const carrito = JSON.parse(sessionStorage.getItem("carrito"));
+    if (!carrito || carrito.length === 0) {
+        alert("No hay productos en el carrito. Agregue productos antes de realizar el pedido.");
+        return null;
+    }
+
+    const IGV_RATE = 0.18; // Porcentaje del impuesto (18%)
+    let subtotal = carrito.reduce((acc, item) => acc + item.precio * item.cantidad, 0);
+    const igv = subtotal * IGV_RATE;
+    const total = subtotal + igv;
+
+    const today = new Date();
+    const fechaPedidoSimple = today.toISOString().split("T")[0]; // "YYYY-MM-DD" format
+
+    const pedido = {
+        idCliente: cliente.idCliente,
+        fechaPedido: fechaPedidoSimple, 
+        subTotal: subtotal.toFixed(2), 
+        total: total.toFixed(2), 
+        estado: "Proceso", 
+        fechaModificacion: fechaPedidoSimple, 
+        idDespachador: null, 
+        codPedido: "" 
+    };
+
+
+    // 6. Retornar el objeto `pedido` y el array `carrito` para usarlos en la solicitud al backend
+    return { pedido, carrito };
+}
+
+
+function crearPedido() {
+    const { pedido, carrito } = obtenerDatosPedido();
+
+    if (!pedido || !carrito || carrito.length === 0) {
+        alert("Datos de pedido o detalles no están completos.");
+        return;
+    }
+
+    // Convertimos `pedido` y `carrito` a JSON para enviar al backend
+    const data = new URLSearchParams();
+    data.append("accion", "CrearPedido");
+    data.append("pedido", JSON.stringify(pedido));
+    data.append("detalles", JSON.stringify(carrito));
+
+    // Imprimimos en consola para ver los datos enviados
+    console.log("Pedido a enviar:", pedido);
+    console.log("Detalles a enviar:", carrito);
+
+    fetch("/Sistemas-Distruibuidos/GestionDePedidos", {
+        method: "POST",
+        body: data,
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
+    })
+    .then(response => {
+        console.log("Respuesta bruta del servidor:", response);
+        return response.json();  // Convertir a JSON
+    })
+    .then(result => {
+        console.log("Respuesta JSON del servidor:", result);
+        if (result.success) {
+            alert("Pedido creado exitosamente.");
+            // Redirigir a Dashboard en caso de éxito
+            window.location.href = "DashboardActividades?accion=Listar";
+        } else {
+            alert("Error al crear el pedido: " + result.message);
+        }
+    })
+    .catch(error => {
+        console.error("Error en la solicitud:", error);
+        alert("Error al procesar la solicitud.");
+    });
+}
+
+
+
+// Agregar evento al botón "Realizar Pedido"
+document.getElementById("realizarPedidoBtn").addEventListener("click", crearPedido);
+
+

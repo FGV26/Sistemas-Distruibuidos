@@ -1,20 +1,22 @@
 
 package entidades;
 
+import java.math.BigDecimal;
+
 public class DetallePedido {
     private int idDetalle;
     private int idPedido;
     private int idProducto;
     private int cantidad;
-    private double precio;
-    private double total;
+    private BigDecimal precio; 
+    private BigDecimal total;   
 
     // Constructor vacío
     public DetallePedido() {
     }
 
     // Constructor con parámetros
-    public DetallePedido(int idDetalle, int idPedido, int idProducto, int cantidad, double precio, double total) {
+    public DetallePedido(int idDetalle, int idPedido, int idProducto, int cantidad, BigDecimal precio, BigDecimal total) {
         this.idDetalle = idDetalle;
         this.idPedido = idPedido;
         this.idProducto = idProducto;
@@ -56,19 +58,19 @@ public class DetallePedido {
         this.cantidad = cantidad;
     }
 
-    public double getPrecio() {
+    public BigDecimal getPrecio() {
         return precio;
     }
 
-    public void setPrecio(double precio) {
+    public void setPrecio(BigDecimal precio) {
         this.precio = precio;
     }
 
-    public double getTotal() {
+    public BigDecimal getTotal() {
         return total;
     }
 
-    public void setTotal(double total) {
+    public void setTotal(BigDecimal total) {
         this.total = total;
     }
 }

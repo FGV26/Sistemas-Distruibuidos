@@ -8,14 +8,25 @@ import entidades.Cliente;
 import entidades.RegistroActividad;
 import entidades.Usuario;
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.google.gson.JsonSyntaxException;
 import dao.CategoriaDAO;
+import dao.DetallePedidoDAO;
 import entidades.Categoria;
+import entidades.DetallePedido;
+import entidades.Pedido;
 import entidades.Producto;
+import java.io.BufferedReader;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 @WebServlet(name = "GestionDePedidos", urlPatterns = {"/GestionDePedidos"})
@@ -25,6 +36,7 @@ public class GestionDePedidos extends HttpServlet {
     private final ProductoDAO productoDAO = new ProductoDAO();
     private final CategoriaDAO categoriaDAO = new CategoriaDAO();
     private final PedidoDAO pedidoDAO = new PedidoDAO();
+    DetallePedidoDAO detallePedidoDAO = new DetallePedidoDAO();
     private final RegistroActividadDAO registroActividadDAO = new RegistroActividadDAO();
     private final Gson gson = new Gson();
 
@@ -65,7 +77,9 @@ public class GestionDePedidos extends HttpServlet {
             case "GenerarCodigoPedido":
                 generarCodigoPedido(response);
                 break;
-
+            case "CrearPedido":
+                crearPedido(request, response, user); // Llamada al método crearPedido
+                break;
             default:
                 response.sendRedirect("GestionDePedido.jsp");
                 break;
@@ -96,6 +110,8 @@ public class GestionDePedidos extends HttpServlet {
             String clienteJson = gson.toJson(cliente);
             response.setContentType("application/json");
             response.getWriter().write(clienteJson);
+            
+            registrarActividad("Búsqueda", "El empleado buscó un cliente por DNI: " + dni, user);
 
         } catch (IOException e) {
             e.printStackTrace(System.out);
@@ -145,7 +161,7 @@ public class GestionDePedidos extends HttpServlet {
 
             int resultado = clienteDAO.insertar(cliente);
             if (resultado > 0) {
-                registrarActividad("Creación", "El empleado creó un nuevo cliente con DNI: " + dni, user.getIdUsuario());
+                registrarActividad("Creación", "El empleado creó un nuevo cliente con DNI: " + dni, user);
                 response.getWriter().write("{\"mensaje\": \"Cliente registrado correctamente\", \"codCliente\": \"" + cliente.getCodCliente() + "\"}");
             } else {
                 response.getWriter().write("{\"error\": \"Error al crear cliente\"}");
@@ -154,15 +170,6 @@ public class GestionDePedidos extends HttpServlet {
             e.printStackTrace(System.out);
             response.getWriter().write("{\"error\": \"Error al procesar solicitud\"}");
         }
-    }
-
-    private void registrarActividad(String tipo, String descripcion, int idUsuario) {
-        RegistroActividad registro = new RegistroActividad();
-        registro.setTipo(tipo);
-        registro.setDescripcion(descripcion);
-        registro.setFecha(LocalDateTime.now());
-        registro.setIdUsuario(idUsuario);
-        registroActividadDAO.insertar(registro);
     }
 
     // Acción para listar todos los productos con stock
@@ -244,6 +251,106 @@ public class GestionDePedidos extends HttpServlet {
             e.printStackTrace(System.out);
             response.getWriter().write("{\"error\": \"Error al generar el código de pedido\"}");
         }
+    }
+
+    private void crearPedido(HttpServletRequest request, HttpServletResponse response, Usuario user) throws IOException {
+        try {
+            // Leer los parámetros enviados
+            String pedidoJson = request.getParameter("pedido");
+            String detallesJson = request.getParameter("detalles");
+
+            // Verificar si los parámetros no son nulos
+            if (pedidoJson == null || detallesJson == null) {
+                response.setContentType("application/json");
+                response.getWriter().write("{\"success\": false, \"message\": \"Datos incompletos enviados al servidor.\"}");
+                return;
+            }
+
+            // Parsear JSON a objetos
+            Pedido pedido = gson.fromJson(pedidoJson, Pedido.class);
+            DetallePedido[] detallesArray = gson.fromJson(detallesJson, DetallePedido[].class);
+            List<DetallePedido> detalles = Arrays.asList(detallesArray);
+
+            // Asignar el idEmpleado desde el usuario logueado
+            pedido.setIdEmpleado(user.getIdUsuario());
+
+            // Generar y asignar el código de pedido
+            String codPedido = generarCodigoPedido(); 
+            pedido.setCodPedido(codPedido);
+
+            // Asegurar que cada detalle tenga su total calculado (precio * cantidad)
+            for (DetallePedido detalle : detalles) {
+                BigDecimal cantidad = new BigDecimal(detalle.getCantidad());
+                BigDecimal total = detalle.getPrecio().multiply(cantidad);
+                detalle.setTotal(total);
+            }
+
+            // Insertar el pedido y procesar detalles (descomentar para insertar en la base de datos)
+            int idPedido = pedidoDAO.insertarPedido(pedido);
+            if (idPedido > 0) {
+                for (DetallePedido detalle : detalles) {
+                    detalle.setIdPedido(idPedido);
+                }
+
+                boolean detallesExito = detallePedidoDAO.insertarDetalle(idPedido, detalles);
+                if (detallesExito) {
+                    boolean stockExito = true;
+
+                    for (DetallePedido detalle : detalles) {
+                        int affectedRows = productoDAO.actualizarStockProducto(detalle.getIdProducto(), detalle.getCantidad());
+                        if (affectedRows <= 0) {
+                            stockExito = false;
+                            break;
+                        }
+                    }
+
+                    if (stockExito) {
+                        response.setContentType("application/json");
+                        response.getWriter().write("{\"success\": true, \"message\": \"Pedido creado exitosamente.\"}");
+                    } else {
+                        response.setContentType("application/json");
+                        response.getWriter().write("{\"success\": false, \"message\": \"Error al actualizar el stock.\"}");
+                
+                    }
+                registrarActividad("Creacion", "El empleado Creo un Pedido con el codigo de: " + pedido.getCodPedido(), user);
+                
+                } else {
+                    response.setContentType("application/json");
+                    response.getWriter().write("{\"success\": false, \"message\": \"Error al insertar detalles.\"}");
+                }
+            } else {
+                response.setContentType("application/json");
+                response.getWriter().write("{\"success\": false, \"message\": \"Error al insertar el pedido.\"}");
+            }
+        } catch (JsonSyntaxException | IOException e) {
+            e.printStackTrace(System.out);
+            response.setContentType("application/json");
+            response.getWriter().write("{\"success\": false, \"message\": \"Error al procesar la solicitud.\"}");
+        }
+        
+    }
+    
+    // Método privado para generar código de pedido
+    private String generarCodigoPedido() {
+        try {
+            int ultimoId = pedidoDAO.obtenerUltimoId();
+            int nuevoId = ultimoId + 1;
+            return "PEDI" + String.format("%03d", nuevoId);
+        } catch (Exception e) {
+            e.printStackTrace(System.out);
+            return null; // O devuelve un valor predeterminado
+        }
+    }
+    
+    
+    // Método para registrar la actividad
+    private void registrarActividad(String tipo, String descripcion, Usuario user) {
+        RegistroActividad registro = new RegistroActividad();
+        registro.setTipo(tipo);
+        registro.setDescripcion(descripcion);
+        registro.setFecha(LocalDateTime.now());
+        registro.setIdUsuario(user.getIdUsuario());
+        registroActividadDAO.insertar(registro);
     }
 
     @Override

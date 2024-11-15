@@ -58,6 +58,14 @@
                                 </a>
                             </li>
 
+                            <li>
+                                <a href="MisPedidos?accion=Listar" title="Mis Pedidos">
+                                    <i class="bi bi-card-text"></i>
+                                    <span class="link hide">Mis Pedidos</span>
+                                </a>
+                            </li>
+
+
                             <!-- Gestionar Mis Clientes -->
                             <li>
                                 <a href="ControlerCliente?accion=Listar" title="Gestionar Mis Clientes">

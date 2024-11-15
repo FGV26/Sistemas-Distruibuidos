@@ -1,4 +1,3 @@
-
 package dao;
 
 import entidades.DetallePedido;
@@ -18,6 +17,10 @@ public class DetallePedidoDAO {
     private static final String SQL_UPDATE = "UPDATE detalle_pedido SET Id_Pedido = ?, Id_Producto = ?, Cantidad = ?, Precio = ?, Total = ? WHERE Id_Detalle = ?";
     private static final String SQL_DELETE = "DELETE FROM detalle_pedido WHERE Id_Detalle = ?";
 
+    // En la clase DetallePedidoDAO, ajusta la consulta SQL de inserción de detalles
+    private static final String SQL_INSERT_DETALLE_PEDIDO = "INSERT INTO detalle_pedido (Id_Pedido, Id_Producto, Cantidad, Precio, Total) VALUES (?, ?, ?, ?, ?)";
+    private static final String SQL_DELETE_DETALLES = "DELETE FROM detalle_pedidos WHERE idPedido = ?";
+
     // Listar todos los detalles de pedidos
     public List<DetallePedido> listar() {
         Connection conn = null;
@@ -35,8 +38,8 @@ public class DetallePedidoDAO {
                 detalle.setIdPedido(rs.getInt("Id_Pedido"));
                 detalle.setIdProducto(rs.getInt("Id_Producto"));
                 detalle.setCantidad(rs.getInt("Cantidad"));
-                detalle.setPrecio(rs.getDouble("Precio"));
-                detalle.setTotal(rs.getDouble("Total"));
+                detalle.setPrecio(rs.getBigDecimal("Precio"));
+                detalle.setTotal(rs.getBigDecimal("Total"));
                 detalles.add(detalle);
             }
         } catch (SQLException ex) {
@@ -71,8 +74,8 @@ public class DetallePedidoDAO {
                 detalle.setIdPedido(rs.getInt("Id_Pedido"));
                 detalle.setIdProducto(rs.getInt("Id_Producto"));
                 detalle.setCantidad(rs.getInt("Cantidad"));
-                detalle.setPrecio(rs.getDouble("Precio"));
-                detalle.setTotal(rs.getDouble("Total"));
+                detalle.setPrecio(rs.getBigDecimal("Precio"));
+                detalle.setTotal(rs.getBigDecimal("Total"));
             }
         } catch (SQLException ex) {
             ex.printStackTrace(System.out);
@@ -100,8 +103,8 @@ public class DetallePedidoDAO {
             stmt.setInt(1, detalle.getIdPedido());
             stmt.setInt(2, detalle.getIdProducto());
             stmt.setInt(3, detalle.getCantidad());
-            stmt.setDouble(4, detalle.getPrecio());
-            stmt.setDouble(5, detalle.getTotal());
+            stmt.setBigDecimal(4, detalle.getPrecio());
+            stmt.setBigDecimal(5, detalle.getTotal());
             rows = stmt.executeUpdate();
         } catch (SQLException ex) {
             ex.printStackTrace(System.out);
@@ -128,8 +131,8 @@ public class DetallePedidoDAO {
             stmt.setInt(1, detalle.getIdPedido());
             stmt.setInt(2, detalle.getIdProducto());
             stmt.setInt(3, detalle.getCantidad());
-            stmt.setDouble(4, detalle.getPrecio());
-            stmt.setDouble(5, detalle.getTotal());
+            stmt.setBigDecimal(4, detalle.getPrecio());
+            stmt.setBigDecimal(5, detalle.getTotal());
             stmt.setInt(6, detalle.getIdDetalle());
             rows = stmt.executeUpdate();
         } catch (SQLException ex) {
@@ -168,4 +171,81 @@ public class DetallePedidoDAO {
         }
         return rows;
     }
+
+    public boolean insertarDetalle(int idPedido, List<DetallePedido> detalles) {
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        boolean success = true;
+
+        try {
+            conn = conexion.getConnection();
+            conn.setAutoCommit(false); // Iniciar una transacción
+
+            stmt = conn.prepareStatement(SQL_INSERT_DETALLE_PEDIDO);
+            for (DetallePedido detalle : detalles) {
+                stmt.setInt(1, idPedido);                    // Columna Id_Pedido
+                stmt.setInt(2, detalle.getIdProducto());     // Columna Id_Producto
+                stmt.setInt(3, detalle.getCantidad());       // Columna Cantidad
+                stmt.setBigDecimal(4, detalle.getPrecio());  // Columna Precio
+                stmt.setBigDecimal(5, detalle.getTotal());   // Columna Total
+
+                stmt.addBatch(); // Agregar a batch
+            }
+
+            stmt.executeBatch(); // Ejecutar el batch
+            conn.commit();
+        } catch (SQLException ex) {
+            success = false;
+            try {
+                if (conn != null) {
+                    conn.rollback(); // Hacer rollback en caso de error
+                }
+            } catch (SQLException e) {
+                e.printStackTrace(System.out);
+            }
+            ex.printStackTrace(System.out);
+        } finally {
+            try {
+                if (stmt != null) {
+                    stmt.close();
+                }
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException ex) {
+                ex.printStackTrace(System.out);
+            }
+        }
+        return success;
+    }
+
+    // Método para eliminar los detalles de un pedido
+    public boolean eliminarDetallesPorPedido(int idPedido) {
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        boolean eliminado = false;
+
+        try {
+            conn = conexion.getConnection();
+            stmt = conn.prepareStatement(SQL_DELETE_DETALLES);
+            stmt.setInt(1, idPedido);
+
+            eliminado = stmt.executeUpdate() > 0;
+        } catch (SQLException ex) {
+            ex.printStackTrace(System.out);
+        } finally {
+            try {
+                if (stmt != null) {
+                    stmt.close();
+                }
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException ex) {
+                ex.printStackTrace(System.out);
+            }
+        }
+        return eliminado;
+    }
+
 }
