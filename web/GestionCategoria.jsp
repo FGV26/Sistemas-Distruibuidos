@@ -39,8 +39,8 @@
                             </div>
                         </form>
                         <div class="input-group mb-3 justify-content-end">
-                            <a class="btn btn-outline-primary"" role="button" href="GestionEmpleados?accion=Listar">Mostrar Todo</a>
-                            <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#agregarEmpleadoModal">Agregar empleado</button>
+                            <a class="btn btn-outline-primary"" role="button" href="GestionCategoria?accion=Listar">Mostrar Todo</a>
+                            <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#agregarCategoriaModal">Agregar categoría</button>
                             <a href="DashboardActividades?accion=Listar" role="button" class="btn btn-outline-dark">Menú Administrador</a>
                         </div>
                     </div>
@@ -111,9 +111,7 @@
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title">Agregar Categoría</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
                             <form action="GestionCategoria" method="POST" class="needs-validation" novalidate>
@@ -123,12 +121,12 @@
                                     <input type="text" name="nombre" id="nombreCategoria" class="form-control" required>
                                     <div class="invalid-feedback">El campo nombre es obligatorio.</div>
                                 </div>
-                                <div class="form-group">
+                                <div class="form-group mb-3">
                                     <label for="descripcionCategoria">Descripción</label>
                                     <textarea name="descripcion" id="descripcionCategoria" class="form-control" required></textarea>
                                     <div class="invalid-feedback">El campo descripción es obligatorio.</div>
                                 </div>
-                                <button type="submit" class="btn btn-info">Agregar</button>
+                                <button type="submit" class="btn btn-warning w-100">Agregar</button>
                             </form>
                         </div>
                     </div>
