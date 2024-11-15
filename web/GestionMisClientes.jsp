@@ -21,6 +21,41 @@
     <body>
 
         <div class="container">
+            <!-- Mensajes de éxito o error -->
+            <% String mensaje = request.getParameter("mensaje");
+            String error = request.getParameter("error"); %>
+
+            <% if (mensaje != null) {%>
+
+            <div aria-live="polite" aria-atomic="true" class="position-relative">
+                <div class="toast-container position-fixed top-0 end-0 p-3 show">
+                    <div class="toast bg-success fade show" role="alert" aria-live="assertive" aria-atomic="true">
+                        <div class="d-flex">
+                            <div class="toast-body text-white">
+                                <%= mensaje%>
+                            </div>
+                            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <% } else if (error != null) {%>
+
+            <div aria-live="polite" aria-atomic="true" class="position-relative">
+                <div class="toast-container position-fixed top-0 end-0 p-3 show">
+                    <div class="toast bg-danger fade show" role="alert" aria-live="assertive" aria-atomic="true">
+                        <div class="d-flex">
+                            <div class="toast-body text-white">
+                                <%= error%>
+                            </div>
+                            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <% }%>
              <header class="mt-4 mb-4 border rounded app-header">
                 <div class="d-flex align-items-center" >
                     <div class="d-flex justify-content-start align-items-center">
@@ -194,7 +229,7 @@
             </div>
         </div>
 
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+        
         <script>
                                        document.addEventListener("DOMContentLoaded", function () {
                                            document.querySelectorAll('.editBtn').forEach(button => {
@@ -227,6 +262,6 @@
                                            })();
                                        });
         </script>
-
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     </body>
 </html>

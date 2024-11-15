@@ -46,18 +46,39 @@
 
         <!-- Mensajes de éxito o error -->
         <% String mensaje = request.getParameter("mensaje");
-           String error = request.getParameter("error"); %>
-        <% if (mensaje != null) { %>
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                <%= mensaje %>
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        String error = request.getParameter("error"); %>
+
+        <% if (mensaje != null) {%>
+
+        <div aria-live="polite" aria-atomic="true" class="position-relative">
+            <div class="toast-container position-fixed top-0 end-0 p-3 show">
+                <div class="toast bg-success fade show" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="d-flex">
+                        <div class="toast-body text-white">
+                            <%= mensaje%>
+                        </div>
+                        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                    </div>
+                </div>
             </div>
-        <% } else if (error != null) { %>
-            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                <%= error %>
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+
+        <% } else if (error != null) {%>
+
+        <div aria-live="polite" aria-atomic="true" class="position-relative">
+            <div class="toast-container position-fixed top-0 end-0 p-3 show">
+                <div class="toast bg-danger fade show" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="d-flex">
+                        <div class="toast-body text-white">
+                            <%= error%>
+                        </div>
+                        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                    </div>
+                </div>
             </div>
-        <% } %>
+        </div>
+
+        <% }%>
 
         <!-- Tabla de despachadores -->
         <div class="container mt-4 mb-4">
