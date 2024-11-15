@@ -6,13 +6,20 @@ const prevBtn = document.getElementById('prev-btn-progress');
 const progressColors = document.getElementsByClassName('progress-color');
 
 function updateView() {
+    // Ocultar todos los módulos
     for (let i = 0; i < content.length; i++) {
         const contentStep = document.getElementById(content[i]);
-        if (currentStep === i) {
-            contentStep.classList.remove('d-none');
-        } else {
-            contentStep.classList.add('d-none');
-        }
+        contentStep.classList.add('d-none');
+    }
+
+    // Mostrar el módulo correspondiente al paso actual
+    const currentContent = document.getElementById(content[currentStep]);
+    currentContent.classList.remove('d-none');
+
+    // Si el paso actual es el de confirmación (por ejemplo, paso 2), llama a cargarDatosClienteEnModulo3()
+    if (content[currentStep] === 'confirmacion') {
+        console.log("Ingrese");
+        cargarDatosClienteEnModulo3();
     }
 }
 
@@ -33,6 +40,8 @@ function nextStep() {
 
     if (currentStep > 0) {
         prevBtn.disabled = false;
+    } else {
+        prevBtn.disabled = true;
     }
 
     if (currentStep === steps.length - 1) {
@@ -46,19 +55,16 @@ function prevStep() {
     const progressBar = document.getElementsByClassName('progress-bar')[0];
 
     if (progressBar && currentStep > 0) {
+        // Revertir el progreso de la barra y los colores
+        if (progressColors[currentStep].classList.contains('bg-success')) {
+            progressColors[currentStep].classList.remove('bg-success');
+            progressColors[currentStep].classList.add('bg-secondary');
+        }
+
         currentStep--;
         progressBar.style.width = steps[currentStep];
 
-        if (progressColors[currentStep + 1].classList.contains('bg-success')) {
-            progressColors[currentStep + 1].classList.remove('bg-success');
-            progressColors[currentStep + 1].classList.add('bg-secondary');
-        }
-
         updateView();
-    }
-
-    if (currentStep < steps.length - 1) {
-        nextBtn.disabled = false;
     }
 
     if (currentStep === 0) {
@@ -66,9 +72,12 @@ function prevStep() {
     } else {
         prevBtn.disabled = false;
     }
+
+    if (currentStep < steps.length - 1) {
+        nextBtn.disabled = false;
+    }
 }
 
 // Inicializa la vista
 updateView();
 prevBtn.disabled = true;
-

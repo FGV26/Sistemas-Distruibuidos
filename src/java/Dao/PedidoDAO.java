@@ -1,27 +1,19 @@
-// Código actual de PedidoDAO ya satisface los requisitos
-// No se necesitan cambios en el código
 package dao;
 
 import entidades.Pedido;
-import entidades.DetallePedido;
 import conexion.conexion;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class PedidoDAO {
 
-    private static final String SQL_SELECT = "SELECT Id_Pedido, Id_Cliente, Id_Empleado, Fecha_Pedido, SubTotal, Total, Estado FROM pedidos";
-    private static final String SQL_SELECT_DETALLE = "SELECT Id_Detalle, Id_Pedido, Id_Producto, Cantidad, Precio, Total FROM detalle_pedido WHERE Id_Pedido = ?";
-    private static final String SQL_INSERT = "INSERT INTO pedidos (Id_Cliente, Id_Empleado, Fecha_Pedido, SubTotal, Total, Estado) VALUES (?, ?, ?, ?, ?, ?)";
-    private static final String SQL_DELETE = "DELETE FROM pedidos WHERE Id_Pedido = ?";
-    private static final String SQL_INSERT_DETAIL = "INSERT INTO detalle_pedido (Id_Pedido, Id_Producto, Cantidad, Precio, Total) VALUES (?, ?, ?, ?, ?)";
-    private static final String SQL_INSERT_PEDIDO = "INSERT INTO pedidos (idCliente, idEmpleado, fechaPedido, subtotal, total, estado) VALUES (?, ?, ?, ?, ?, ?)";
-    private static final String SQL_INSERT_DETALLE = "INSERT INTO detalle_pedido (idPedido, idProducto, cantidad, precio, total) VALUES (?, ?, ?, ?, ?)";
+    private static final String SQL_SELECT = "SELECT * FROM pedidos";
+    private static final String SQL_SELECT_BY_ID = "SELECT * FROM pedidos WHERE idPedido = ?";
+    private static final String SQL_INSERT = "INSERT INTO pedidos (idCliente, idEmpleado, fechaPedido, subTotal, total, estado, fecha_modificacion, idDespachador, codPedido) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    private static final String SQL_UPDATE = "UPDATE pedidos SET estado = ? WHERE idPedido = ?";
+    private static final String SQL_OBTENER_ULTIMO_ID = "SELECT MAX(idPedido) AS ultimoId FROM pedidos";
+    private static final String SQL_DELETE = "DELETE FROM pedidos WHERE idPedido = ?";
 
     // Listar todos los pedidos
     public List<Pedido> listar() {
@@ -34,67 +26,63 @@ public class PedidoDAO {
             conn = conexion.getConnection();
             stmt = conn.prepareStatement(SQL_SELECT);
             rs = stmt.executeQuery();
-
             while (rs.next()) {
-                Pedido pedido = new Pedido();
-                pedido.setIdPedido(rs.getInt("Id_Pedido"));
-                pedido.setIdCliente(rs.getInt("Id_Cliente"));
-                pedido.setIdEmpleado(rs.getInt("Id_Empleado"));
-                pedido.setFechaPedido(rs.getDate("Fecha_Pedido"));
-                pedido.setSubTotal(rs.getDouble("SubTotal"));
-                pedido.setTotal(rs.getDouble("Total"));
-                pedido.setEstado(rs.getString("Estado"));
+                Pedido pedido = mapResultSetToPedido(rs);
                 pedidos.add(pedido);
             }
-        } catch (SQLException e) {
-            e.printStackTrace(System.out);
+        } catch (SQLException ex) {
+            ex.printStackTrace(System.out);
         } finally {
             try {
-                conexion.close(rs);
-                conexion.close(stmt);
-                conexion.close(conn);
-            } catch (SQLException e) {
-                e.printStackTrace(System.out);
+                if (rs != null) {
+                    rs.close();
+                }
+                if (stmt != null) {
+                    stmt.close();
+                }
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException ex) {
+                ex.printStackTrace(System.out);
             }
         }
         return pedidos;
     }
 
-    // Obtener detalles del pedido por ID
-    public List<DetallePedido> obtenerDetallesPorIdPedido(int idPedido) {
+    // Obtener pedido por ID
+    public Pedido obtenerPedidoPorId(int id) {
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
-        List<DetallePedido> detalles = new ArrayList<>();
+        Pedido pedido = null;
 
         try {
             conn = conexion.getConnection();
-            stmt = conn.prepareStatement(SQL_SELECT_DETALLE);
-            stmt.setInt(1, idPedido);
+            stmt = conn.prepareStatement(SQL_SELECT_BY_ID);
+            stmt.setInt(1, id);
             rs = stmt.executeQuery();
-
-            while (rs.next()) {
-                DetallePedido detalle = new DetallePedido();
-                detalle.setIdDetalle(rs.getInt("Id_Detalle"));
-                detalle.setIdPedido(rs.getInt("Id_Pedido"));
-                detalle.setIdProducto(rs.getInt("Id_Producto"));
-                detalle.setCantidad(rs.getInt("Cantidad"));
-                detalle.setPrecio(rs.getDouble("Precio"));
-                detalle.setTotal(rs.getDouble("Total"));
-                detalles.add(detalle);
+            if (rs.next()) {
+                pedido = mapResultSetToPedido(rs);
             }
-        } catch (SQLException e) {
-            e.printStackTrace(System.out);
+        } catch (SQLException ex) {
+            ex.printStackTrace(System.out);
         } finally {
             try {
-                conexion.close(rs);
-                conexion.close(stmt);
-                conexion.close(conn);
-            } catch (SQLException e) {
-                e.printStackTrace(System.out);
+                if (rs != null) {
+                    rs.close();
+                }
+                if (stmt != null) {
+                    stmt.close();
+                }
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException ex) {
+                ex.printStackTrace(System.out);
             }
         }
-        return detalles;
+        return pedido;
     }
 
     // Insertar un nuevo pedido
@@ -108,25 +96,96 @@ public class PedidoDAO {
             stmt = conn.prepareStatement(SQL_INSERT);
             stmt.setInt(1, pedido.getIdCliente());
             stmt.setInt(2, pedido.getIdEmpleado());
-            stmt.setDate(3, new java.sql.Date(pedido.getFechaPedido().getTime()));
+            stmt.setDate(3, new Date(pedido.getFechaPedido().getTime()));
             stmt.setDouble(4, pedido.getSubTotal());
             stmt.setDouble(5, pedido.getTotal());
             stmt.setString(6, pedido.getEstado());
+            stmt.setString(7, pedido.getFecha_modificacion());
+            stmt.setInt(8, pedido.getIdDespachador());
+            stmt.setString(9, pedido.getCodPedido());
+
             rows = stmt.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace(System.out);
+        } catch (SQLException ex) {
+            ex.printStackTrace(System.out);
         } finally {
             try {
-                conexion.close(stmt);
-                conexion.close(conn);
-            } catch (SQLException e) {
-                e.printStackTrace(System.out);
+                if (stmt != null) {
+                    stmt.close();
+                }
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException ex) {
+                ex.printStackTrace(System.out);
             }
         }
         return rows;
     }
 
-    // Eliminar pedido por ID
+    // Actualizar el estado de un pedido
+    public int actualizarEstado(int idPedido, String nuevoEstado) {
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        int rows = 0;
+
+        try {
+            conn = conexion.getConnection();
+            stmt = conn.prepareStatement(SQL_UPDATE);
+            stmt.setString(1, nuevoEstado);
+            stmt.setInt(2, idPedido);
+            rows = stmt.executeUpdate();
+        } catch (SQLException ex) {
+            ex.printStackTrace(System.out);
+        } finally {
+            try {
+                if (stmt != null) {
+                    stmt.close();
+                }
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException ex) {
+                ex.printStackTrace(System.out);
+            }
+        }
+        return rows;
+    }
+
+    // Obtener el último ID de pedido
+    public int obtenerUltimoId() {
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        int ultimoId = 0;
+
+        try {
+            conn = conexion.getConnection();
+            stmt = conn.prepareStatement(SQL_OBTENER_ULTIMO_ID);
+            rs = stmt.executeQuery();
+            if (rs.next()) {
+                ultimoId = rs.getInt("ultimoId");
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace(System.out);
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (stmt != null) {
+                    stmt.close();
+                }
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException ex) {
+                ex.printStackTrace(System.out);
+            }
+        }
+        return ultimoId;
+    }
+
+    // Eliminar un pedido por ID
     public int eliminar(int idPedido) {
         Connection conn = null;
         PreparedStatement stmt = null;
@@ -135,124 +194,38 @@ public class PedidoDAO {
         try {
             conn = conexion.getConnection();
             stmt = conn.prepareStatement(SQL_DELETE);
-            stmt.setInt(1, idPedido);
-            rows = stmt.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace(System.out);
-        } finally {
-            try {
-                conexion.close(stmt);
-                conexion.close(conn);
-            } catch (SQLException e) {
-                e.printStackTrace(System.out);
-            }
-        }
-        return rows;
-    }
-
-    // Insertar detalle de pedido
-    public boolean insertarDetalle(DetallePedido detalle) {
-        Connection conn = null;
-        PreparedStatement stmt = null;
-        boolean success = false;
-
-        try {
-            conn = conexion.getConnection();
-            stmt = conn.prepareStatement(SQL_INSERT_DETAIL);
-            stmt.setInt(1, detalle.getIdPedido());
-            stmt.setInt(2, detalle.getIdProducto());
-            stmt.setInt(3, detalle.getCantidad());
-            stmt.setDouble(4, detalle.getPrecio());
-            stmt.setDouble(5, detalle.getTotal());
-
-            int rows = stmt.executeUpdate();
-            success = (rows > 0);
+            stmt.setInt(1, idPedido); // Establece el ID del pedido a eliminar
+            rows = stmt.executeUpdate(); // Ejecuta la eliminación y guarda el número de filas afectadas
         } catch (SQLException ex) {
-            ex.printStackTrace(System.out);
+            ex.printStackTrace(System.out); // Imprime el error en la consola
         } finally {
             try {
-                conexion.close(stmt);
-                conexion.close(conn);
-            } catch (SQLException ex) {
-                ex.printStackTrace(System.out);
-            }
-        }
-        return success;
-    }
-
-    // Método para insertar un nuevo pedido y devolver el ID generado
-    public int insertarPedido(Pedido pedido) {
-        Connection conn = null;
-        PreparedStatement stmt = null;
-        ResultSet generatedKeys = null;
-        int idPedido = -1;
-
-        try {
-            conn = conexion.getConnection();
-            stmt = conn.prepareStatement(SQL_INSERT, Statement.RETURN_GENERATED_KEYS);
-            stmt.setInt(1, pedido.getIdCliente());
-            stmt.setInt(2, pedido.getIdEmpleado());
-            stmt.setDate(3, new java.sql.Date(pedido.getFechaPedido().getTime()));
-            stmt.setDouble(4, pedido.getSubTotal());
-            stmt.setDouble(5, pedido.getTotal());
-            stmt.setString(6, pedido.getEstado());
-
-            int affectedRows = stmt.executeUpdate();
-
-            if (affectedRows > 0) {
-                generatedKeys = stmt.getGeneratedKeys();
-                if (generatedKeys.next()) {
-                    idPedido = generatedKeys.getInt(1);
+                if (stmt != null) {
+                    stmt.close();
                 }
-            }
-        } catch (SQLException ex) {
-            ex.printStackTrace(System.out);
-        } finally {
-            try {
-                if (generatedKeys != null) {
-                    generatedKeys.close();
+                if (conn != null) {
+                    conn.close();
                 }
-                conexion.close(stmt);
-                conexion.close(conn);
             } catch (SQLException ex) {
                 ex.printStackTrace(System.out);
             }
         }
-        return idPedido;
+        return rows; // Retorna el número de filas eliminadas
     }
 
-    // Método para insertar un detalle de pedido
-    public boolean insertarDetallePedido(List<DetallePedido> detalles) {
-        Connection conn = null;
-        PreparedStatement stmt = null;
-        boolean success = false;
-
-        try {
-            conn = conexion.getConnection();
-            stmt = conn.prepareStatement(SQL_INSERT_DETAIL);
-
-            for (DetallePedido detalle : detalles) {
-                stmt.setInt(1, detalle.getIdPedido());
-                stmt.setInt(2, detalle.getIdProducto());
-                stmt.setInt(3, detalle.getCantidad());
-                stmt.setDouble(4, detalle.getPrecio());
-                stmt.setDouble(5, detalle.getTotal());
-                stmt.addBatch();
-            }
-
-            int[] rowsAffected = stmt.executeBatch();
-            success = rowsAffected.length == detalles.size();
-        } catch (SQLException ex) {
-            ex.printStackTrace(System.out);
-        } finally {
-            try {
-                conexion.close(stmt);
-                conexion.close(conn);
-            } catch (SQLException ex) {
-                ex.printStackTrace(System.out);
-            }
-        }
-        return success;
+    // Mapeo de ResultSet a entidad Pedido
+    private Pedido mapResultSetToPedido(ResultSet rs) throws SQLException {
+        Pedido pedido = new Pedido();
+        pedido.setIdPedido(rs.getInt("idPedido"));
+        pedido.setIdCliente(rs.getInt("idCliente"));
+        pedido.setIdEmpleado(rs.getInt("idEmpleado"));
+        pedido.setFechaPedido(rs.getDate("fechaPedido"));
+        pedido.setSubTotal(rs.getDouble("subTotal"));
+        pedido.setTotal(rs.getDouble("total"));
+        pedido.setEstado(rs.getString("estado"));
+        pedido.setFecha_modificacion(rs.getString("fecha_modificacion"));
+        pedido.setIdDespachador(rs.getInt("idDespachador"));
+        pedido.setCodPedido(rs.getString("codPedido"));
+        return pedido;
     }
-
 }

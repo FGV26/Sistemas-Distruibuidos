@@ -1,14 +1,4 @@
 
-// Control de navegación entre módulos
-function goToStep(stepNumber) {
-    $(".step-content").addClass("d-none");
-    $("#step" + stepNumber).removeClass("d-none");
-
-    if (stepNumber === 2) {
-        $("#nextToStep3").prop("disabled", $("#carrito").is(':empty'));
-    }
-}
-
 // Modulo 1
 // Control de navegación entre módulos
 let clienteSeleccionado = false;  // Indicador de selección
@@ -29,7 +19,6 @@ function bloquearRegistro() {
 // Buscar cliente en base de datos interna por DNI
 async function buscarCliente() {
     const dniInput = $("#dniCliente").val().trim();
-    console.log("Iniciando búsqueda de cliente con DNI:", dniInput);
 
     if (!dniInput) {
         alert("Por favor, ingrese un DNI para buscar.");
@@ -41,9 +30,7 @@ async function buscarCliente() {
         dni: dniInput
     };
 
-    $.post("/Sistemas-Distruibuidos/GestionDePedidos", data, function(response) {
-        console.log("Respuesta del servidor al buscar cliente:", response);
-
+    $.post("/Sistemas-Distruibuidos/GestionDePedidos", data, function (response) {
         if (!response || response.error) {
             alert(response ? response.error : "Cliente no encontrado.");
             return;
@@ -56,11 +43,14 @@ async function buscarCliente() {
         $("#telefonoCliente").val(response.telefono);
         $("#emailCliente").val(response.email);
 
+        // Guardar en sessionStorage
+        sessionStorage.setItem("cliente", JSON.stringify(response));
+        console.log(sessionStorage.getItem("cliente"));
+
         clienteSeleccionado = true;
         $("#nextToStep2").prop("disabled", false);  // Habilitar botón "Siguiente"
         bloquearRegistro();  // Bloquear el formulario de registro
-    }).fail(function() {
-        console.log("Error al hacer la solicitud al servidor para buscar cliente.");
+    }).fail(function () {
         alert("Error al buscar cliente.");
     });
 }
@@ -76,28 +66,27 @@ function registrarCliente() {
         telefono: $("#telefono").val().trim(),
         email: $("#email").val().trim()
     };
-    console.log("Intentando registrar cliente con datos:", data);
 
-    // Validación de campos de registro
     if (!data.dni || !data.nombre || !data.apellido || !data.direccion || !data.telefono || !data.email) {
         alert("Todos los campos de registro son obligatorios.");
         return;
     }
 
-    $.post("/Sistemas-Distruibuidos/GestionDePedidos", data, function(response) {
-        console.log("Respuesta del servidor al registrar cliente:", response);
-
+    $.post("/Sistemas-Distruibuidos/GestionDePedidos", data, function (response) {
         if (response.error) {
             alert(response.error);
             return;
         }
 
         alert("Cliente registrado correctamente.");
+
+        // Guardar en sessionStorage
+        sessionStorage.setItem("cliente", JSON.stringify(data));
+
         clienteSeleccionado = true;
-        $("#nextToStep2").prop("disabled", false);  // Habilitar botón "Siguiente"
+        $("#nextToStep2").prop("disabled", false);
         bloquearBusqueda();  // Bloquear el formulario de búsqueda
-    }).fail(function() {
-        console.log("Error al hacer la solicitud al servidor para registrar cliente.");
+    }).fail(function () {
         alert("Error al registrar el cliente.");
     });
 }
@@ -122,7 +111,7 @@ async function searchClient() {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token_api}`
             },
-            body: JSON.stringify({ dni: dni })
+            body: JSON.stringify({dni: dni})
         });
 
         console.log("Respuesta de la API externa:", response);
@@ -222,8 +211,8 @@ function cargarCategorias() {
             // Agregar cada categoría al select
             response.forEach(function (categoria) {
                 $('#categoriaProducto').append(
-                    `<option value="${categoria.nombre}">${categoria.nombre}</option>`
-                );
+                        `<option value="${categoria.nombre}">${categoria.nombre}</option>`
+                        );
             });
         },
         error: function () {
@@ -335,7 +324,14 @@ function actualizarCarrito() {
 
     html += `</div>`;
     $("#carrito").html(html);
+
+    // Guardar el carrito en sessionStorage
+    sessionStorage.setItem("carrito", JSON.stringify(carrito));
+    console.log(sessionStorage.getItem("carrito"));
+
+   
 }
+
 
 // Función para eliminar un producto del carrito
 function eliminarDelCarrito(idProducto) {
@@ -355,96 +351,84 @@ $(document).ready(function () {
 
 // Modulo 3: Confirmación de Pedido
 
-// Variables para el cálculo de totales
-const IGV_RATE = 0.18; // Tasa de IGV del 18%
+// Cargar datos del cliente y productos del carrito en el módulo 3
+function cargarDatosClienteEnModulo3() {
+    console.log("Cargando datos del cliente en el módulo 3");
 
-// Función principal para cargar y mostrar la información del pedido
-function cargarInformacionPedido() {
-    cargarDatosCliente();
-    generarNumeroPedido();
-    mostrarResumenProductos();
-    calcularTotalesPedido();
-}
+    // 1. Obtener código de pedido desde el backend
+    generarCodigoPedido();
 
-// Cargar los datos del cliente desde los datos almacenados
-function cargarDatosCliente() {
-    // Supongamos que tenemos los datos del cliente almacenados en variables globales o en el sessionStorage
-    $("#codigoCliente").val(sessionStorage.getItem("codigoCliente"));
-    $("#nombreCliente").val(sessionStorage.getItem("nombreCliente"));
-    $("#direccionCliente").val(sessionStorage.getItem("direccionCliente"));
+    // 2. Cargar información del cliente
+    const cliente = JSON.parse(sessionStorage.getItem("cliente"));
     
-    // Fecha actual
-    const fecha = new Date().toLocaleDateString();
-    $("#fechaPedido").val(fecha);
+    
+    if (cliente) {
+        $("#codigoCliente").val(cliente.codCliente);  
+        $("#nombreCliente").val(`${cliente.nombre}  ${cliente.apellido}`);
+        $("#direccionCliente").val(cliente.direccion);
+        $("#fechaPedido").val(new Date().toLocaleDateString());
+    } else {
+        console.warn("No se encontraron datos del cliente en sessionStorage.");
+    }
+    
+    // 3. Cargar y mostrar productos del carrito con desglose de precios
+    const carrito = JSON.parse(sessionStorage.getItem("carrito"));
+    if (carrito && carrito.length > 0) {
+        let html = "";
+        let subtotal = 0;
+        const IGV_RATE = 0.18;  // Tasa de IGV, por ejemplo 18%
+
+        carrito.forEach((item, index) => {
+            const itemSubtotal = item.precio * item.cantidad;
+            subtotal += itemSubtotal;
+            html += `
+                <tr>
+                    <td>${index + 1}</td> <!-- Número de ítem -->
+                    <td><img src="resources/img/productos/${item.imagen}" alt="${item.nombre}" style="width: 50px; height: 50px;"></td>
+                    <td>${item.nombre}</td>
+                    <td>${item.cantidad}</td>
+                    <td>$${item.precio.toFixed(2)}</td>
+                    <td>$${itemSubtotal.toFixed(2)}</td>
+                </tr>
+            `;
+        });
+
+        console.log("Datos del cliente:", cliente);
+        console.log("Productos en el carrito:", carrito);
+
+        // Calcular IGV y total
+        const igv = subtotal * IGV_RATE;
+        const total = subtotal + igv;
+
+        // Insertar HTML de los productos y mostrar desglose de precios
+        $("#listaResumenProductos").html(html);
+        $("#subtotalPedido").text(`$${subtotal.toFixed(2)}`);
+        $("#igvPedido").text(`$${igv.toFixed(2)}`);
+        $("#totalPedido").text(`$${total.toFixed(2)}`);
+    } else {
+        console.warn("No se encontraron datos del carrito en sessionStorage.");
+    }
 }
 
-// Generar el número de pedido automáticamente
-function generarNumeroPedido() {
-    $.get("/Sistemas-Distruibuidos/GestionDePedidos", {accion: "ObtenerUltimoIdPedido"}, function(response) {
-        if (response.error) {
-            alert(response.error);
-            return;
+// AJAX para generar y mostrar el código de pedido
+function generarCodigoPedido() {
+    $.ajax({
+        url: "/Sistemas-Distruibuidos/GestionDePedidos",
+        type: "GET",
+        data: { accion: "GenerarCodigoPedido" },
+        success: function(response) {
+            $("#numeroPedido").val(response.codPedido); // Asignar código de pedido al campo
+        },
+        error: function() {
+            console.error("Error al obtener el código de pedido.");
         }
-        
-        const nuevoIdPedido = response.ultimoId + 1;
-        const numeroPedido = `PEDI${String(nuevoIdPedido).padStart(3, '0')}`;
-        $("#numeroPedido").val(numeroPedido);
-    }).fail(function() {
-        alert("Error al generar el número de pedido.");
     });
 }
 
-// Mostrar los productos seleccionados en el resumen del pedido
-function mostrarResumenProductos() {
-    let html = "";
-    
-    carrito.forEach((producto, index) => {
-        const precio = producto.precio;
-        const cantidad = producto.cantidad;
-        const subtotal = precio * cantidad;
-        const igv = subtotal * IGV_RATE;
-
-        html += `
-            <tr>
-                <td><img src="resources/img/productos/${producto.imagen}" alt="${producto.nombre}" style="width: 50px; height: 50px;"></td>
-                <td>${producto.nombre}</td>
-                <td>$${precio.toFixed(2)}</td>
-                <td>${cantidad}</td>
-                <td>$${igv.toFixed(2)}</td>
-                <td>$${subtotal.toFixed(2)}</td>
-            </tr>
-        `;
-    });
-    
-    $("#listaResumenProductos").html(html);
-}
-
-// Calcular y mostrar los totales del pedido (Subtotal, IGV, Total)
-function calcularTotalesPedido() {
-    let subtotalPedido = 0;
-    let totalIGV = 0;
-
-    carrito.forEach(producto => {
-        const precio = producto.precio;
-        const cantidad = producto.cantidad;
-        const subtotal = precio * cantidad;
-        const igv = subtotal * IGV_RATE;
-
-        subtotalPedido += subtotal;
-        totalIGV += igv;
-    });
-
-    const totalPedido = subtotalPedido + totalIGV;
-
-    // Mostrar los valores en el HTML
-    $("#subtotalPedido").text(`$${subtotalPedido.toFixed(2)}`);
-    $("#igvPedido").text(`$${totalIGV.toFixed(2)}`);
-    $("#totalPedido").text(`$${totalPedido.toFixed(2)}`);
-}
-
-// Inicializar módulo 3 cuando se accede
 $(document).ready(function () {
-    if ($("#step3").is(":visible")) {
-        cargarInformacionPedido(); // Cargar la información del pedido si estamos en el módulo 3
+    console.log("holi");
+    if ($("#confirmacion").is(":visible")) {
+        cargarDatosClienteEnModulo3();
     }
 });
+;

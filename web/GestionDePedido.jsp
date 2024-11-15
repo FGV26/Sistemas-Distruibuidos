@@ -342,7 +342,6 @@
                     </div>
                 </div>
 
-
                 <!-- Módulo 4: Content Pay -->
                 <div class="container pago pt-2 pb-2 d-none" id="pago">
                     <h3 class="text-center pb-5">Pago</h3>
