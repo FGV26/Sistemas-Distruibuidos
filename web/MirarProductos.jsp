@@ -53,8 +53,7 @@
                             </div>
                         </form>
                         <div class="input-group mb-3 justify-content-end">
-                            <a class="btn btn-outline-primary"" role="button" href="GestionEmpleados?accion=Listar">Mostrar Todo</a>
-                            <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#agregarEmpleadoModal">Agregar empleado</button>
+                            <a class="btn btn-outline-primary"" role="button" href="MirarProductos?accion=Listar">Mostrar Todo</a>
                             <a href="DashboardActividades?accion=Listar" role="button" class="btn btn-outline-dark">Menú Administrador</a>
                         </div>
                     </div>
@@ -95,23 +94,6 @@
                                     <img src="resources/img/productos/${producto.imagen}?timestamp=<%= System.currentTimeMillis()%>" alt="${producto.nombre}" width="50" height="50">
                                 </td>
                                 <td>${producto.estado}</td>
-                                <td>
-                                <div class="btn-group">
-                                    <!-- Editar -->
-                                    <button class="btn btn-primary editBtn" data-bs-toggle="modal" data-bs-target="#editModal"
-                                            data-id="${producto.idProducto}" data-nombre="${producto.nombre}" 
-                                            data-precio="${producto.precio}" data-stock="${producto.stock}" 
-                                            data-descripcion="${producto.descripcion}">
-                                        <i class="fas fa-edit"></i> 
-                                    </button>
-                                    <!-- Eliminar -->
-                                    <a href="GestionDespachadores?accion=Eliminar&Id=${producto.idProducto}" 
-                                       class="btn btn-danger ml-2" 
-                                       onclick="return confirm('¿Estás seguro de que deseas eliminar este despachador?');">
-                                        <i class="fas fa-trash-alt"></i>
-                                    </a>
-                                </div>
-                            </td>
                             </tr>
                         </c:forEach>
                     </tbody>

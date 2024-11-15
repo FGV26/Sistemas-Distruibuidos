@@ -39,8 +39,8 @@
                             </div>
                         </form>
                         <div class="input-group mb-3 justify-content-end">
-                            <a class="btn btn-outline-primary"" role="button" href="GestionEmpleados?accion=Listar">Mostrar Todo</a>
-                            <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#agregarEmpleadoModal">Agregar empleado</button>
+                            <a class="btn btn-outline-primary"" role="button" href="ControlerCliente?accion=Listar">Mostrar Todo</a>
+                            <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#agregarClienteModal">Agregar cliente</button>
                             <a href="DashboardActividades?accion=Listar" role="button" class="btn btn-outline-dark">Menú Administrador</a>
                         </div>
                     </div>

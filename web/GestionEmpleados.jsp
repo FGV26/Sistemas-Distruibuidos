@@ -147,9 +147,10 @@
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <!-- body -->
-                        <div class="modal-body">
+                        
                             <!-- Formulario con validación -->
                             <form action="GestionEmpleados" method="POST" class="needs-validation" novalidate>
+                                <div class="modal-body">
                                 <input type="hidden" name="accion" value="Crear">
                                 <div class="form-group">
                                     <label for="txtUsuario">Usuario</label>
@@ -191,13 +192,12 @@
                                     </select>
                                     <div class="invalid-feedback">Debe seleccionar un estado.</div>
                                 </div>
-                                
-                                <div class="d-grid gap-2 col-6 mx-auto mt-2">
-                                    <button class="btn btn-primary" type="submit">Agregar</button>
                                 </div>
-
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                    <button type="submit" class="btn btn-primary">Agregar empleado</button>
+                                </div>
                             </form>
-                        </div>
                     </div>
                 </div>
             </div>

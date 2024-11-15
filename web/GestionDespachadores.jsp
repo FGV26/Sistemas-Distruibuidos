@@ -116,8 +116,9 @@
                         <h5 class="modal-title" id="agregarDespachadorModalLabel">Agregar Despachador</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="modal-body">
+                    
                         <form action="GestionDespachadores" method="POST">
+                            <div class="modal-body">
                             <input type="hidden" name="accion" value="Crear">
                             <div class="mb-3">
                                 <label for="txtUsuario" class="form-label">Usuario</label>
@@ -139,16 +140,19 @@
                                 <label for="txtEmail" class="form-label">Email</label>
                                 <input type="email" name="email" id="txtEmail" class="form-control" required>
                             </div>
-                            <div class="mb-3">
+                            <div>
                                 <label for="txtEstado" class="form-label">Estado</label>
                                 <select name="estado" id="txtEstado" class="form-select" required>
                                     <option value="Activo">Activo</option>
                                     <option value="Inactivo">Inactivo</option>
                                 </select>
                             </div>
-                            <button type="submit" class="btn btn-warning w-100">Agregar</button>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                <button type="submit" class="btn btn-primary">Agregar despachador</button>
+                            </div>
                         </form>
-                    </div>
                 </div>
             </div>
         </div>

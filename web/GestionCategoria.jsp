@@ -113,8 +113,8 @@
                             <h5 class="modal-title">Agregar Categoría</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
-                        <div class="modal-body">
                             <form action="GestionCategoria" method="POST" class="needs-validation" novalidate>
+                                <div class="modal-body">
                                 <input type="hidden" name="accion" value="Crear">
                                 <div class="form-group">
                                     <label for="nombreCategoria">Nombre</label>
@@ -126,9 +126,12 @@
                                     <textarea name="descripcion" id="descripcionCategoria" class="form-control" required></textarea>
                                     <div class="invalid-feedback">El campo descripción es obligatorio.</div>
                                 </div>
-                                <button type="submit" class="btn btn-warning w-100">Agregar</button>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                    <button type="submit" class="btn btn-primary">Agregar categoría</button>
+                                </div>
                             </form>
-                        </div>
                     </div>
                 </div>
             </div>

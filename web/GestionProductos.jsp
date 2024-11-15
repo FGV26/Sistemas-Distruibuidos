@@ -146,8 +146,9 @@
                             <h5 class="modal-title">Agregar Producto</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
-                        <div class="modal-body">
+                        
                             <form action="GestionProductos" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
+                                <div class="modal-body">
                                 <input type="hidden" name="accion" value="Agregar">
                                 <div class="form-group">
                                     <label for="nombreProducto">Nombre</label>
@@ -177,20 +178,24 @@
                                     <label for="descripcionProducto">Descripción</label>
                                     <textarea name="descripcion" id="descripcionProducto" class="form-control" required></textarea>
                                 </div>
-                                <div class="form-group mb-3">
+                                <div class="form-group mb-2">
                                     <label for="estadoProducto">Estado</label>
                                     <select name="estado" id="estadoProducto" class="form-control" required>
                                         <option value="Disponible">Disponible</option>
                                         <option value="No Disponible">No Disponible</option>
                                     </select>
                                 </div>
-                                <div class="form-group mb-3">
+                                <div class="form-group">
                                     <label for="imagenProducto">Imagen</label>
                                     <input type="file" name="imagen" id="imagenProducto" class="form-control-file" required>
                                 </div>
-                                <button type="submit" class="btn btn-warning w-100">Agregar</button>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                    <button type="submit" class="btn btn-primary">Agregar producto</button>
+                                </div>
                             </form>
-                        </div>
+                        
                     </div>
                 </div>
             </div>
