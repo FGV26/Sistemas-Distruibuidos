@@ -62,12 +62,10 @@ public class GestionDePedidos extends HttpServlet {
             case "ListarCategorias":
                 listarCategorias(request, response);
                 break;
-//            case "ObtenerUltimoIdPedido":
-//                obtenerUltimoIdPedido(request, response);
-//                break;
-//            case "CrearPedido":
-//                crearPedido(request, response, user);
-//                break;
+            case "GenerarCodigoPedido":
+                generarCodigoPedido(response);
+                break;
+
             default:
                 response.sendRedirect("GestionDePedido.jsp");
                 break;
@@ -229,56 +227,24 @@ public class GestionDePedidos extends HttpServlet {
         }
     }
 
-//    // Acción para obtener el último ID de pedido
-//    private void obtenerUltimoIdPedido(HttpServletRequest request, HttpServletResponse response) throws IOException {
-//        try {
-//            int ultimoId = pedidoDAO.obtenerUltimoIdPedido(); // Suponiendo que tienes este método en PedidoDAO
-//            String jsonResponse = gson.toJson(new HashMap<String, Integer>() {
-//                {
-//                    put("ultimoId", ultimoId);
-//                }
-//            });
-//            response.setContentType("application/json");
-//            response.getWriter().write(jsonResponse);
-//        } catch (IOException e) {
-//            e.printStackTrace(System.out);
-//            response.getWriter().write("{\"error\": \"Error al obtener último ID del pedido\"}");
-//        }
-//    }
-//
-//// Acción para crear un nuevo pedido
-//    private void crearPedido(HttpServletRequest request, HttpServletResponse response, Usuario user) throws IOException {
-//        try {
-//            String carritoJson = request.getParameter("carrito");
-//            List<Producto> carrito = gson.fromJson(carritoJson, new TypeToken<List<Producto>>() {
-//            }.getType());
-//
-//            String codCliente = request.getParameter("codigoCliente");
-//            double subtotal = Double.parseDouble(request.getParameter("subtotal"));
-//            double igv = Double.parseDouble(request.getParameter("igv"));
-//            double total = Double.parseDouble(request.getParameter("total"));
-//
-//            // Crear el objeto pedido
-//            Pedido pedido = new Pedido();
-//            pedido.setCodCliente(codCliente);
-//            pedido.setFecha(LocalDateTime.now());
-//            pedido.setSubtotal(subtotal);
-//            pedido.setIgv(igv);
-//            pedido.setTotal(total);
-//            pedido.setIdEmpleado(user.getIdUsuario());
-//
-//            int nuevoIdPedido = pedidoDAO.crearPedido(pedido, carrito); // Crear el pedido y devolver el ID generado
-//
-//            if (nuevoIdPedido > 0) {
-//                response.getWriter().write("{\"mensaje\": \"Pedido creado correctamente\", \"idPedido\": " + nuevoIdPedido + "}");
-//            } else {
-//                response.getWriter().write("{\"error\": \"Error al crear pedido\"}");
-//            }
-//        } catch (IOException | NumberFormatException e) {
-//            e.printStackTrace(System.out);
-//            response.getWriter().write("{\"error\": \"Error al procesar solicitud\"}");
-//        }
-//    }
+    private void generarCodigoPedido(HttpServletResponse response) throws IOException {
+        try {
+            // Obtener el último ID de pedido
+            int ultimoId = pedidoDAO.obtenerUltimoId();
+            int nuevoId = ultimoId + 1; // Incrementamos en 1 para el nuevo pedido
+
+            // Generar el código de pedido en formato PEDI### (con tres dígitos)
+            String codPedido = "PEDI" + String.format("%03d", nuevoId);
+
+            // Devolver el código en formato JSON al frontend
+            response.setContentType("application/json");
+            response.getWriter().write("{\"codPedido\": \"" + codPedido + "\"}");
+
+        } catch (IOException e) {
+            e.printStackTrace(System.out);
+            response.getWriter().write("{\"error\": \"Error al generar el código de pedido\"}");
+        }
+    }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)

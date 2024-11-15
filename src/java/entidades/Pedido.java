@@ -1,9 +1,9 @@
-
 package entidades;
 
 import java.util.Date;
 
 public class Pedido {
+
     private int idPedido;
     private int idCliente;
     private int idEmpleado;
@@ -11,49 +11,44 @@ public class Pedido {
     private double subTotal;
     private double total;
     private String estado;
-    private String fecha_modificacion; 
+    private String fecha_modificacion;
     private int idDespachador;
     private String codPedido;
 
-    // Constructor vacío
-    public Pedido() {}
+    public Pedido() {
+    }
 
-    // Constructor completo con todos los parámetros
-    public Pedido(int idPedido, String codPedido, int idCliente, int idEmpleado, Date fechaPedido, double subTotal, double total, String estado) {
+    public Pedido(int idPedido, int idCliente, int idEmpleado, Date fechaPedido, double subTotal, double total, String estado, String fecha_modificacion, int idDespachador, String codPedido) {
         this.idPedido = idPedido;
-        this.codPedido = codPedido;
         this.idCliente = idCliente;
         this.idEmpleado = idEmpleado;
         this.fechaPedido = fechaPedido;
         this.subTotal = subTotal;
         this.total = total;
         this.estado = estado;
+        this.fecha_modificacion = fecha_modificacion;
+        this.idDespachador = idDespachador;
+        this.codPedido = codPedido;
     }
 
-    // Constructor simplificado (para `crearPedido` en el controlador)
-    public Pedido(int idCliente, double subTotal, double total) {
+    public Pedido(int idCliente, int idEmpleado, Date fechaPedido, double subTotal, double total, String estado, String fecha_modificacion, int idDespachador, String codPedido) {
         this.idCliente = idCliente;
+        this.idEmpleado = idEmpleado;
+        this.fechaPedido = fechaPedido;
         this.subTotal = subTotal;
         this.total = total;
-        this.fechaPedido = new Date();  // Fecha actual por defecto
-        this.estado = "Proceso";        // Estado predeterminado
+        this.estado = estado;
+        this.fecha_modificacion = fecha_modificacion;
+        this.idDespachador = idDespachador;
+        this.codPedido = codPedido;
     }
 
-    // Getters y Setters
     public int getIdPedido() {
         return idPedido;
     }
 
     public void setIdPedido(int idPedido) {
         this.idPedido = idPedido;
-    }
-
-    public String getCodPedido() {
-        return codPedido;
-    }
-
-    public void setCodPedido(String codPedido) {
-        this.codPedido = codPedido;
     }
 
     public int getIdCliente() {
@@ -103,4 +98,31 @@ public class Pedido {
     public void setEstado(String estado) {
         this.estado = estado;
     }
+
+    public String getFecha_modificacion() {
+        return fecha_modificacion;
+    }
+
+    public void setFecha_modificacion(String fecha_modificacion) {
+        this.fecha_modificacion = fecha_modificacion;
+    }
+
+    public int getIdDespachador() {
+        return idDespachador;
+    }
+
+    public void setIdDespachador(int idDespachador) {
+        this.idDespachador = idDespachador;
+    }
+
+    public String getCodPedido() {
+        return codPedido;
+    }
+
+    public void setCodPedido(String codPedido) {
+        this.codPedido = codPedido;
+    }
+    
+    
+    
 }

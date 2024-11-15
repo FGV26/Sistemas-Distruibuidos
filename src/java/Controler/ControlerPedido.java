@@ -58,10 +58,10 @@ public class ControlerPedido extends HttpServlet {
 
     private void consultarPedido(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        int idPedido = Integer.parseInt(request.getParameter("Id"));
-        List<DetallePedido> detalles = pedidoDAO.obtenerDetallesPorIdPedido(idPedido);
-        request.setAttribute("Lista", detalles);
-        request.getRequestDispatcher("consultarPedido.jsp").forward(request, response);
+//        int idPedido = Integer.parseInt(request.getParameter("Id"));
+//        List<DetallePedido> detalles = pedidoDAO.obtenerDetallesPorIdPedido(idPedido);
+//        request.setAttribute("Lista", detalles);
+//        request.getRequestDispatcher("consultarPedido.jsp").forward(request, response);
     }
 
     private void eliminarPedido(HttpServletRequest request, HttpServletResponse response)
@@ -78,13 +78,13 @@ public class ControlerPedido extends HttpServlet {
 
     private void crearPedido(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        int idCliente = Integer.parseInt(request.getParameter("idCliente"));
-        double subTotal = Double.parseDouble(request.getParameter("subTotal"));
-        double totalVenta = Double.parseDouble(request.getParameter("totalVenta"));
-
-        Pedido nuevoPedido = new Pedido(idCliente, subTotal, totalVenta);
-        pedidoDAO.insertar(nuevoPedido);
-        response.sendRedirect("ControlerPedido?accion=Listar");
+//        int idCliente = Integer.parseInt(request.getParameter("idCliente"));
+//        double subTotal = Double.parseDouble(request.getParameter("subTotal"));
+//        double totalVenta = Double.parseDouble(request.getParameter("totalVenta"));
+//
+//        Pedido nuevoPedido = new Pedido(idCliente, subTotal, totalVenta);
+//        pedidoDAO.insertar(nuevoPedido);
+//        response.sendRedirect("ControlerPedido?accion=Listar");
     }
 
     @Override
