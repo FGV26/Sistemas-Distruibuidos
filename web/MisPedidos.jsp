@@ -37,7 +37,7 @@
                     </form>
                     <div class="input-group mb-3 justify-content-end">
                         <a class="btn btn-outline-primary" role="button" href="MisPedidos?accion=Listar">Mostrar Todo</a>
-                        <a href="DashboardEmpleado" role="button" class="btn btn-outline-dark">Dashboard</a>
+                        <a href="DashboardActividades?accion=Listar" role="button" class="btn btn-outline-dark">Volver al Dashboard</a>
                     </div>
                 </div>
 

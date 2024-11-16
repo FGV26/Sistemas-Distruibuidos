@@ -1,9 +1,10 @@
-
 package Controler;
 
 import dao.PedidoDAO;
 import dao.DetallePedidoDAO;
+import dao.RegistroActividadDAO;
 import entidades.Pedido;
+import entidades.RegistroActividad;
 import entidades.Usuario;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -12,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @WebServlet(name = "MisPedidos", urlPatterns = {"/MisPedidos"})
@@ -19,6 +21,7 @@ public class MisPedidos extends HttpServlet {
 
     private final PedidoDAO pedidoDAO = new PedidoDAO();
     private final DetallePedidoDAO detallePedidoDAO = new DetallePedidoDAO();
+    private final RegistroActividadDAO registroActividadDAO = new RegistroActividadDAO();
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -52,7 +55,7 @@ public class MisPedidos extends HttpServlet {
     // Listar pedidos creados por el empleado
     private void listarPedidos(HttpServletRequest request, HttpServletResponse response, Usuario user)
             throws ServletException, IOException {
-        List<Pedido> listaPedidos = pedidoDAO.listarPedidosPorEmpleado(user.getIdUsuario(), null);
+        List<Pedido> listaPedidos = pedidoDAO.listarPedidosPorEmpleado(user.getIdUsuario());
         request.setAttribute("ListaPedidos", listaPedidos);
         request.getRequestDispatcher("MisPedidos.jsp").forward(request, response);
     }
@@ -60,9 +63,10 @@ public class MisPedidos extends HttpServlet {
     // Buscar pedidos por el nombre del cliente
     private void buscarPedidos(HttpServletRequest request, HttpServletResponse response, Usuario user)
             throws ServletException, IOException {
-        String nombreCliente = request.getParameter("nombre");
+        String nombreCliente = request.getParameter("nombreCliente");
 
         if (nombreCliente == null || nombreCliente.isEmpty()) {
+            registrarActividad("Busqueda", "Se busco a un Cliente con el Nombre de "+nombreCliente, user);
             response.sendRedirect("MisPedidos?accion=Listar&error=Debe+ingresar+el+nombre+del+cliente");
             return;
         }
@@ -86,11 +90,25 @@ public class MisPedidos extends HttpServlet {
         boolean pedidoEliminado = pedidoDAO.eliminarPedido(idPedido);
 
         if (detallesEliminados && pedidoEliminado) {
+            
+            registrarActividad("Eliminacion", "Se elimino el Cliente con el ID "+idPedido, user);
             response.sendRedirect("MisPedidos?accion=Listar&mensaje=Pedido+eliminado+correctamente");
         } else {
             response.sendRedirect("MisPedidos?accion=Listar&error=No+se+pudo+eliminar+el+pedido");
         }
+        
     }
+    
+    // Método para registrar la actividad
+    private void registrarActividad(String tipo, String descripcion, Usuario user) {
+        RegistroActividad registro = new RegistroActividad();
+        registro.setTipo(tipo);
+        registro.setDescripcion(descripcion);
+        registro.setFecha(LocalDateTime.now());
+        registro.setIdUsuario(user.getIdUsuario());
+        registroActividadDAO.insertar(registro);
+    }
+
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)

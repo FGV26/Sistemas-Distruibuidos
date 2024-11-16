@@ -66,9 +66,9 @@ public class ControlerPedido extends HttpServlet {
 
     private void eliminarPedido(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        int idPedido = Integer.parseInt(request.getParameter("Id"));
-        pedidoDAO.eliminar(idPedido);
-        response.sendRedirect("ControlerPedido?accion=Listar");
+//        int idPedido = Integer.parseInt(request.getParameter("Id"));
+//        pedidoDAO.eliminar(idPedido);
+//        response.sendRedirect("ControlerPedido?accion=Listar");
     }
 
     private void nuevoPedido(HttpServletRequest request, HttpServletResponse response)
