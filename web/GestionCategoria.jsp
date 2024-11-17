@@ -32,8 +32,9 @@
             <div class="border rounded" style="min-height: 80vh;">
                 <!-- Busqueda y botones arriba de la tabla -->
                     <div class="mt-4 mb-4 p-4">
-                        <form action="GestionEmpleados" method="GET">
+                        <form action="GestionCategoria" method="GET">
                             <div class="input-group mb-3">
+                                <input type="hidden" name="accion" value="Buscar">
                                 <input type="text" name="nombre" class="form-control" placeholder="Buscar por categoría" required>
                                 <button type="submit" name="accion" class="btn btn-outline-success">Buscar</button>
                             </div>

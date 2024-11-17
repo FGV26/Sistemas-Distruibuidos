@@ -34,6 +34,7 @@
                     <div class="mt-4 mb-4 p-4">
                         <form action="GestionEmpleados" method="GET">
                             <div class="input-group mb-3">
+                                <input type="hidden" name="accion" value="Buscar">
                                 <input type="text" name="nombre" class="form-control" placeholder="Buscar por nombre o usuario" required>
                                 <button type="submit" name="accion" class="btn btn-outline-success">Buscar</button>
                             </div>
