@@ -109,7 +109,7 @@
                     <!-- Sección de Bienvenida -->
                     <div class="welcome-section">
                         <img src="resources/img/user.png" alt="User Image" class="welcome-image">
-                        <h2>Bienvenido, <%= user.getNombre()%> (Empleado)</h2>
+                        <h2>Bienvenido, <%= user.getNombre()%>(<%= user.getRol()%>)</h2>
                     </div>
 
                     <div class="reminder-section">

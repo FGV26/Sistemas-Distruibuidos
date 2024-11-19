@@ -27,6 +27,24 @@ public class PedidoDAO {
             + "JOIN clientes c ON p.Id_Cliente = c.Id_Cliente "
             + "WHERE p.Id_Empleado = ? AND CONCAT(c.nombre, ' ', c.apellido) LIKE ?";
 
+    //ObterPedido 
+    // Constantes SQL específicas
+    private static final String SQL_LISTAR_PEDIDOS_DISPONIBLES
+            = "SELECT p.*, CONCAT(c.Nombre, ' ', c.Apellido) AS nombreCompleto "
+            + "FROM pedidos p "
+            + "JOIN clientes c ON p.Id_Cliente = c.Id_Cliente "
+            + "WHERE p.Estado = 'Proceso' AND p.Id_Despachador IS NULL";
+
+    private static final String SQL_ASIGNAR_PEDIDO
+            = "UPDATE pedidos SET Id_Despachador = ?, Estado = 'Leído' WHERE Id_Pedido = ? AND Id_Despachador IS NULL AND Estado = 'Proceso'";
+
+    private static final String SQL_BUSCAR_POR_CLIENTE
+            = "SELECT p.*, CONCAT(c.Nombre, ' ', c.Apellido) AS nombreCompleto "
+            + "FROM pedidos p "
+            + "JOIN clientes c ON p.Id_Cliente = c.Id_Cliente "
+            + "WHERE p.Estado = 'Proceso' AND p.Id_Despachador IS NULL AND "
+            + "      CONCAT(c.Nombre, ' ', c.Apellido) LIKE ?";
+
     // Listar todos los pedidos
     public List<Pedido> listar() {
         Connection conn = null;
@@ -291,6 +309,43 @@ public class PedidoDAO {
         return pedidos;
     }
 
+    public List<Pedido> buscarPedidosPorNombreClienteDisponibles(String nombreCliente) {
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        List<Pedido> pedidos = new ArrayList<>();
+
+        try {
+            conn = conexion.getConnection();
+            stmt = conn.prepareStatement(SQL_BUSCAR_POR_CLIENTE);
+            stmt.setString(1, "%" + nombreCliente + "%");
+            rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                Pedido pedido = mapResultSetToPedido(rs);
+                pedidos.add(pedido);
+            }
+
+        } catch (SQLException ex) {
+            ex.printStackTrace(System.out);
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (stmt != null) {
+                    stmt.close();
+                }
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException ex) {
+                ex.printStackTrace(System.out);
+            }
+        }
+        return pedidos;
+    }
+
     public boolean eliminarPedido(int idPedido) {
         Connection conn = null;
         PreparedStatement stmt = null;
@@ -301,12 +356,12 @@ public class PedidoDAO {
 
             // Usar la consulta SQL corregida
             stmt = conn.prepareStatement(SQL_DELETE_PEDIDO);
-            stmt.setInt(1, idPedido); 
+            stmt.setInt(1, idPedido);
 
             int rows = stmt.executeUpdate();
             rowsAffected = rows > 0;
         } catch (SQLException ex) {
-            ex.printStackTrace(System.out); 
+            ex.printStackTrace(System.out);
         } finally {
             try {
                 if (stmt != null) {
@@ -320,6 +375,72 @@ public class PedidoDAO {
             }
         }
         return rowsAffected;
+    }
+
+    public List<Pedido> listarPedidosDisponibles() {
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        List<Pedido> pedidos = new ArrayList<>();
+
+        try {
+            conn = conexion.getConnection();
+            stmt = conn.prepareStatement(SQL_LISTAR_PEDIDOS_DISPONIBLES);
+            rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                Pedido pedido = mapResultSetToPedido(rs);
+                pedidos.add(pedido);
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace(System.out);
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (stmt != null) {
+                    stmt.close();
+                }
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException ex) {
+                ex.printStackTrace(System.out);
+            }
+        }
+        return pedidos;
+    }
+
+    public boolean asignarPedido(int idPedido, int idDespachador) {
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        boolean actualizado = false;
+
+        try {
+            conn = conexion.getConnection();
+            stmt = conn.prepareStatement(SQL_ASIGNAR_PEDIDO);
+
+            stmt.setInt(1, idDespachador); // Id del despachador
+            stmt.setInt(2, idPedido);     // Id del pedido
+
+            int rowsAffected = stmt.executeUpdate();
+            actualizado = rowsAffected > 0; // Si se afectaron filas, la asignación fue exitosa
+        } catch (SQLException ex) {
+            ex.printStackTrace(System.out);
+        } finally {
+            try {
+                if (stmt != null) {
+                    stmt.close();
+                }
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException ex) {
+                ex.printStackTrace(System.out);
+            }
+        }
+        return actualizado;
     }
 
     // Mapeo de ResultSet a entidad Pedido
