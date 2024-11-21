@@ -7,7 +7,7 @@
 <html lang="es">
     <head>
         <meta charset="UTF-8">
-        <title>Dashboard Empleado</title>
+        <title>Dashboard Despachador</title>
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
@@ -57,7 +57,7 @@
                             </li>
 
                             <li>
-                                <a href="#" title="Mis Pedidos">
+                                <a href="ControlerPedido?accion=Listar" title="Mis Pedidos">
                                     <i class="bi bi-card-text"></i>
                                     <span class="link hide">Mis Pedidos</span>
                                 </a>

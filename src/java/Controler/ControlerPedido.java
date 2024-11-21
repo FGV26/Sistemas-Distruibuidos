@@ -1,8 +1,10 @@
 package Controler;
 
+import com.google.gson.Gson;
 import dao.PedidoDAO;
 import entidades.DetallePedido;
 import entidades.Pedido;
+import entidades.Usuario;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -19,8 +21,10 @@ public class ControlerPedido extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
         HttpSession session = request.getSession();
-        if (session.getAttribute("user") == null) {
+        Usuario user = (Usuario) session.getAttribute("user");
+        if (user == null || !"Despachador".equals(user.getRol())) {
             response.sendRedirect("login.jsp");
             return;
         }
@@ -29,62 +33,83 @@ public class ControlerPedido extends HttpServlet {
 
         switch (accion) {
             case "Listar":
-                listarPedidos(request, response);
+                listarPedidos(request, response, user);
                 break;
-            case "Consultar":
-                consultarPedido(request, response);
+            case "Buscar":
+                buscarPedidos(request, response, user);
                 break;
-            case "Eliminar":
-                eliminarPedido(request, response);
-                break;
-            case "Nuevo":
-                nuevoPedido(request, response);
-                break;
-            case "Crear":
-                crearPedido(request, response);
+            case "ObtenerDetalles":
+                obtenerDetallesPedido(request, response);
                 break;
             default:
-                response.sendRedirect("Pedidos.jsp");
+                response.sendRedirect("GestionPedido.jsp");
                 break;
         }
     }
 
-    private void listarPedidos(HttpServletRequest request, HttpServletResponse response)
+    private void listarPedidos(HttpServletRequest request, HttpServletResponse response, Usuario user)
             throws ServletException, IOException {
-        List<Pedido> listaPedidos = pedidoDAO.listar();
-        request.setAttribute("Lista", listaPedidos);
-        request.getRequestDispatcher("listarPedido.jsp").forward(request, response);
+
+        List<Pedido> listaPedidos = pedidoDAO.listarPedidosPorDespachador(user.getIdUsuario());
+
+        if (listaPedidos == null || listaPedidos.isEmpty()) {
+            request.setAttribute("mensaje", "No hay pedidos disponibles para asignar.");
+        } else {
+            request.setAttribute("ListaPedidos", listaPedidos);
+        }
+        request.getRequestDispatcher("GestionPedido.jsp").forward(request, response);
     }
 
-    private void consultarPedido(HttpServletRequest request, HttpServletResponse response)
+    private void buscarPedidos(HttpServletRequest request, HttpServletResponse response, Usuario user)
             throws ServletException, IOException {
-//        int idPedido = Integer.parseInt(request.getParameter("Id"));
-//        List<DetallePedido> detalles = pedidoDAO.obtenerDetallesPorIdPedido(idPedido);
-//        request.setAttribute("Lista", detalles);
-//        request.getRequestDispatcher("consultarPedido.jsp").forward(request, response);
+
+        String nombreCliente = request.getParameter("nombreCliente");
+
+        if (nombreCliente == null || nombreCliente.trim().isEmpty()) {
+            request.setAttribute("error", "Debe ingresar un nombre para buscar.");
+            listarPedidos(request, response, user);
+            return;
+        }
+
+        List<Pedido> listaPedidos = pedidoDAO.buscarPedidosPorNombreCliente(user.getIdUsuario(), nombreCliente.trim());
+
+        if (listaPedidos == null || listaPedidos.isEmpty()) {
+            request.setAttribute("error", "No se encontraron pedidos para el cliente especificado. Mostrando todos los pedidos.");
+            listarPedidos(request, response, user);
+        } else {
+            request.setAttribute("ListaPedidos", listaPedidos);
+            request.setAttribute("mensaje", "Resultados de la búsqueda para: " + nombreCliente);
+            request.getRequestDispatcher("GestionPedido.jsp").forward(request, response);
+        }
     }
 
-    private void eliminarPedido(HttpServletRequest request, HttpServletResponse response)
+    protected void obtenerDetallesPedido(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-//        int idPedido = Integer.parseInt(request.getParameter("Id"));
-//        pedidoDAO.eliminar(idPedido);
-//        response.sendRedirect("ControlerPedido?accion=Listar");
-    }
+        String idPedidoStr = request.getParameter("idPedido");
 
-    private void nuevoPedido(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        request.getRequestDispatcher("nuevoPedido.jsp").forward(request, response);
-    }
+        try {
+            int idPedido = Integer.parseInt(idPedidoStr);
 
-    private void crearPedido(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-//        int idCliente = Integer.parseInt(request.getParameter("idCliente"));
-//        double subTotal = Double.parseDouble(request.getParameter("subTotal"));
-//        double totalVenta = Double.parseDouble(request.getParameter("totalVenta"));
-//
-//        Pedido nuevoPedido = new Pedido(idCliente, subTotal, totalVenta);
-//        pedidoDAO.insertar(nuevoPedido);
-//        response.sendRedirect("ControlerPedido?accion=Listar");
+            // Obtener el pedido con sus detalles desde la capa DAO
+            Pedido pedido = pedidoDAO.obtenerPedidoConDetalles(idPedido);
+
+            if (pedido != null) {
+                // Pasar el pedido como atributo de la solicitud
+                request.setAttribute("pedido", pedido);
+                
+                // Redirigir al JSP de DetallesPedido.jsp
+                request.getRequestDispatcher("DetallesPedido.jsp").forward(request, response);
+            } else {
+                // Manejar caso de error si no se encuentra el pedido
+                request.setAttribute("error", "El pedido no fue encontrado.");
+                request.getRequestDispatcher("GestionPedido.jsp").forward(request, response);
+            }
+        } catch (NumberFormatException e) {
+            // Manejar caso de error si el ID no es válido
+            
+            request.setAttribute("error", "ID de pedido inválido.");
+            request.getRequestDispatcher("GestionPedido.jsp").forward(request, response);
+        }
     }
 
     @Override

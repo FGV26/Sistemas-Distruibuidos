@@ -2,6 +2,7 @@ package dao;
 
 import entidades.Pedido;
 import conexion.conexion;
+import entidades.DetallePedido;
 import entidades.Producto;
 import java.sql.*;
 import java.util.ArrayList;
@@ -9,7 +10,6 @@ import java.util.List;
 
 public class PedidoDAO {
 
-    private static final String SQL_SELECT = "SELECT * FROM pedidos";
     private static final String SQL_SELECT_BY_ID = "SELECT * FROM pedidos WHERE Id_Pedido = ?";
     private static final String SQL_INSERT = "INSERT INTO pedidos (Id_Cliente, Id_Empleado, Fecha_Pedido, SubTotal, Total, Estado, Fecha_Modificacion, Id_Despachador, Cod_Pedido) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
     private static final String SQL_UPDATE = "UPDATE pedidos SET Estado = ? WHERE Id_Pedido = ?";
@@ -45,40 +45,38 @@ public class PedidoDAO {
             + "WHERE p.Estado = 'Proceso' AND p.Id_Despachador IS NULL AND "
             + "      CONCAT(c.Nombre, ' ', c.Apellido) LIKE ?";
 
-    // Listar todos los pedidos
-    public List<Pedido> listar() {
-        Connection conn = null;
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
-        List<Pedido> pedidos = new ArrayList<>();
+    private static final String SQL_LISTAR_PEDIDOS_Despachador
+            = "SELECT p.*, CONCAT(c.Nombre, ' ', c.Apellido) AS nombreCompleto "
+            + "FROM pedidos p "
+            + "JOIN clientes c ON p.Id_Cliente = c.Id_Cliente "
+            + "WHERE p.Id_Despachador = ? "
+            + "ORDER BY p.Fecha_Pedido DESC";
 
-        try {
-            conn = conexion.getConnection();
-            stmt = conn.prepareStatement(SQL_SELECT);
-            rs = stmt.executeQuery();
-            while (rs.next()) {
-                Pedido pedido = mapResultSetToPedido(rs);
-                pedidos.add(pedido);
-            }
-        } catch (SQLException ex) {
-            ex.printStackTrace(System.out);
-        } finally {
-            try {
-                if (rs != null) {
-                    rs.close();
-                }
-                if (stmt != null) {
-                    stmt.close();
-                }
-                if (conn != null) {
-                    conn.close();
-                }
-            } catch (SQLException ex) {
-                ex.printStackTrace(System.out);
-            }
-        }
-        return pedidos;
-    }
+    private static final String SQL_OBTENER_DETALLE_PEDIDO
+            = "SELECT "
+            + "p.Id_Pedido, "
+            + "p.Fecha_Pedido, "
+            + "p.SubTotal, "
+            + "p.Total, "
+            + "p.Estado, "
+            + "p.Fecha_Modificacion, "
+            + "p.Cod_Pedido, "
+            + "CONCAT(c.Nombre, ' ', c.Apellido) AS nombreCliente, "
+            + "CONCAT(e.Nombre, ' ', e.Apellido) AS nombreEmpleado, "
+            + "CONCAT(d.Nombre, ' ', d.Apellido) AS nombreDespachador, "
+            + "dp.Id_Detalle, "
+            + "dp.Cantidad, "
+            + "dp.Precio, "
+            + "dp.Total AS TotalDetalle, "
+            + "pr.Nombre AS nombreProducto, "
+            + "pr.Imagen AS imagenProducto "
+            + "FROM pedidos p "
+            + "INNER JOIN clientes c ON p.Id_Cliente = c.Id_Cliente "
+            + "INNER JOIN usuarios e ON p.Id_Empleado = e.Id_Usuario "
+            + "LEFT JOIN usuarios d ON p.Id_Despachador = d.Id_Usuario "
+            + "INNER JOIN detalle_pedido dp ON p.Id_Pedido = dp.Id_Pedido "
+            + "INNER JOIN productos pr ON dp.Id_Producto = pr.IdProducto "
+            + "WHERE p.Id_Pedido = ?;";
 
     // Obtener pedido por ID
     public Pedido obtenerPedidoPorId(int id) {
@@ -441,6 +439,112 @@ public class PedidoDAO {
             }
         }
         return actualizado;
+    }
+
+    public List<Pedido> listarPedidosPorDespachador(int idDespachador) {
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        List<Pedido> pedidos = new ArrayList<>();
+
+        try {
+            conn = conexion.getConnection();
+            stmt = conn.prepareStatement(SQL_LISTAR_PEDIDOS_Despachador);
+            stmt.setInt(1, idDespachador); // Establece el ID del despachador como parámetro
+            rs = stmt.executeQuery();
+
+            // Procesar los resultados
+            while (rs.next()) {
+                Pedido pedido = mapResultSetToPedido(rs);
+                pedidos.add(pedido);
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace(System.out); // Maneja excepciones
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (stmt != null) {
+                    stmt.close();
+                }
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException ex) {
+                ex.printStackTrace(System.out);
+            }
+        }
+
+        return pedidos;
+    }
+
+    public Pedido obtenerPedidoConDetalles(int idPedido) {
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        Pedido pedido = null;
+        List<DetallePedido> detalles = new ArrayList<>();
+
+        try {
+            conn = conexion.getConnection();
+            stmt = conn.prepareStatement(SQL_OBTENER_DETALLE_PEDIDO);
+            stmt.setInt(1, idPedido);
+            rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                // Si el pedido aún no se ha inicializado, lo creamos
+                if (pedido == null) {
+                    pedido = new Pedido();
+                    pedido.setIdPedido(rs.getInt("Id_Pedido"));
+                    pedido.setFechaPedido(rs.getTimestamp("Fecha_Pedido"));
+                    pedido.setSubTotal(rs.getBigDecimal("SubTotal"));
+                    pedido.setTotal(rs.getBigDecimal("Total"));
+                    pedido.setEstado(rs.getString("Estado"));
+                    pedido.setFechaModificacion(rs.getTimestamp("Fecha_Modificacion"));
+                    pedido.setCodPedido(rs.getString("Cod_Pedido"));
+                    pedido.setNombreCliente(rs.getString("nombreCliente"));
+                    pedido.setNombreEmpleado(rs.getString("nombreEmpleado"));
+                    pedido.setNombreDespachador(rs.getString("nombreDespachador"));
+                }
+
+                // Creamos un nuevo detalle de pedido y lo añadimos a la lista
+                DetallePedido detalle = new DetallePedido();
+                detalle.setIdDetalle(rs.getInt("Id_Detalle"));
+                detalle.setIdPedido(rs.getInt("Id_Pedido"));
+                detalle.setCantidad(rs.getInt("Cantidad"));
+                detalle.setPrecio(rs.getBigDecimal("Precio"));
+                detalle.setTotal(rs.getBigDecimal("TotalDetalle"));
+                detalle.setNombreProducto(rs.getString("nombreProducto"));
+                detalle.setImagenProducto(rs.getString("imagenProducto"));
+
+                detalles.add(detalle);
+            }
+
+            // Asignamos la lista de detalles al pedido
+            if (pedido != null) {
+                pedido.setDetalles(detalles);
+            }
+
+        } catch (SQLException ex) {
+            ex.printStackTrace(System.out);
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (stmt != null) {
+                    stmt.close();
+                }
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException ex) {
+                ex.printStackTrace(System.out);
+            }
+        }
+
+        return pedido;
     }
 
     // Mapeo de ResultSet a entidad Pedido

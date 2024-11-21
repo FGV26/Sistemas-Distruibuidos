@@ -9,7 +9,9 @@ public class DetallePedido {
     private int idProducto;
     private int cantidad;
     private BigDecimal precio; 
-    private BigDecimal total;   
+    private BigDecimal total;
+    private String nombreProducto; 
+    private String imagenProducto; 
 
     // Constructor vacío
     public DetallePedido() {
@@ -72,5 +74,21 @@ public class DetallePedido {
 
     public void setTotal(BigDecimal total) {
         this.total = total;
+    }
+    
+    public String getNombreProducto() {
+        return nombreProducto;
+    }
+
+    public void setNombreProducto(String nombreProducto) {
+        this.nombreProducto = nombreProducto;
+    }
+
+    public String getImagenProducto() {
+        return imagenProducto;
+    }
+
+    public void setImagenProducto(String imagenProducto) {
+        this.imagenProducto = imagenProducto;
     }
 }

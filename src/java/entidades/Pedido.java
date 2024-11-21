@@ -2,6 +2,7 @@ package entidades;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 public class Pedido {
 
@@ -16,6 +17,9 @@ public class Pedido {
     private Integer idDespachador;
     private String codPedido;
     private String nombreCliente; 
+    private String nombreEmpleado; // Nuevo
+    private String nombreDespachador; // Nuevo
+    private List<DetallePedido> detalles; // Nuevo: Lista de detalles del pedido
 
     public Pedido() {
     }
@@ -131,5 +135,29 @@ public class Pedido {
 
     public void setNombreCliente(String nombreCliente) {
         this.nombreCliente = nombreCliente;
+    }
+    
+    public String getNombreEmpleado() {
+        return nombreEmpleado;
+    }
+
+    public void setNombreEmpleado(String nombreEmpleado) {
+        this.nombreEmpleado = nombreEmpleado;
+    }
+
+    public String getNombreDespachador() {
+        return nombreDespachador;
+    }
+
+    public void setNombreDespachador(String nombreDespachador) {
+        this.nombreDespachador = nombreDespachador;
+    }
+
+    public List<DetallePedido> getDetalles() {
+        return detalles;
+    }
+
+    public void setDetalles(List<DetallePedido> detalles) {
+        this.detalles = detalles;
     }
 }

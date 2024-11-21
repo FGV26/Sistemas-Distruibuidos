@@ -55,7 +55,7 @@
                         </form>
                         <div class="input-group mb-3 justify-content-end">
                             <a class="btn btn-outline-primary"" role="button" href="MirarProductos?accion=Listar">Mostrar Todo</a>
-                            <a href="DashboardActividades?accion=Listar" role="button" class="btn btn-outline-dark">Menú Administrador</a>
+                            <a href="DashboardActividades?accion=Listar" role="button" class="btn btn-outline-dark">Volver Dashboard</a>
                         </div>
                     </div>
 
