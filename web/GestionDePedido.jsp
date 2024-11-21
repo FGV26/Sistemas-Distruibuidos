@@ -39,10 +39,21 @@
 
         
         <div class="container pt-5">
+            <div class="pt-2 pb-2 d-flex justify-content-end" id="boton-dashboard" style="margin-top: 30px; margin:20px">
+                <button type="button" class="btn" 
+                        style="background-color: #198754; color: white;" 
+                        onmouseover="this.style.backgroundColor='#E49156'" 
+                        onmouseout="this.style.backgroundColor='#198754'"
+                        onclick="window.location.href='DashboardActividades?accion=Listar'">
+                    Volver al Dashboard
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-house-heart" viewBox="0 0 16 16">
+                        <path d="M8 6.982C9.664 5.309 13.825 8.236 8 12 2.175 8.236 6.336 5.309 8 6.982"/>
+                        <path d="M8.707 1.5a1 1 0 0 0-1.414 0L.646 8.146a.5.5 0 0 0 .708.707L2 8.207V13.5A1.5 1.5 0 0 0 3.5 15h9a1.5 1.5 0 0 0 1.5-1.5V8.207l.646.646a.5.5 0 0 0 .708-.707L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293zM13 7.207V13.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V7.207l5-5z"/>
+                    </svg>
+                </button>
+            </div>
             <div class="border rounded" style="min-height: 80vh; box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;">
-
                 <!-- Progress Bar -->
-
                 <div class="progress-container container pt-5 pb-5 align-items-center" style="min-height: 100px;">
                     <div class="mx-auto">
                         <div class="progress-container" style="position:  relative; margin-top: 20px; width: 100%;">
@@ -222,17 +233,34 @@
 
                 <!-- Módulo 2: Content Product -->
                 <div class="container producto pt-2 pb-5 d-none" id="producto">
-                    <h4>Seleccionar Productos</h4>
+                    <h3 style="color: #28a745; font-weight: 800; margin-bottom: 20px">
+                        Seleccionar productos a comprar : 
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down-square-fill ms-2" viewBox="0 0 16 16">
+                            <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm6.5 4.5v5.793l2.146-2.147a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 1 1 .708-.708L7.5 10.293V4.5a.5.5 0 0 1 1 0"/>
+                        </svg>
+                    </h3>
 
                     <!-- Barra de búsqueda de productos -->
                     <div class="d-flex mb-3">
-                        <input type="text" class="form-control me-2" id="buscarProducto" placeholder="Buscar producto por nombre" onkeyup="buscarProducto()">
-                        <button class="btn btn-secondary" onclick="listarProductos()">Mostrar Todo</button>
-                        <select class="form-select ms-2" id="categoriaProducto" onchange="listarPorCategoria(this.value)">
+                        <div class="input-group me-2 flex-grow-1">
+                            <span class="input-group-text">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard-check" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd" d="M10.854 7.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 9.793l2.646-2.647a.5.5 0 0 1 .708 0"/>
+                                    <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1z"/>
+                                    <path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0z"/>
+                                </svg>
+                            </span>
+                            <input type="text" class="form-control" id="buscarProducto" placeholder="Buscar producto por nombre" onkeyup="buscarProducto()">
+                        </div>
+                        <button class="btn btn-secondary flex-shrink-0" style="background-color: #A1512E; color: white; border: none;" onmouseover="this.style.backgroundColor='#D53C2D'" onmouseout="this.style.backgroundColor='#E49156'" 
+                                onclick="listarProductos()">Mostrar Todo
+                        </button>
+                        <select class="form-select ms-2 flex-grow-1" id="categoriaProducto" onchange="listarPorCategoria(this.value)">
                             <option value="">Categoría</option>
                             <!-- Las opciones se añadirán dinámicamente a través de JavaScript -->
                         </select>
                     </div>
+
 
                     <!-- Contenedor principal de selección de productos y carrito -->
                     <div class="d-flex">
@@ -343,21 +371,28 @@
                 </div>
 
                 <!-- Módulo 4: Content Pay -->
-                <div class="container pago pt-2 pb-2 d-none" id="pago">
-                    <h3 class="text-center pb-5">Pago</h3>
+                <div class="container pago pt-2 pb-2 d-none" id="pago" style="border: 1px solid #ddd; border-radius: 5px; margin-left: auto; margin-right: auto; padding: 20px; max-width: 600px;">
+                    <h3 class="text-center pb-5" style="padding-bottom: 20px; color: #EC6959; ">Métodos de Pago</h3>
                     <form id="formPago" class="pb-5">
-                        <input type="text" class="form-control mt-2" placeholder="Número de Tarjeta" id="numeroTarjeta">
-                        <input type="text" class="form-control mt-2" placeholder="CVV" id="cvvTarjeta">
-                        <input type="text" class="form-control mt-2" placeholder="Nombre en la Tarjeta" id="nombreTarjeta">
+                        <label for="tarjeta" style="font-weight: 700; ">Tipo de Tarjeta</label>  
+                        <select id="tarjeta" class="form-control mt-2" required>
+                            <option value="credito">Tarjeta de Crédito</option>
+                            <option value="debito">Tarjeta de Débito</option>
+                            <option value="mastercard">Mastercard</option>
+                        </select>
+                        <label for="card-number" style="font-weight: 700; ">Número de la Tarjeta</label>
+                        <input type="text" id="card-number" class="form-control mt-2" placeholder="Ejemplo: (0000-0000-0000-0000)" pattern="\d*" maxlength="16" required>
+                        <label for="cvv" style="font-weight: 700; ">Ingresar tu CVV (tu número de 3 dígitos)</label>
+                        <input type="text" id="cvv" class="form-control mt-2" placeholder="Ejemplo de CVV: *123*" pattern="\d*" maxlength="3" required>
+                        <label for="expired" style="font-weight: 700; ">Ingresar Fecha de Expiración</label>
+                        <input id="expired" class="form-control mt-2" type="text" autocomplete="cc-exp" placeholder="MM/YY" maxlength="5" pattern="[0-9/]+" required>
+                        <div class="text-center mt-4">
+                            <button type="submit" class="btn btn-success" style="background-color: green;">Realizar Pedido</button>
+                        </div>
                     </form>
-                    <div class="d-flex justify-content-center mt-4">
-                        <button id="realizarPedidoBtn" onclick="realizarPedido()" class="btn btn-success" style="width: 150px;">
-                            Realizar Pedido
-                        </button>
-                    </div>
                 </div>
 
-                <div class="container d-flex justify-content-center pb-5">
+                <div class="container d-flex justify-content-center pb-5" style="margin-top: 20px;">
                     <div class="d-flex justify-content-between align-items-center" style="width: 80%">
                         <button id="prev-btn-progress" onclick="prevStep()" class="btn btn-primary d-flex align-items-center justify-content-around rounded-pill" style="width: 90px; height: 40px">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
