@@ -319,7 +319,7 @@ public class UsuarioDAO {
                 String hashedPassword = BCrypt.hashpw(empleado.getPassword(), BCrypt.gensalt(12));
                 stmt = conn.prepareStatement(SQL_UPDATE_EMPLEADO_CON_PASSWORD);
                 stmt.setString(1, empleado.getUsername());
-                stmt.setString(2, hashedPassword); // Usar la nueva contraseña hasheada
+                stmt.setString(2, hashedPassword); 
                 stmt.setString(3, empleado.getEmail());
                 stmt.setString(4, empleado.getNombre());
                 stmt.setString(5, empleado.getApellido());

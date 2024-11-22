@@ -149,8 +149,7 @@ public class ControlerDespachadores extends HttpServlet {
         }
 
         // Mantener la contraseña actual si no se ha proporcionado una nueva
-        String actualPassword = usuarioDAO.obtenerEmpleadoPorId(id).getPassword();
-        String finalPassword = (password != null && !password.isEmpty()) ? password : actualPassword;
+        String finalPassword = (password != null && !password.isEmpty()) ? password : null;
 
         Usuario despachador = new Usuario(id, username, finalPassword, email, "Despachador", nombre, apellido, estado);
         boolean exito = usuarioDAO.actualizarDespachador(despachador);
