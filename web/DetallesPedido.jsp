@@ -42,9 +42,13 @@
 
         <div class="container mt-5">
             <!-- Título -->
-            <h1 class="text-center">Detalles del Pedido</h1>
+            <div class="d-flex justify-content-between align-items-center">
+                <h1 class="text-center mb-0">Detalles del Pedido</h1>
+                <a href="ControlerPedido?accion=Listar" class="btn btn-outline-secondary">
+                    <i class="fas fa-arrow-left"></i> Volver
+                </a>
+            </div>
             <hr>
-
             <!-- Datos del Pedido -->
             <div class="row mt-4">
                 <div class="col-md-4">
@@ -76,7 +80,9 @@
             </div>
 
             <!-- Barra de Progreso -->
-            <div class="progress-container container mt-4 mb-4">
+            <div class="progress-container container mt-4 mb-4" 
+                 data-estado="${pedido.estado}" 
+                 data-idpedido="${pedido.idPedido}">
                 <div class="progress" style="height: 5px;">
                     <div class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
                 </div>
@@ -96,7 +102,7 @@
                 </div>
                 <div class="d-flex justify-content-between mt-2">
                     <span class="step-label">Proceso</span>
-                    <span class="step-label">Leído</span>
+                    <span class="step-label">Leido</span>
                     <span class="step-label">Empaquetado</span>
                     <span class="step-label">Enviado</span>
                 </div>
@@ -104,8 +110,8 @@
 
             <!-- Botones de Acción -->
             <div class="d-flex justify-content-between mt-4">
-                <button id="cancel-btn" class="btn btn-danger" onclick="cancelOrder()">Cancelar Pedido</button>
-                <button id="next-btn-progress" class="btn btn-primary" onclick="nextStep()">Avanzar Estado</button>
+                <button id="cancel-btn" class="btn btn-danger">Cancelar Pedido</button>
+                <button id="next-btn-progress" class="btn btn-primary">Avanzar Estado</button>
             </div>
         </div>
 
@@ -146,13 +152,17 @@
                     <div class="border p-3">
                         <h5>Total General</h5>
                         <p class="fs-4 text-end"><strong>S/ ${pedido.total}</strong></p>
-                        <button class="btn btn-success w-100 mt-3" onclick="generarBoleta()">Generar Boleta</button>
+                        <!-- Botón para generar la boleta -->
+                        <a href="GenerarBoleta?idPedido=${pedido.idPedido}" class="btn btn-success w-100 mt-3" target="_blank">
+                            <i class="fas fa-file-pdf"></i> Generar Boleta
+                        </a>
                     </div>
                 </div>
             </div>
         </div>
 
         <!-- Bootstrap Scripts -->
+        <script src="resources/js/DetallePedido.js?timestamp=<%= System.currentTimeMillis()%>"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     </body>
 </html>

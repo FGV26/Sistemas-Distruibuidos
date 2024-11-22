@@ -63,14 +63,6 @@
                                 </a>
                             </li>
 
-                            <!-- Ver Información -->
-                            <li>
-                                <a href="VerInformacion" title="Ver Información">
-                                    <i class="bi bi-person-circle"></i>
-                                    <span class="link hide">Ver Información</span>
-                                </a>
-                            </li>
-
                             <!-- Cerrar Sesión -->
                             <li>
                                 <a href="CerrarSesion" title="Cerrar Sesión">

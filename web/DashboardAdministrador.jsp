@@ -82,12 +82,6 @@
                                 </a>
                             </li>
                             <li>
-                                <a href="#profile" title="Ver Información">
-                                    <i class="bi bi-person-circle"></i>
-                                    <span class="link hide">Ver Información</span>
-                                </a>
-                            </li>
-                            <li>
                                 <a href="CerrarSesion" title="Cerrar Sesión">
                                     <i class="bi bi-box-arrow-right"></i>
                                     <span class="link hide">Cerrar Sesión</span>

@@ -48,6 +48,10 @@
         <servlet-name>ControlerPedido</servlet-name>
         <servlet-class>Controler.ControlerPedido</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>GenerarBoleta</servlet-name>
+        <servlet-class>Controler.GenerarBoleta</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>ControlerPedido</servlet-name>
         <url-pattern>/ControlerPedido</url-pattern>
@@ -95,6 +99,10 @@
     <servlet-mapping>
         <servlet-name>MirarProductos</servlet-name>
         <url-pattern>/MirarProductos</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>GenerarBoleta</servlet-name>
+        <url-pattern>/GenerarBoleta</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

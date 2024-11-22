@@ -17,9 +17,9 @@ public class Pedido {
     private Integer idDespachador;
     private String codPedido;
     private String nombreCliente; 
-    private String nombreEmpleado; // Nuevo
-    private String nombreDespachador; // Nuevo
-    private List<DetallePedido> detalles; // Nuevo: Lista de detalles del pedido
+    private String nombreEmpleado; 
+    private String nombreDespachador; 
+    private List<DetallePedido> detalles; 
 
     public Pedido() {
     }
