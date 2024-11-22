@@ -40,12 +40,12 @@
         <button type="submit" class="my-form__button">Ingresar</button>
 
         <!-- Enlace para crear una cuenta -->
-        <div class="my-form_actions">
+<!--        <div class="my-form_actions">
             <div class="my-form_row">
                 <span>¿No tienes una cuenta?</span>
-<!--                <a href="registro.jsp" title="Crear Cuenta">Regístrate</a>-->
+                <a href="registro.jsp" title="Crear Cuenta">Regístrate</a>
             </div>
-        </div>
+        </div>-->
     </form>
 </body>
 </html>
