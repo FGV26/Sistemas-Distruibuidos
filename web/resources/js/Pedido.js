@@ -350,7 +350,10 @@ function eliminarDelCarrito(idProducto) {
 
     // Si el carrito está vacío, deshabilitar el botón "Siguiente"
     if (carrito.length === 0) {
-        $("#nextToStep3").prop("disabled", true);
+        
+        const nextBtn = document.getElementById('next-btn-progress');
+        nextBtn.disabled = true;
+
     }
 }
 
