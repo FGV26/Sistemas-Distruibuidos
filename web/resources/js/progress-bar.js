@@ -48,11 +48,11 @@ function nextStep() {
     } else {
         prevBtn.disabled = true;
     }
-
-    if (currentStep === steps.length - 1) {
-        nextBtn.disabled = true;
-    } else {
+    
+    if(currentStep === 2){
         nextBtn.disabled = false;
+    }else{
+        nextBtn.disabled = true;
     }
 }
 

@@ -330,9 +330,13 @@ function actualizarCarrito() {
 
     html += `</div>`;
     $("#carrito").html(html);
-
+    
     // Guardar el carrito en sessionStorage
     sessionStorage.setItem("carrito", JSON.stringify(carrito));
+    
+    const nextBtn = document.getElementById('next-btn-progress');
+    nextBtn.disabled = false;
+    
     console.log(sessionStorage.getItem("carrito"));
 
 
