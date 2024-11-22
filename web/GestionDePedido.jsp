@@ -39,25 +39,9 @@
 
 
         <div class="container pt-5">
-            <div class="pt-2 pb-2 d-flex justify-content-end" id="boton-dashboard" style="margin-top: 30px; margin:20px">
-                <button type="button" class="btn" 
-                        style="background-color: #198754; color: white;" 
-                        onmouseover="this.style.backgroundColor = '#E49156'" 
-                        onmouseout="this.style.backgroundColor = '#198754'"
-                        onclick="window.location.href = 'DashboardActividades?accion=Listar'">
-                    Volver al Dashboard
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-house-heart" viewBox="0 0 16 16">
-                    <path d="M8 6.982C9.664 5.309 13.825 8.236 8 12 2.175 8.236 6.336 5.309 8 6.982"/>
-                    <path d="M8.707 1.5a1 1 0 0 0-1.414 0L.646 8.146a.5.5 0 0 0 .708.707L2 8.207V13.5A1.5 1.5 0 0 0 3.5 15h9a1.5 1.5 0 0 0 1.5-1.5V8.207l.646.646a.5.5 0 0 0 .708-.707L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293zM13 7.207V13.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V7.207l5-5z"/>
-                    </svg>
-                </button>
-            </div>
             <div class="border rounded" style="min-height: 80vh; box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;">
                 <div class="pt-2 pb-2 d-flex justify-content-end" id="boton-dashboard" style="margin:20px">
-                    <button type="button" class="btn d-flex justify-content-center align-items-center" 
-                            style="background-color: #198754; color: white;" 
-                            onmouseover="this.style.backgroundColor='#E49156'" 
-                            onmouseout="this.style.backgroundColor='#198754'"
+                    <button type="button" class="btn btn-outline-success d-flex justify-content-center align-items-center" 
                             onclick="window.location.href='DashboardActividades?accion=Listar'">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-house-heart me-2" viewBox="0 0 16 16">
                             <path d="M8 6.982C9.664 5.309 13.825 8.236 8 12 2.175 8.236 6.336 5.309 8 6.982"/>
