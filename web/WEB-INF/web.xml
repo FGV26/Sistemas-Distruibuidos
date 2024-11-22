@@ -44,6 +44,14 @@
         <servlet-name>MirarProductos</servlet-name>
         <servlet-class>Controler.MirarProductos</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ControlerPedido</servlet-name>
+        <servlet-class>Controler.ControlerPedido</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ControlerPedido</servlet-name>
+        <url-pattern>/ControlerPedido</url-pattern>
+    </servlet-mapping>
     <servlet-mapping>
         <servlet-name>ControladorEmpleado</servlet-name>
         <url-pattern>/ControladorEmpleado</url-pattern>

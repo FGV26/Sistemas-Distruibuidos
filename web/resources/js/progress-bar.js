@@ -86,3 +86,4 @@ function prevStep() {
 // Inicializa la vista
 updateView();
 prevBtn.disabled = true;
+nextBtn.disabled = true;
