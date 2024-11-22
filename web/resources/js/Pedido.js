@@ -8,12 +8,18 @@ function bloquearBusqueda() {
     console.log("Bloquear búsqueda");
     $("#formBuscarCliente :input").prop("disabled", true);
     $("#formBuscarCliente button").prop("disabled", true);
+    const nextBtn = document.getElementById('next-btn-progress');
+    
+    nextBtn.disabled = false;
 }
 
 function bloquearRegistro() {
     console.log("Bloquear registro");
     $("#formRegistroCliente :input").prop("disabled", true);
     $("#formRegistroCliente button").prop("disabled", true);
+    const nextBtn = document.getElementById('next-btn-progress');
+    
+    nextBtn.disabled = false;
 }
 
 // Buscar cliente en base de datos interna por DNI
