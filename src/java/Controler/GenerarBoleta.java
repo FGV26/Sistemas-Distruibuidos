@@ -91,7 +91,9 @@ public class GenerarBoleta extends HttpServlet {
                 // **Detalles de los Productos**
                 List<DetallePedido> detalles = pedido.getDetalles();
                 for (DetallePedido detalle : detalles) {
-                    detalleTable.addCell(detalle.getIdDetalle()+ "");
+                    String CodigoImg = detalle.getImagenProducto();
+                    CodigoImg = CodigoImg.replace(".jpg", "");
+                    detalleTable.addCell(CodigoImg + "");
                     detalleTable.addCell(detalle.getNombreProducto());
                     detalleTable.addCell(detalle.getCantidad() + "");
                     detalleTable.addCell("S/ " + detalle.getPrecio());
